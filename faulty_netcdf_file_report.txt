@@ -1,0 +1,11 @@
+Faulty NETCDF format file report
+--------------------------------
+·Directory: /media/jonander/My_Basic/Dokumentuak/03-Ikasketak/02-UCM_meteorologiako_masterra/TFM/input_data
+·Total scanned files scanned: 30
+·Faulty file number: 5
+·Faulty files:
+ /media/jonander/My_Basic/Dokumentuak/03-Ikasketak/02-UCM_meteorologiako_masterra/TFM/input_data/TEM_4xdaily_1958_06.nc
+ /media/jonander/My_Basic/Dokumentuak/03-Ikasketak/02-UCM_meteorologiako_masterra/TFM/input_data/TEM_4xdaily_1958_10.nc
+ /media/jonander/My_Basic/Dokumentuak/03-Ikasketak/02-UCM_meteorologiako_masterra/TFM/input_data/TEM_4xdaily_1959_01.nc
+ /media/jonander/My_Basic/Dokumentuak/03-Ikasketak/02-UCM_meteorologiako_masterra/TFM/input_data/TEM_4xdaily_1959_03.nc
+ /media/jonander/My_Basic/Dokumentuak/03-Ikasketak/02-UCM_meteorologiako_masterra/TFM/input_data/TEM_4xdaily_1959_05.nc
