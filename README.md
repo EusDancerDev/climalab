@@ -1,6 +1,6 @@
-# climaLab
+# climalab
 
-**climaLab** is a Python toolkit designed to facilitate climate data analysis and manipulation, including tools for data extraction, processing, and visualization. It leverages external tools and standards like CDO and CDS to streamline workflows for climate-related research.
+**climalab** is a Python toolkit designed to facilitate climate data analysis and manipulation, including tools for data extraction, processing, and visualization. It leverages external tools and standards like CDO and CDS to streamline workflows for climate-related research.
 
 ## Features
 
