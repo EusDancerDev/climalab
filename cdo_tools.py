@@ -5,13 +5,13 @@
 # Import custom modules #
 #-----------------------#
 
-from pyutils.arrays_and_lists.data_manipulation import flatten_to_string
-from pyutils.operative_systems.os_operations import exit_info, run_system_command
-from pyutils.parameters_and_constants import global_parameters
-from pyutils.strings import information_output_formatters, string_handler
-from pyutils.time_handling.date_and_time_utils import find_time_key
-from pyutils.filewise.file_operations.ops_handler import rename_objects
-from pyutils.filewise.xarray_utils.patterns import get_file_variables, get_times
+from pygenutils.arrays_and_lists.data_manipulation import flatten_to_string
+from pygenutils.operative_systems.os_operations import exit_info, run_system_command
+from paramlib.parameters_and_constants import global_parameters
+from pygenutils.strings import information_output_formatters, string_handler
+from pygenutils.time_handling.date_and_time_utils import find_time_key
+from filewise.file_operations.ops_handler import rename_objects
+from filewise.xarray_utils.patterns import get_file_variables, get_times
 
 # Create aliases #
 #----------------#

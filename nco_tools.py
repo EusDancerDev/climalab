@@ -5,10 +5,10 @@
 # Import custom modules #
 #-----------------------#
 
-from pyutils.strings.information_output_formatters import format_string, print_format_string
-from pyutils.operative_systems.os_operations import run_system_command, exit_info
-from pyutils.parameters_and_constants.global_parameters import basic_four_rules
-from pyutils.filewise.file_operations.ops_handler import add_to_path, rename_objects
+from pygenutils.strings.information_output_formatters import format_string, print_format_string
+from pygenutils.operative_systems.os_operations import run_system_command, exit_info
+from paramlib.parameters_and_constants.global_parameters import basic_four_rules
+from filewise.file_operations.ops_handler import add_to_path, rename_objects
 
 #-------------------------#
 # Define custom functions #

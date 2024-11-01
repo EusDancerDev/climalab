@@ -12,8 +12,8 @@ import pandas as pd
 # Import custom modules #
 #-----------------------#
 
-from pyutils.arrays_and_lists.maths import approach_value
-from pyutils.time_handling.calendar_operators import week_range
+from pygenutils.arrays_and_lists.maths import approach_value
+from pygenutils.time_handling.calendar_operators import week_range
 
 #-------------------------#
 # Define custom functions #

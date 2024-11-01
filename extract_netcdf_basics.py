@@ -33,8 +33,8 @@ Execution timing is handled using the `program_exec_timer` method from the
 # Import custom modules #
 #-----------------------#
 
-from pyutils.time_handling.program_snippet_exec_timers import program_exec_timer
-from pyutils.filewise.xarray_utils import data_manipulation
+from pygenutils.time_handling.program_snippet_exec_timers import program_exec_timer
+from filewise.xarray_utils import data_manipulation
 
 # Create aliases #
 #----------------#

@@ -11,7 +11,7 @@ import numpy as np
 # Import custom modules #
 #-----------------------#
 
-from pyutils.strings.information_output_formatters import format_string
+from pygenutils.strings.information_output_formatters import format_string
 
 #-------------------------#
 # Define custom functions #

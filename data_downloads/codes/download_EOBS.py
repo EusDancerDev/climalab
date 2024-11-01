@@ -5,11 +5,11 @@
 # Import custom modules #
 #-----------------------#
 
-from pyutils.climalab.cds_tools import download_data
-from pyutils.strings.string_handler import find_substring_index, substring_replacer
-from pyutils.time_handling.program_snippet_exec_timers import program_exec_timer
-from pyutils.filewise.file_operations import ops_handler, path_utils
-from pyutils.filewise.xarray_utils.file_utils import scan_ncfiles
+from climalab.cds_tools import download_data
+from pygenutils.strings.string_handler import find_substring_index, substring_replacer
+from pygenutils.time_handling.program_snippet_exec_timers import program_exec_timer
+from filewise.file_operations import ops_handler, path_utils
+from filewise.xarray_utils.file_utils import scan_ncfiles
 
 # Create aliases #
 #----------------#
@@ -92,7 +92,7 @@ resolution = "0.1"
 #------------------#
 
 # Document containing directory #
-repo_path = "/home/jonander/Documents/gordetegiak/pyutils."
+repo_path = "/home/jonander/Documents/gordetegiak/pygenutils."
 
 # Project (main) directory #
 project_dir = f"{repo_path}/test-base_programs/{project_name}"
