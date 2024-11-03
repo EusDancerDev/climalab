@@ -7,7 +7,7 @@
 
 from pygenutils.arrays_and_lists.data_manipulation import flatten_to_string
 from pygenutils.operative_systems.os_operations import exit_info, run_system_command
-from paramlib.parameters_and_constants import global_parameters
+from paramlib import global_parameters
 from pygenutils.strings import information_output_formatters, string_handler
 from pygenutils.time_handling.date_and_time_utils import find_time_key
 from filewise.file_operations.ops_handler import rename_objects
