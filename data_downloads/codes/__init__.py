@@ -3,6 +3,7 @@
 
 # climalab/data_downloads/codes/__init__.py
 
+from . import __init__
 from . import download_CORDEX
 from . import download_EOBS
 from . import download_ERA5

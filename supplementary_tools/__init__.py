@@ -3,6 +3,7 @@
 
 # climalab/supplementary_tools/__init__.py
 
+from . import __init__
 from . import auxiliary_functions
 from . import ba_mean
 from . import ba_mean_and_var

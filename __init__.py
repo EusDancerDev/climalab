@@ -3,6 +3,7 @@
 
 # climalab/__init__.py
 
+from . import __init__
 from . import cdo_tools
 from . import cds_tools
 from . import data_downloads
