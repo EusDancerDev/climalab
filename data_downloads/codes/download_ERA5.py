@@ -43,7 +43,7 @@ def return_file_extension(file_format):
 #---------------------#
 
 # Project name #
-project_name = "climate-change"
+project_name = "EusDancerDev"
 
 # Coverage area #
 #---------------#

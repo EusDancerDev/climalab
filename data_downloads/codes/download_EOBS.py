@@ -51,7 +51,7 @@ def check_correct_product_type(product_type):
 #---------------------#
 
 # Project name #
-project_name = "climate-change"
+project_name = "EusDancerDev"
 
 # Product attributes #
 product_type = "ensemble_mean"

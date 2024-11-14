@@ -105,7 +105,7 @@ def check_correct_temporal_resolution(t_resolution):
 #---------------------#
 
 # Project name #
-project_name = "climate-change"
+project_name = "EusDancerDev"
 
 # Domain #
 domain = "Africa"
