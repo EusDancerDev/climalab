@@ -2,7 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
-## [v3.2.0] - 2024-11-03s
+---
+
+## [v3.2.8] - 2025-02-18
+
+### Changed
+
+**CDO tools**
+
+- Refactored terminology for consistency and clarity:
+  - Renamed variable `calc_method` to `calc_proc` to align with the term "Calculation procedure" used in docstrings, ensuring consistency between code and documentation.
+  - Renamed variable `remap_method` to `remap_proc` to match the terminology "Remapping procedure" in the docstring, enhancing clarity.
+  - Substituted the word `method` with `procedure` in docstrings and variable names where it more accurately describes the approach or technique used.
+  - Updated docstrings to consistently use "procedure" when referring to specific techniques or approaches within functions.
+  - Ensured that the term "method" is retained only when referring to class method calls, maintaining accurate terminology.
+  - Improved overall code readability and maintainability by aligning variable names with their documented purposes.
+
+**General**
+- For the rest of the modules, perform several term replacements:
+  - Replace `method` with `procedure` to more accurately describe the approach or technique used in functions, except when referring to class method calls.
+  - Replace `action` with `procedure` to align with the context of operations being performed.
+
+---
+
+## [v3.2.0] - 2024-11-03
 
 ### Added
 
