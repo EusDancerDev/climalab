@@ -131,10 +131,7 @@ def dewpoint_temperature(T, rh):
     if not isinstance(rh, list):
         rh = np.array(rh)
 
-    t_shape = T.shape
-    rh_shape = rh.shape
-    
-    if t_shape != rh_shape:
+    if T.shape != rh.shape:
         raise ValueError("Temperature and relative humidity arrays"
                          "must have the same shape.")
         
@@ -175,12 +172,9 @@ def relative_humidity(T, Td):
          
     if not isinstance(Td, list):
         Td = np.array(Td)
-
-    t_shape = T.shape
-    td_shape = Td.shape
     
-    if t_shape != td_shape:
-        raise ValueError("Temperature and relative humidity arrays"
+    if T.shape != Td.shape:
+        raise ValueError("Temperature and dewpoint temperature arrays"
                          "must have the same shape.")
 
     rh = T.copy()
