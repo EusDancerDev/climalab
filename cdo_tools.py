@@ -8,7 +8,7 @@
 from pygenutils.arrays_and_lists.data_manipulation import flatten_to_string
 from pygenutils.operative_systems.os_operations import exit_info, run_system_command
 from paramlib import global_parameters
-from pygenutils.strings import information_output_formatters, string_handler
+from pygenutils.strings import text_formatters, string_handler
 from pygenutils.time_handling.date_and_time_utils import find_time_key
 from filewise.file_operations.ops_handler import rename_objects
 from filewise.xarray_utils.patterns import get_file_variables, get_times
@@ -21,7 +21,7 @@ common_delim_list = global_parameters.common_delim_list
 freq_abbrs = global_parameters.time_frequencies_shorter_1
 time_freqs = global_parameters.time_frequencies_short_1
 
-format_string = information_output_formatters.format_string
+format_string = text_formatters.format_string
 
 add_to_path = string_handler.add_to_path
 find_substring_index = string_handler.find_substring_index
@@ -72,7 +72,7 @@ def _get_varname_in_filename(file, return_std=False, varlist_orig=None, varlist_
     return var_file
 
 
-def _standardise_filename(variable, freq, model, experiment, calc_method, period, region, ext):
+def _standardise_filename(variable, freq, model, experiment, calc_proc, period, region, ext):
     """
     Creates a standardised filename based on input components.
 
@@ -86,8 +86,8 @@ def _standardise_filename(variable, freq, model, experiment, calc_method, period
         Model name.
     experiment : str
         Experiment name or type.
-    calc_method : str
-        Calculation method.
+    calc_proc : str
+        Calculation procedure.
     period : str
         Time period string (e.g., '2000-2020').
     region : str
@@ -98,18 +98,18 @@ def _standardise_filename(variable, freq, model, experiment, calc_method, period
     Returns
     -------
     str
-        standardised filename.
+        Standardised filename.
     """
-    return f"{variable}_{freq}_{model}_{experiment}_{calc_method}_{region}_{period}.{ext}"
+    return f"{variable}_{freq}_{model}_{experiment}_{calc_proc}_{region}_{period}.{ext}"
 
 
-# Main methods #
-#--------------#
+# Main functions #
+#----------------#
 
 # Core Data Processing Functions #
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-def cdo_mergetime(file_list, variable, freq, model, experiment, calc_method, period, region, ext):
+def cdo_mergetime(file_list, variable, freq, model, experiment, calc_proc, period, region, ext):
     """
     Merges time steps of multiple files into one using CDO's mergetime operator.
 
@@ -125,8 +125,8 @@ def cdo_mergetime(file_list, variable, freq, model, experiment, calc_method, per
         Model name.
     experiment : str
         Experiment name or type.
-    calc_method : str
-        Calculation method.
+    calc_proc : str
+        Calculation procedure.
     period : str
         Time period string (e.g., '2000-2020').
     region : str
@@ -138,7 +138,7 @@ def cdo_mergetime(file_list, variable, freq, model, experiment, calc_method, per
     -------
     None
     """
-    output_name = _standardise_filename(variable, freq, model, experiment, calc_method, period, region, ext)
+    output_name = _standardise_filename(variable, freq, model, experiment, calc_proc, period, region, ext)
     start_year, end_year = period.split(splitdelim2)
     file_list_selyear = [f for f in file_list if (year := obj_path_specs(f, "name_noext_parts", splitdelim1)[-1]) >= start_year and year <= end_year]
 
@@ -148,7 +148,7 @@ def cdo_mergetime(file_list, variable, freq, model, experiment, calc_method, per
     exit_info(process_exit_info)
 
 
-def cdo_selyear(file_list, selyear_str, freq, model, experiment, calc_method, region, ext):
+def cdo_selyear(file_list, selyear_str, freq, model, experiment, calc_proc, region, ext):
     """
     Selects data for specific years from a file list using CDO's selyear operator.
 
@@ -164,8 +164,8 @@ def cdo_selyear(file_list, selyear_str, freq, model, experiment, calc_method, re
         Model name.
     experiment : str
         Experiment name or type.
-    calc_method : str
-        Calculation method.
+    calc_proc : str
+        Calculation procedure.
     region : str
         Region or geographic area.
     ext : str
@@ -184,13 +184,13 @@ def cdo_selyear(file_list, selyear_str, freq, model, experiment, calc_method, re
     
     for file in file_list:
         var = _get_varname_in_filename(file)
-        output_name = _standardise_filename(var, freq, model, experiment, calc_method, period, region, ext)
+        output_name = _standardise_filename(var, freq, model, experiment, calc_proc, period, region, ext)
         cmd = f"cdo selyear,{selyear_cdo} '{file}' {output_name}"
         process_exit_info = run_system_command(cmd, capture_output=True)
         exit_info(process_exit_info)
 
 
-def cdo_sellonlatbox(file_list, coords, freq, model, experiment, calc_method, region, ext):
+def cdo_sellonlatbox(file_list, coords, freq, model, experiment, calc_proc, region, ext):
     """
     Applies CDO's sellonlatbox operator to select a geographical box from the input files.
 
@@ -206,8 +206,8 @@ def cdo_sellonlatbox(file_list, coords, freq, model, experiment, calc_method, re
         Model name.
     experiment : str
         Experiment name or type.
-    calc_method : str
-        Calculation method.
+    calc_proc : str
+        Calculation procedure.
     region : str
         Region or geographic area.
     ext : str
@@ -222,22 +222,22 @@ def cdo_sellonlatbox(file_list, coords, freq, model, experiment, calc_method, re
         time_var = find_time_key(file)
         times = get_times(file, time_var)
         period = f"{times.dt.year.values[0]}-{times.dt.year.values[-1]}"
-        output_name = _standardise_filename(var, freq, model, experiment, calc_method, period, region, ext)
+        output_name = _standardise_filename(var, freq, model, experiment, calc_proc, period, region, ext)
         cmd = f"cdo sellonlatbox,{coords} '{file}' {output_name}"
         process_exit_info = run_system_command(cmd, capture_output=True)
         exit_info(process_exit_info)
         
 
-def cdo_remap(file_list, remap_str, var, freq, model, experiment, calc_method, period, region, ext, remap_method="bilinear"):
+def cdo_remap(file_list, remap_str, var, freq, model, experiment, calc_proc, period, region, ext, remap_proc="bilinear"):
     """
-    Applies remapping to the files using CDO's remap method.
+    Applies remapping to the files using CDO's remap procedure.
 
     Parameters
     ----------
     file_list : list
         List of file paths.
     remap_str : str
-        The remapping method to use (e.g., 'bil', 'nearest').
+        The remapping procedure to use (e.g., 'bil', 'nearest').
     var : str
         Variable name.
     freq : str
@@ -246,25 +246,25 @@ def cdo_remap(file_list, remap_str, var, freq, model, experiment, calc_method, p
         Model name.
     experiment : str
         Experiment name or type.
-    calc_method : str
-        Calculation method.
+    calc_proc : str
+        Calculation procedure.
     period : str
         Time period string (e.g., '2000-2020').
     region : str
         Region or geographic area.
     ext : str
         File extension (e.g., 'nc').
-    remap_method : str, optional
-        Remapping method (default is "bilinear").
+    remap_proc : str, optional
+        Remapping procedure (default is "bilinear").
 
     Returns
     -------
     None
     """
-    output_name = _standardise_filename(var, freq, model, experiment, calc_method, period, region, ext)
+    output_name = _standardise_filename(var, freq, model, experiment, calc_proc, period, region, ext)
     
-    if remap_method not in cdo_remap_options:
-        raise ValueError(f"Unsupported remap method. Options are {cdo_remap_options}")
+    if remap_proc not in cdo_remap_options:
+        raise ValueError(f"Unsupported remap procedure. Options are {cdo_remap_options}")
     
     remap_cdo = cdo_remap_option_dict[remap_str]
     
@@ -277,7 +277,7 @@ def cdo_remap(file_list, remap_str, var, freq, model, experiment, calc_method, p
 # Statistical and Analytical Functions #
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-def cdo_time_mean(input_file, var, freq, model, experiment, calc_method, period, region, ext):
+def cdo_time_mean(input_file, var, freq, model, experiment, calc_proc, period, region, ext):
     """
     Calculates the time mean for a specific variable using CDO.
 
@@ -293,8 +293,8 @@ def cdo_time_mean(input_file, var, freq, model, experiment, calc_method, period,
         Model name.
     experiment : str
         Experiment name or type.
-    calc_method : str
-        Calculation method (e.g., 'mean', 'sum').
+    calc_proc : str
+        Calculation procedure (e.g., 'mean', 'sum').
     period : str
         Time period string (e.g., '2000-2020').
     region : str
@@ -306,8 +306,8 @@ def cdo_time_mean(input_file, var, freq, model, experiment, calc_method, period,
     -------
     None
     """
-    output_name = _standardise_filename(var, freq, model, experiment, calc_method, period, region, ext)
-    cmd = f"cdo -{calc_method} '{input_file}' {output_name}"
+    output_name = _standardise_filename(var, freq, model, experiment, calc_proc, period, region, ext)
+    cmd = f"cdo -{calc_proc} '{input_file}' {output_name}"
     process_exit_info = run_system_command(cmd, capture_output=True)
     exit_info(process_exit_info)
         
@@ -352,7 +352,7 @@ def cdo_periodic_statkit(nc_file, statistic, is_climatic, freq, season_str=None)
     exit_info(process_exit_info)    
     
 
-def cdo_anomalies(input_file_full, input_file_avg, var, freq, model, experiment, calc_method, period, region, ext):
+def cdo_anomalies(input_file_full, input_file_avg, var, freq, model, experiment, calc_proc, period, region, ext):
     """
     Calculates anomalies by subtracting the average from the full time series using CDO's sub operator.
 
@@ -370,8 +370,8 @@ def cdo_anomalies(input_file_full, input_file_avg, var, freq, model, experiment,
         Model name.
     experiment : str
         Experiment name or type.
-    calc_method : str
-        Calculation method
+    calc_proc : str
+        Calculation procedure
     period : str
         Time period string (e.g., '2000-2020').
     region : str
@@ -383,7 +383,7 @@ def cdo_anomalies(input_file_full, input_file_avg, var, freq, model, experiment,
     -------
     None
     """
-    output_name = _standardise_filename(var, freq, model, experiment, calc_method, period, region, ext)
+    output_name = _standardise_filename(var, freq, model, experiment, calc_proc, period, region, ext)
     cmd = f"cdo sub '{input_file_avg}' '{input_file_full}' {output_name}"
     process_exit_info = run_system_command(cmd, capture_output=True)
     exit_info(process_exit_info)
@@ -478,7 +478,7 @@ def apply_periodic_deltas(proj_file, hist_file, operator="+", delta_period="mont
     exit_info(process_exit_info)
 
 
-# File Renaming and Organizational Functions #
+# File Renaming and Organisational Functions #
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
     
 def cdo_rename(file_list, varlist_orig, varlist_std):
