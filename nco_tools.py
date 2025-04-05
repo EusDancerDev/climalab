@@ -27,8 +27,8 @@ def modify_variable_units_and_values(file_list,
     for file_num, file_name in enumerate(file_list, start=1): 
         temp_file = add_to_path(file_name, str2add=file_name)
         
-        isactuallyfloat = (abs(value-int(value)) == 0)
-        isactuallyfloat_int = int(isactuallyfloat)
+        is_whole_number = (abs(value-int(value)) == 0)
+        use_integer_format = int(is_whole_number)
         
         var_chunit_formatted\
         = f"ncatted -a units,{variable_name},o,c,'{new_unit}' '{file_name}'"        
@@ -56,7 +56,7 @@ def modify_variable_units_and_values(file_list,
             varval_mod_formatted = \
             format_string(varval_mod_command_templates_UV
                           .get(operator)
-                          .get(isactuallyfloat_int),
+                          .get(use_integer_format),
                           format_args)
         
             # Execute the command through the shell #
@@ -81,8 +81,8 @@ def modify_coordinate_values_by_threshold(file_list,
     for file_num, file_name in enumerate(file_list, start=1):
         temp_file = add_to_path(file_name, str2add=file_name)
         
-        isactuallyfloat = (abs(value-int(value)) == 0)
-        isactuallyfloat_int = int(isactuallyfloat)
+        is_whole_number = (abs(value-int(value)) == 0)
+        use_integer_format = int(is_whole_number)
         
         if operator not in basic_four_rules:
             raise ValueError(invalid_operator_err_template)
@@ -111,7 +111,7 @@ def modify_coordinate_values_by_threshold(file_list,
                 format_string(varval_mod_command_templates_BTH
                               .get(operator)
                               .get(threshold_mode)
-                              .get(isactuallyfloat_int),
+                              .get(use_integer_format),
                               format_args)
             
                 # Execute the command through the shell #
@@ -136,8 +136,8 @@ def modify_coordinate_all_values(file_list,
     for file_num, file_name in enumerate(file_list, start=1): 
         temp_file = add_to_path(file_name, str2add=file_name)
         
-        isactuallyfloat = (abs(value-int(value)) == 0)
-        isactuallyfloat_int = int(isactuallyfloat)
+        is_whole_number = (abs(value-int(value)) == 0)
+        use_integer_format = int(is_whole_number)
         
         if operator not in basic_four_rules:
             raise ValueError(invalid_operator_err_template)
@@ -165,7 +165,7 @@ def modify_coordinate_all_values(file_list,
                 format_string(varval_mod_command_templates_all
                               .get(operator)
                               .get(threshold_mode)
-                              .get(isactuallyfloat_int),
+                              .get(use_integer_format),
                               format_args)
             
                 # Execute the command through the shell #
