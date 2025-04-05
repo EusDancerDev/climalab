@@ -5,10 +5,10 @@
 # Import custom modules #
 #-----------------------#
 
-from pygenutils.strings.text_formatters import format_string, print_format_string
-from pygenutils.operative_systems.os_operations import run_system_command, exit_info
-from paramlib.global_parameters import basic_four_rules
 from filewise.file_operations.ops_handler import add_to_path, rename_objects
+from paramlib.global_parameters import basic_four_rules
+from pygenutils.operative_systems.os_operations import run_system_command, exit_info
+from pygenutils.strings.text_formatters import format_string, print_format_string
 
 #-------------------------#
 # Define custom functions #
@@ -30,37 +30,37 @@ def modify_variable_units_and_values(file_list,
         isactuallyfloat = (abs(value-int(value)) == 0)
         isactuallyfloat_int = int(isactuallyfloat)
         
-        var_chunit_command\
+        var_chunit_formatted\
         = f"ncatted -a units,{variable_name},o,c,'{new_unit}' '{file_name}'"        
-        process_exit_info = run_system_command(var_chunit_command,
+        process_exit_info = run_system_command(var_chunit_formatted,
                                                capture_output=True,
                                                encoding="utf-8")
         exit_info(process_exit_info)
 
         
         if operator not in basic_four_rules:
-            raise ValueError(invalid_operator_errtext)
+            raise ValueError(invalid_operator_err_template)
         else:            
             # Print progress information #
             operator_gerund = operator_gerund_dict.get(operator)
-            arg_tuple_print = (ncap2_comm_args, 
-                               operator_gerund, value, variable_name, 
-                               file_num, lfl)
-            print_format_string(prefmt_str_progress_UV, arg_tuple_print)
+            format_args_print = (ncap2_base_args, 
+                                 operator_gerund, value, variable_name, 
+                                 file_num, lfl)
+            print_format_string(prefmt_str_progress_UV, format_args_print)
             
             # Get the command from the corresponding switch case dictionary #
-            arg_tuple_command = (ncap2_comm_args,
-                                 variable_name, variable_name, value,
-                                 file_name, temp_file)
+            format_args = (ncap2_base_args,
+                           variable_name, variable_name, value,
+                           file_name, temp_file)
             
-            varval_mod_command = \
-            format_string(varval_mod_command_dict_UV
+            varval_mod_formatted = \
+            format_string(varval_mod_command_templates_UV
                           .get(operator)
                           .get(isactuallyfloat_int),
-                          arg_tuple_command)
+                          format_args)
         
             # Execute the command through the shell #
-            process_exit_info = run_system_command(varval_mod_command,
+            process_exit_info = run_system_command(varval_mod_formatted,
                                                    capture_output=True,
                                                    encoding="utf-8")
             exit_info(process_exit_info)            
@@ -85,37 +85,37 @@ def modify_coordinate_values_by_threshold(file_list,
         isactuallyfloat_int = int(isactuallyfloat)
         
         if operator not in basic_four_rules:
-            raise ValueError(invalid_operator_errtext)
+            raise ValueError(invalid_operator_err_template)
         else:
             if threshold_mode not in threshold_mode_opts:
-                raise ValueError(format_string(prefmt_invalid_threshold_mode,
+                raise ValueError(format_string(invalid_threshold_mode_err_template,
                                                threshold_mode_opts))
             
             else:
                 # Print progress information #
                 operator_gerund = operator_gerund_dict.get(operator)
                     
-                arg_tuple_print = (ncap2_comm_args, 
-                                   operator_gerund, value, dimension_name, 
-                                   file_num, lfl)
+                format_args_print = (ncap2_base_args, 
+                                     operator_gerund, value, dimension_name, 
+                                     file_num, lfl)
                 
-                print_format_string(prefmt_str_progress_BTH, arg_tuple_print)
+                print_format_string(prefmt_str_progress_BTH, format_args_print)
                 
                 # Get the command from the corresponding switch case dictionary #
-                arg_tuple_command = (ncap2_comm_args,
-                                     dimension_name, threshold,
-                                     dimension_name, dimension_name, value,
-                                     file_name, temp_file)
-                
-                dimval_mod_command = \
-                format_string(varval_mod_command_dict_BTH
+                format_args = (ncap2_base_args,
+                               dimension_name, threshold,
+                               dimension_name, dimension_name, value,
+                               file_name, temp_file)
+        
+                dimval_mod_formatted = \
+                format_string(varval_mod_command_templates_BTH
                               .get(operator)
                               .get(threshold_mode)
                               .get(isactuallyfloat_int),
-                              arg_tuple_command)
+                              format_args)
             
                 # Execute the command through the shell #
-                process_exit_info = run_system_command(dimval_mod_command,
+                process_exit_info = run_system_command(dimval_mod_formatted,
                                                        capture_output=True,
                                                        encoding="utf-8")
                 exit_info(process_exit_info)                 
@@ -140,36 +140,36 @@ def modify_coordinate_all_values(file_list,
         isactuallyfloat_int = int(isactuallyfloat)
         
         if operator not in basic_four_rules:
-            raise ValueError(invalid_operator_errtext)
+            raise ValueError(invalid_operator_err_template)
         else:
             if threshold_mode not in threshold_mode_opts:
-                raise ValueError(format_string(prefmt_invalid_threshold_mode,
+                raise ValueError(format_string(invalid_threshold_mode_err_template,
                                                threshold_mode_opts))
             
             else:
                 # Print progress information #
                 operator_gerund = operator_gerund_dict.get(operator)
                     
-                arg_tuple_print = (ncap2_comm_args, 
-                                   operator_gerund, value, dimension_name, 
-                                   file_num, lfl)
+                format_args_print = (ncap2_base_args,
+                                     operator_gerund, value, dimension_name, 
+                                     file_num, lfl)
                 
-                print_format_string(prefmt_str_progress_BTH, arg_tuple_print)
+                print_format_string(prefmt_str_progress_BTH, format_args_print)
                 
                 # Get the command from the corresponding switch case dictionary #
-                arg_tuple_command = (ncap2_comm_args,
-                                     dimension_name, dimension_name, value,
-                                     file_name, temp_file)
+                format_args = (ncap2_base_args,
+                               dimension_name, dimension_name, value,
+                               file_name, temp_file)
                 
-                dimval_mod_command = \
-                format_string(varval_mod_command_dict_all
+                dimval_mod_formatted = \
+                format_string(varval_mod_command_templates_all
                               .get(operator)
                               .get(threshold_mode)
                               .get(isactuallyfloat_int),
-                              arg_tuple_command)
+                              format_args)
             
                 # Execute the command through the shell #
-                process_exit_info = run_system_command(dimval_mod_command,
+                process_exit_info = run_system_command(dimval_mod_formatted,
                                                        capture_output=True,
                                                        encoding="utf-8")
                 exit_info(process_exit_info)    
@@ -180,11 +180,11 @@ def modify_coordinate_all_values(file_list,
 # Parameters and constants #
 #--------------------------#
 
-# Fixed and preformatted strings #
-#--------------------------------#
+# Template strings #
+#------------------#
 
 # NCAP2 command #
-ncap2_comm_args = "ncap2 -O -s"
+ncap2_base_args = "ncap2 -O -s"
 
 # Progress verbose #
 prefmt_str_progress_UV = \
@@ -200,42 +200,45 @@ prefmt_str_progress_all = \
 {} out of {}..."""
 
 # NCAP2 command's argument syntaxes, for all values or dimensions #
-prefmt_str_addvalue = """{} '{}={}+{}' '{}' '{}'"""
-prefmt_str_subtrvalue = """{} '{}={}-{}' '{}' '{}'"""
-prefmt_str_multvalue = """{} '{}={}*{}' '{}' '{}'"""
-prefmt_str_divvalue = """{} '{}={}/{}' '{}' '{}'"""
+addvalue_command_template = """{} '{}={}+{}' '{}' '{}'"""
+subtrvalue_command_template = """{} '{}={}-{}' '{}' '{}'"""
+multvalue_command_template = """{} '{}={}*{}' '{}' '{}'"""
+divvalue_command_template = """{} '{}={}/{}' '{}' '{}'"""
 
-prefmt_str_addvalue_float = """{} '{}={}+{}.0f' '{}' '{}'"""
-prefmt_str_subtrvalue_float = """{} '{}={}-{}.0f' '{}' '{}'"""
-prefmt_str_multvalue_float = """{} '{}={}*{}.0f' '{}' '{}'"""
-prefmt_str_divvalue_float = """{} '{}={}/{}.0f' '{}' '{}'"""
+addvalue_float_command_template = """{} '{}={}+{}.0f' '{}' '{}'"""
+subtrvalue_float_command_template = """{} '{}={}-{}.0f' '{}' '{}'"""
+multvalue_float_command_template = """{} '{}={}*{}.0f' '{}' '{}'"""
+divvalue_float_command_template = """{} '{}={}/{}.0f' '{}' '{}'"""
 
 # NCAP2 command's argument syntaxes, conditional #
-prefmt_str_addvalue_where_max = """{} 'where({}<{}) {}={}+{}' '{}' '{}'"""
-prefmt_str_subtrvalue_where_max = """{} 'where({}<{}) {}={}-{}' '{}' '{}'"""
-prefmt_str_multvalue_where_max = """{} 'where({}<{}) {}={}*{}' '{}' '{}'"""
-prefmt_str_divvalue_where_max = """{} 'where({}<{}) {}={}/{}' '{}' '{}'"""
+addvalue_where_max_command_template = """{} 'where({}<{}) {}={}+{}' '{}' '{}'"""
+subtrvalue_where_max_command_template = """{} 'where({}<{}) {}={}-{}' '{}' '{}'"""
+multvalue_where_max_command_template = """{} 'where({}<{}) {}={}*{}' '{}' '{}'"""
+divvalue_where_max_command_template = """{} 'where({}<{}) {}={}/{}' '{}' '{}'"""
 
-prefmt_str_addvalue_where_max_float = """{} 'where({}<{}) {}={}+{}.0f' '{}' '{}'"""
-prefmt_str_subtrvalue_where_max_float = """{} 'where({}<{}) {}={}-{}.0f' '{}' '{}'"""
-prefmt_str_multvalue_where_max_float = """{} 'where({}<{}) {}={}*{}.0f' '{}' '{}'"""
-prefmt_str_divvalue_where_max_float = """{} 'where({}<{}) {}={}/{}.0f' '{}' '{}'"""
+addvalue_where_max_float_command_template = """{} 'where({}<{}) {}={}+{}.0f' '{}' '{}'"""
+subtrvalue_where_max_float_command_template = """{} 'where({}<{}) {}={}-{}.0f' '{}' '{}'"""
+multvalue_where_max_float_command_template = """{} 'where({}<{}) {}={}*{}.0f' '{}' '{}'"""
+divvalue_where_max_float_command_template = """{} 'where({}<{}) {}={}/{}.0f' '{}' '{}'"""
 
 
-prefmt_str_addvalue_where_min = """{} 'where({}>{}) {}={}+{}' '{}' '{}'"""
-prefmt_str_subtrvalue_where_min = """{} 'where({}>{}) {}={}-{}' '{}' '{}'"""
-prefmt_str_multvalue_where_min = """{} 'where({}>{}) {}={}*{}' '{}' '{}'"""
-prefmt_str_divvalue_where_min = """{} 'where({}>{}) {}={}/{}' '{}' '{}'"""
+addvalue_where_min_command_template = """{} 'where({}>{}) {}={}+{}' '{}' '{}'"""
+subtrvalue_where_min_command_template = """{} 'where({}>{}) {}={}-{}' '{}' '{}'"""
+multvalue_where_min_command_template = """{} 'where({}>{}) {}={}*{}' '{}' '{}'"""
+divvalue_where_min_command_template = """{} 'where({}>{}) {}={}/{}' '{}' '{}'"""
 
-prefmt_str_addvalue_where_min_float = """{} 'where({}>{}) {}={}+{}.0f' '{}' '{}'"""
-prefmt_str_subtrvalue_where_min_float = """{} 'where({}>{}) {}={}-{}.0f' '{}' '{}'"""
-prefmt_str_multvalue_where_min_float = """{} 'where({}>{}) {}={}*{}.0f' '{}' '{}'"""
-prefmt_str_divvalue_where_min_float = """{} 'where({}>{}) {}={}/{}.0f' '{}' '{}'"""
+addvalue_where_min_float_command_template = """{} 'where({}>{}) {}={}+{}.0f' '{}' '{}'"""
+subtrvalue_where_min_float_command_template = """{} 'where({}>{}) {}={}-{}.0f' '{}' '{}'"""
+multvalue_where_min_float_command_template = """{} 'where({}>{}) {}={}*{}.0f' '{}' '{}'"""
+divvalue_where_min_float_command_template = """{} 'where({}>{}) {}={}/{}.0f' '{}' '{}'"""
+
+# Fixed strings #
+#---------------#
 
 # Error messages #
-invalid_operator_errtext = \
+invalid_operator_err_template = \
 f"Invalid basic operator chosen. Options are {basic_four_rules}."
-prefmt_invalid_threshold_mode = \
+invalid_threshold_mode_err_template = \
 """Invalid threshold mode. Options are {}."""
 
 
@@ -254,107 +257,107 @@ operator_gerund_dict = {
     basic_four_rules[3] : "Dividing"
     }
 
-varval_mod_command_dict_UV = {
+varval_mod_command_templates_UV = {
     basic_four_rules[0] : {
-        1 : prefmt_str_addvalue,
-        0 : prefmt_str_addvalue_float
+        1 : addvalue_command_template,
+        0 : addvalue_float_command_template
     },
     basic_four_rules[1] : {
-        1 : prefmt_str_subtrvalue,
-        0 : prefmt_str_subtrvalue_float
+        1 : subtrvalue_command_template,
+        0 : subtrvalue_float_command_template
     },
     basic_four_rules[2] : {
-        1 : prefmt_str_multvalue,
-        0 : prefmt_str_multvalue_float
+        1 : multvalue_command_template,
+        0 : multvalue_float_command_template
     },
     basic_four_rules[3] : {
-        1 : prefmt_str_divvalue,
-        0 : prefmt_str_divvalue_float
+        1 : divvalue_command_template,
+        0 : divvalue_float_command_template
     }
 }
 
-varval_mod_command_dict_BTH = {
+varval_mod_command_templates_BTH = {
     basic_four_rules[0] : {
         "max" : {
-            1 : prefmt_str_addvalue_where_max,
-            0 : prefmt_str_addvalue_where_max_float
+            1 : addvalue_where_max_command_template,
+            0 : addvalue_where_max_float_command_template
         },
         "min" : {
-            1 : prefmt_str_addvalue_where_min,
-            0 : prefmt_str_addvalue_where_min_float
+            1 : addvalue_where_min_command_template,
+            0 : addvalue_where_min_float_command_template
         },
     },
     basic_four_rules[1] : {
         "max" : {
-            1 : prefmt_str_subtrvalue_where_max,
-            0 : prefmt_str_subtrvalue_where_max_float
+            1 : subtrvalue_where_max_command_template,
+            0 : subtrvalue_where_max_float_command_template
         },
         "min" : {
-            1 : prefmt_str_subtrvalue_where_min,
-            0 : prefmt_str_subtrvalue_where_min_float
+            1 : subtrvalue_where_min_command_template,
+            0 : subtrvalue_where_min_float_command_template
         },
     },
     basic_four_rules[2] : {
         "max" : {
-            1 : prefmt_str_multvalue_where_max,
-            0 : prefmt_str_multvalue_where_max_float
+            1 : multvalue_where_max_command_template,
+            0 : multvalue_where_max_float_command_template
         },
         "min" : {
-            1 : prefmt_str_multvalue_where_min,
-            0 : prefmt_str_multvalue_where_min_float
+            1 : multvalue_where_min_command_template,
+            0 : multvalue_where_min_float_command_template
         },
     },
     basic_four_rules[3] : {
         "max" : {
-            1 : prefmt_str_divvalue_where_max,
-            0 : prefmt_str_divvalue_where_max_float
+            1 : divvalue_where_max_command_template,
+            0 : divvalue_where_max_float_command_template
         },
         "min" : {
-            1 : prefmt_str_divvalue_where_min,
-            0 : prefmt_str_divvalue_where_min_float
+            1 : divvalue_where_min_command_template,
+            0 : divvalue_where_min_float_command_template
         }
     }
 }
 
-varval_mod_command_dict_all = {
+varval_mod_command_templates_all = {
     basic_four_rules[0] : {
         "max" : {
-            1 : prefmt_str_addvalue,
-            0 : prefmt_str_addvalue_float
+            1 : addvalue_command_template,
+            0 : addvalue_float_command_template
         },
         "min" : {
-            1 : prefmt_str_addvalue,
-            0 : prefmt_str_addvalue_float
+            1 : addvalue_command_template,
+            0 : addvalue_float_command_template
         },
     },
     basic_four_rules[1] : {
         "max" : {
-            1 : prefmt_str_subtrvalue,
-            0 : prefmt_str_subtrvalue_float
+            1 : subtrvalue_command_template,
+            0 : subtrvalue_float_command_template
         },
         "min" : {
-            1 : prefmt_str_subtrvalue,
-            0 : prefmt_str_subtrvalue_float
+            1 : subtrvalue_command_template,
+            0 : subtrvalue_float_command_template
         },
     },
     basic_four_rules[2] : {
         "max" : {
-            1 : prefmt_str_multvalue,
-            0 : prefmt_str_multvalue_float
+            1 : multvalue_command_template,
+            0 : multvalue_float_command_template
         },
         "min" : {
-            1 : prefmt_str_multvalue,
-            0 : prefmt_str_multvalue_float
+            1 : multvalue_command_template,
+            0 : multvalue_float_command_template
         },
     },
     basic_four_rules[3] : {
         "max" : {
-            1 : prefmt_str_divvalue,
-            0 : prefmt_str_divvalue_float
+            1 : divvalue_command_template,
+            0 : divvalue_float_command_template
         },
         "min" : {
-            1 : prefmt_str_divvalue,
-            0 : prefmt_str_divvalue_float
+            1 : divvalue_command_template,
+            0 : divvalue_float_command_template
         }
     }
 }
