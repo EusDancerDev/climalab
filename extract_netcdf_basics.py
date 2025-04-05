@@ -5,7 +5,7 @@
 **Program Note**
 
 - This program is an application of the functions from the `data_manipulation` module
-  within the `xarray_utils` subpackage.
+  within the `xarray_utils` sub-package.
 - It extracts geographical bounds (latitude and longitude), time bounds, 
 ccand time formats from netCDF (`.nc`) files found in the directory where the program is executed.
 - The functions scan directories recursively and are designed to search for
@@ -17,16 +17,16 @@ ccand time formats from netCDF (`.nc`) files found in the directory where the pr
   it is executed (using the current working directory) and will recursively search 
   for `.nc` files within that directory.
 
-**Main Functions and Subpackages Used**
-- `extract_latlon_bounds` (from `data_manipulation`, part of the `xarray_utils` subpackage)
+**Main Functions and sub-packages Used**
+- `extract_latlon_bounds` (from `data_manipulation`, part of the `xarray_utils` sub-package)
    Extracts latitude and longitude bounds from netCDF files and writes the results into a report.
-- `extract_time_bounds` (from `data_manipulation`, part of the `xarray_utils` subpackage):
+- `extract_time_bounds` (from `data_manipulation`, part of the `xarray_utils` sub-package):
    Extracts the start and end times from netCDF files and generates a report.
-- `extract_time_formats` (from `data_manipulation`, part of the `xarray_utils` subpackage):
+- `extract_time_formats` (from `data_manipulation`, part of the `xarray_utils` sub-package):
    Extracts the time formats from netCDF files and documents them in a report.
 
 Execution timing is handled using the `program_exec_timer` function from the
-`time_handling` subpackage to track the start and end times of the process.
+`time_handling` sub-package to track the start and end times of the process.
 """
 
 #-----------------------#

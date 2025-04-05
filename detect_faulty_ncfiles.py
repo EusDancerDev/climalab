@@ -5,7 +5,7 @@
 **Program Note**
 
 - This program is an application of the `scan_ncfiles` function from the 
-  `file_utils` module within the `xarray_utils` subpackage.
+  `file_utils` module within the `xarray_utils` sub-package.
 - It is designed to scan specified directories for netCDF (`.nc`) files,
   check their integrity if necessary, and generate a report of faulty files.
 - The `scan_ncfiles` function offers various configurations for returning 
@@ -16,14 +16,14 @@
 - However, keep in mind that it is designed to operate with absolute paths,
   so ensure that any paths provided are properly configured to reflect your system's directory structure.
 
-**Main Functions and Subpackages Used**
-- `scan_ncfiles` (from `file_utils`, part of the `xarray_utils` subpackage):
+**Main Functions and sub-packages Used**
+- `scan_ncfiles` (from `file_utils`, part of the `xarray_utils` sub-package):
    The core function used to scan directories and check for `.nc` file integrity.
-- `ncfile_integrity_status` (from `file_utils`, part of the `xarray_utils` subpackage):
+- `ncfile_integrity_status` (from `file_utils`, part of the `xarray_utils` sub-package):
    This function checks the integrity of `.nc` files and flags any issues.
 
 The execution of the program is timed using the `program_exec_timer` function 
-from the `time_handling` subpackage, which calculates the elapsed time of 
+from the `time_handling` sub-package, which calculates the elapsed time of 
 the execution of the program for performance analysis.
 """
 
