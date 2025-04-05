@@ -312,9 +312,9 @@ def cdo_time_mean(input_file, var, freq, model, experiment, calc_proc, period, r
     exit_info(process_exit_info)
         
 
-def cdo_periodic_statkit(nc_file, statistic, is_climatic, freq, season_str=None):
+def cdo_periodic_statistics(nc_file, statistic, is_climatic, freq, season_str=None):
     """
-    Calculates basic periodic statkit on a netCDF file using CDO.
+    Calculates basic periodic statistics on a netCDF file using CDO.
 
     Parameters
     ----------
@@ -695,9 +695,9 @@ freq_abbrs_delta = [freq_abbrs[0]] + freq_abbrs[2:4]
 
 # Basic statkit #
 statkit = ["max", "min", "sum", 
-              "mean", "avg", 
-              "var", "var1",
-              "std", "std1"]
+           "mean", "avg", 
+           "var", "var1",
+           "std", "std1"]
   
 # CDO remapping options #
 cdo_remap_option_dict = {
