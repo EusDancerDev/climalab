@@ -225,8 +225,8 @@ def return_constants():
 # Magnitude unit conversions #
 unit_conversions_list = ["deg2rad", "rad2deg", "mps_to_kph", "kph_to_mps"]
 
-# Preformatted strings #
-#----------------------#
+# Template strings #
+#------------------#
 
 # Error messages #
 unsupported_unit_conversion_error = "Unsupported unit converter. Choose one from {}."
