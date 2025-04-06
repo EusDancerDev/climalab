@@ -1,0 +1,64 @@
+# ERA5 Configuration File
+
+# Variable parameters
+project_name: "EusDancerDev"
+country_list:
+  - "Basque-Country"
+area_lists:
+  - [45, 1, 40, 4]
+year_range:
+  - "1977"
+month_range:
+  - "01"
+day_range:
+  - "01"
+hour_range:
+  - "00:00"
+variable_list:
+  - "2m_temperature"
+  - "2m_dewpoint_temperature"
+  - "10m_u_component_of_wind"
+  - "10m_v_component_of_wind"
+  - "surface_pressure"
+  - "surface_solar_radiation_downwards"
+  - "surface_thermal_radiation_downwards"
+  - "total_precipitation"
+file_format: "grib"
+convert_to_nc: true
+
+# Fixed parameters
+# Main directories
+repo_path: "/home/jonander/Documents/gordetegiak/pygenutils."
+project_dir: "{repo_path}/test-base_programs/{project_name}"
+codes_dir: "{project_dir}/codes"
+main_input_data_dir: "{project_dir}/input_data"
+
+# Dataset information
+dataset: "ERA5"
+dataset_lower: "era5"
+
+# Product attributes
+product_name: "reanalysis-era5"
+
+# Area
+area_kw: "area"
+
+# Date and times
+year_kw: "year"
+month_kw: "month"
+day_kw: "day"
+hour_kw: "hour"
+
+# Variables
+variable_kw: "variable"
+
+# Downloadable formats and extensions
+format_kw: "format"
+available_formats:
+  - "netcdf"
+  - "grib"
+  - "netcdf_zip"
+available_extensions:
+  - "nc"
+  - "grib"
+  - "zip" 

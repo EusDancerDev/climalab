@@ -1,0 +1,62 @@
+# E-OBS Configuration File
+
+# Variable parameters
+project_name: "EusDancerDev"
+product_type: "ensemble_mean"
+periods:
+  - "1950_1964"
+  - "1965_1979"
+  - "1980_1994"
+  - "1995_2010"
+  - "2011_2022"
+variable_list:
+  - "maximum_temperature"
+  - "mean_temperature"
+  - "minimum_temperature"
+  - "precipitation_amount"
+file_format: "zip"
+version: "28.0e"
+resolution: "0.1"
+
+# Fixed parameters
+# Main directories
+repo_path: "/home/jonander/Documents/gordetegiak/pygenutils."
+project_dir: "{repo_path}/test-base_programs/{project_name}"
+codes_dir: "{project_dir}/codes"
+main_input_data_dir: "{project_dir}/input_data"
+
+# Dataset information
+dataset: "E-OBS"
+dataset_lower: "e-obs"
+
+# Product attributes
+product_name: "insitu-gridded-observations-europe"
+product_kw: "product_type"
+available_products:
+  - "ensemble_mean"
+  - "ensemble_spread"
+  - "elevation"
+
+# Periods
+period_kw: "period"
+
+# Variables
+variable_kw: "variable"
+
+# Downloadable formats and extensions
+format_kw: "format"
+available_formats:
+  - "zip"
+  - "tgz"
+available_extensions:
+  - "zip"
+  - "tar.gz"
+
+# Version
+version_kw: "version"
+
+# Grid resolution
+resolution_kw: "grid_resolution"
+available_resolutions:
+  - "0.1"
+  - "0.25" 
