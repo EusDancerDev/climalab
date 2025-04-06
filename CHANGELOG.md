@@ -95,7 +95,7 @@ After these changes, absolute imports in all affected files have been updated ac
 
 ## [v3.2.0] - 2024-11-03
 
-### Added
+### Added (v3.2.0)
 
 - Added `__init__.py` files to all first-level and deeper sub-packages for enhanced import access
 
