@@ -4,9 +4,35 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [v3.3.0] - 2025-04-05
+## [v4.0.0] - 2025-04-06
 
 ### Changed
+
+#### **General** (v4.0.0)
+
+- In order to improve the overall structure and readability of the codebase, the following new directories have been created:
+  - `netcdf_tools/`
+  - `meteorological/`
+
+- Next, some modules originally in the top-level directory have been moved to new sub-packages:
+
+| Module | Original Location | New Location | New module name |
+|:------:|:-----------------:|:------------:|:---------------:|
+| `cdo_tools.py` | `climalab/` | `climalab/netcdf_tools/` | `cdo_tools.py` |
+| `nco_tools.py` | `climalab/` | `climalab/netcdf_tools/` | `nco_tools.py` |
+| `extract_netcdf_basics.py` | `climalab/` | `climalab/netcdf_tools/` | `extract_basics.py` |
+| `detect_faulty_ncfiles.py` | `climalab/` | `climalab/netcdf_tools/` | `detect_faulty.py` |
+| `meteorological_variables.py` | `climalab/` | `climalab/meteorological/` | `variables.py` |
+| `weather_software_file_creator.py` | `climalab/` | `climalab/meteorological/` | `weather_software.py` |
+| `cds_tools.py` | `climalab/` | `climalab/data_downloads/` | `cds_tools.py` |
+
+After these changes, absolute imports in all affected files have been updated accordingly.
+
+---
+
+## [v3.3.0] - 2025-04-05
+
+### Changed (v3.3.0)
 
 #### **General** (v3.3.0)
 
@@ -73,7 +99,7 @@ All notable changes to this project will be documented in this file.
 
 - The following **sub-packages** and `modules` were added:
   - **data_downloads**: includes scripts for automated downloads from CORDEX, EOBS, and ERA5 repositories.
-  - **supplementary_tools**: additional tools for visualizations, bias correction, and statistical analysis in climate data.
+  - **supplementary_tools**: additional tools for visualisations, bias correction, and statistical analysis in climate data.
   - `cdo_tools`: provides climate data operators for processing and analyzing climate datasets.
   - `cds_tools`: facilitates data downloads from the Copernicus Climate Data Store (CDS).
   - `detect_faulty_ncfiles`: detects and reports issues in netCDF files.
