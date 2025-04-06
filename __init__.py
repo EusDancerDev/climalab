@@ -3,7 +3,7 @@
 
 # climalab/__init__.py
 
-__version__ = "3.3.0"
+__version__ = "4.0.0"
 
 from . import __init__
 from . import cdo_tools
