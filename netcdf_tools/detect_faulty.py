@@ -31,8 +31,8 @@ the execution of the program for performance analysis.
 # Import custom modules #
 #-----------------------#
 
-from pygenutils.time_handling.program_snippet_exec_timers import program_exec_timer
 from filewise.xarray_utils.file_utils import scan_ncfiles
+from pygenutils.time_handling.program_snippet_exec_timers import program_exec_timer
 
 #-------------------#
 # Define parameters #
