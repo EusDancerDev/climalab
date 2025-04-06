@@ -6,6 +6,26 @@ All notable changes to this project will be documented in this file.
 
 ## [v4.0.0] - 2025-04-06
 
+### Added
+
+#### **Data Analysis Projects Sample** (v4.0.0)
+
+- Created a new sample project structure for data analysis projects:
+  - Added configuration-based approach for data downloads
+  - Created YAML configuration files for different datasets:
+    - `cordex_config.yaml`: configuration for CORDEX data
+    - `eobs_config.yaml`: configuration for E-OBS data
+    - `era5_config.yaml`: configuration for ERA5 data
+    - `era5_land_config.yaml`: configuration for ERA5-Land data
+  - Implemented Python scripts for downloading data:
+    - `download_cordex.py`: script to download CORDEX data
+    - `download_eobs.py`: script to download E-OBS data
+    - `download_era5.py`: script to download ERA5 data
+    - `download_era5_land.py`: script to download ERA5-Land data
+  - Added file existence checking and validation in all download scripts
+  - Implemented temporary directory for downloads and proper cleanup
+  - Added comprehensive logging for tracking download progress
+
 ### Changed
 
 #### **General** (v4.0.0)
@@ -24,7 +44,7 @@ All notable changes to this project will be documented in this file.
 | `detect_faulty_ncfiles.py` | `climalab/` | `climalab/netcdf_tools/` | `detect_faulty.py` |
 | `meteorological_variables.py` | `climalab/` | `climalab/meteorological/` | `variables.py` |
 | `weather_software_file_creator.py` | `climalab/` | `climalab/meteorological/` | `weather_software.py` |
-| `cds_tools.py` | `climalab/` | `climalab/data_downloads/` | `cds_tools.py` |
+| `cds_tools.py` | `climalab/` | `climalab/data_analysis_projects_sample/src/data/` | `cds_tools.py` |
 
 After these changes, absolute imports in all affected files have been updated accordingly.
 
