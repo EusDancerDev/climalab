@@ -4,9 +4,32 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [v4.1.0] - 2025-04-24
+
+### Changed
+
+#### **General**
+
+- Refactored package import structure:
+  - Replace direct imports with `__all__` definitions in package initiator files:
+    - `climalab/__init__.py`
+    - `climalab/data_analysis_projects_sample/src/__init__.py`
+    - `climalab/data_analysis_projects_sample/src/data/__init__.py`
+    - `climalab/meteorological/__init__.py`
+    - `climalab/supplementary_tools/__init__.py`
+  - Improved control over exported symbols when using 'from package import *'
+  - Maintained consistent public API while following Python best practices
+
+#### **Meteorological**
+
+- Module `weather_software.py`:
+  - Correct the import paths for the functions `approach_value` and `week_range`.
+
+---
+
 ## [v4.0.0] - 2025-04-06
 
-### Added
+### Added (v4.0.0)
 
 #### **Data Analysis Projects Sample** (v4.0.0)
 
