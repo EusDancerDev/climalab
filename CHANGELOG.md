@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
     - `climalab/__init__.py`
     - `climalab/data_analysis_projects_sample/src/__init__.py`
     - `climalab/data_analysis_projects_sample/src/data/__init__.py`
+    - `climalab/netcdf_tools/__init__.py`
     - `climalab/meteorological/__init__.py`
     - `climalab/supplementary_tools/__init__.py`
   - Improved control over exported symbols when using 'from package import *'
