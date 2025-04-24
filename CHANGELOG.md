@@ -49,7 +49,7 @@ All notable changes to this project will be documented in this file.
   - Implemented temporary directory for downloads and proper cleanup
   - Added comprehensive logging for tracking download progress
 
-### Changed
+### Changed (v4.0.0)
 
 #### **General** (v4.0.0)
 
