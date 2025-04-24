@@ -3,7 +3,10 @@
 
 # climalab/netcdf_tools/__init__.py
 
-from . import cdo_tools
-from . import nco_tools
-from . import extract_netcdf_basics
-from . import detect_faulty_ncfiles
+# Define what should be available when using 'from climalab.netcdf_tools import *'
+__all__ = [
+    'cdo_tools',
+    'detect_faulty',
+    'extract_basics',
+    'nco_tools'
+]
