@@ -3,5 +3,8 @@
 
 # climalab/meteorological/__init__.py
 
-from . import variables
-from . import weather_software
+# Define what should be available when using 'from climalab.meteorological import *'
+__all__ = [
+    'variables',
+    'weather_software'
+]
