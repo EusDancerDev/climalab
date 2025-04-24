@@ -3,14 +3,16 @@
 
 # climalab/supplementary_tools/__init__.py
 
-from . import __init__
-from . import auxiliary_functions
-from . import ba_mean
-from . import ba_mean_and_var
-from . import ba_nonparametric_qm
-from . import ba_parametric_qm
-from . import basic_mapplot
-from . import basic_plot
-from . import comparison_lineplot
-from . import eval_original
-from . import temperature_map
+# Define what should be available when using 'from climalab.supplementary_tools import *'
+__all__ = [
+    'auxiliary_functions',
+    'ba_mean',
+    'ba_mean_and_var',
+    'ba_nonparametric_qm',
+    'ba_parametric_qm',
+    'basic_mapplot',
+    'basic_plot',
+    'comparison_lineplot',
+    'eval_original',
+    'temperature_map'
+]
