@@ -3,7 +3,7 @@
 
 # climalab/__init__.py
 
-__version__ = "4.0.0"
+__version__ = "4.1.0"
 
 # Define what should be available when using 'from climalab import *'
 __all__ = [
