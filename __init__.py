@@ -5,6 +5,9 @@
 
 __version__ = "4.0.0"
 
-from . import meteorological
-from . import netcdf_tools
-from . import supplementary_tools
+# Define what should be available when using 'from climalab import *'
+__all__ = [
+    'meteorological',
+    'netcdf_tools',
+    'supplementary_tools'
+]
