@@ -1,32 +1,28 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-#-----------------------#
-# Import custom modules #
-#-----------------------#
+#------------------------#
+# Import project modules #
+#------------------------#
 
 from filewise.file_operations.ops_handler import rename_objects
 from filewise.xarray_utils.patterns import get_file_variables, get_times
-from paramlib import global_parameters
+from paramlib.global_parameters import (
+    BASIC_FOUR_RULES, 
+    COMMON_DELIM_LIST, 
+    TIME_FREQUENCIES_SHORTER_1,
+    TIME_FREQUENCIES_SHORT_1
+)
 from pygenutils.arrays_and_lists.data_manipulation import flatten_to_string
 from pygenutils.operative_systems.os_operations import exit_info, run_system_command
-from pygenutils.strings import text_formatters, string_handler
+from pygenutils.strings.text_formatters import format_string
+from pygenutils.strings.string_handler import (
+    add_to_path, 
+    find_substring_index, 
+    obj_path_specs, 
+    modify_obj_specs
+)
 from pygenutils.time_handling.date_and_time_utils import find_time_key
-
-# Create aliases #
-#----------------#
-
-basic_four_rules = global_parameters.basic_four_rules
-common_delim_list = global_parameters.common_delim_list
-freq_abbrs = global_parameters.time_frequencies_shorter_1
-time_freqs = global_parameters.time_frequencies_short_1
-
-format_string = text_formatters.format_string
-
-add_to_path = string_handler.add_to_path
-find_substring_index = string_handler.find_substring_index
-obj_path_specs = string_handler.obj_path_specs
-modify_obj_specs = string_handler.modify_obj_specs
 
 #-------------------------#
 # Define custom functions #
@@ -60,7 +56,7 @@ def _get_varname_in_filename(file, return_std=False, varlist_orig=None, varlist_
     ValueError
         If the variable is not found in the original variable list when `return_std` is True.
     """
-    file_name_parts = obj_path_specs(file, file_spec_key="name_noext_parts", splitdelim=splitdelim1)
+    file_name_parts = obj_path_specs(file, file_spec_key="name_noext_parts", splitdelim=SPLIT_DELIM1)
     var_file = file_name_parts[0]
 
     if return_std:
@@ -139,8 +135,8 @@ def cdo_mergetime(file_list, variable, freq, model, experiment, calc_proc, perio
     None
     """
     output_name = _standardise_filename(variable, freq, model, experiment, calc_proc, period, region, ext)
-    start_year, end_year = period.split(splitdelim2)
-    file_list_selyear = [f for f in file_list if (year := obj_path_specs(f, "name_noext_parts", splitdelim1)[-1]) >= start_year and year <= end_year]
+    start_year, end_year = period.split(SPLIT_DELIM2)
+    file_list_selyear = [f for f in file_list if (year := obj_path_specs(f, "name_noext_parts", SPLIT_DELIM1)[-1]) >= start_year and year <= end_year]
 
     allfiles_string = flatten_to_string(file_list_selyear)
     cmd = f"cdo -b F64 -f nc4 mergetime '{allfiles_string}' {output_name}"
@@ -175,7 +171,7 @@ def cdo_selyear(file_list, selyear_str, freq, model, experiment, calc_proc, regi
     -------
     None
     """
-    selyear_split = obj_path_specs(selyear_str, file_spec_key="name_noext_parts", splitdelim=splitdelim2)
+    selyear_split = obj_path_specs(selyear_str, file_spec_key="name_noext_parts", splitdelim=SPLIT_DELIM2)
     start_year = f"{selyear_split[0]}"
     end_year = f"{selyear_split[-1]}"
     
@@ -263,10 +259,10 @@ def cdo_remap(file_list, remap_str, var, freq, model, experiment, calc_proc, per
     """
     output_name = _standardise_filename(var, freq, model, experiment, calc_proc, period, region, ext)
     
-    if remap_proc not in cdo_remap_options:
-        raise ValueError(f"Unsupported remap procedure. Options are {cdo_remap_options}")
+    if remap_proc not in CDO_REMAP_OPTIONS:
+        raise ValueError(f"Unsupported remap procedure. Options are {CDO_REMAP_OPTIONS}")
     
-    remap_cdo = cdo_remap_option_dict[remap_str]
+    remap_cdo = CDO_REMAP_OPTION_DICT[remap_str]
     
     for file in file_list:
         cmd = f"cdo {remap_cdo},{remap_str} '{file}' {output_name}"
@@ -333,18 +329,18 @@ def cdo_periodic_statistics(nc_file, statistic, is_climatic, freq, season_str=No
     -------
     None
     """
-    if statistic not in statkit:
-        raise ValueError(f"Unsupported statistic {statistic}. Options are {statkit}")
+    if statistic not in STATKIT:
+        raise ValueError(f"Unsupported statistic {statistic}. Options are {STATKIT}")
     
-    period_abbr = freq_abbrs[find_substring_index(time_freqs, freq)]
+    period_abbr = TIME_FREQUENCIES_SHORTER_1[find_substring_index(TIME_FREQUENCIES_SHORT_1, freq)]
 
     statname = f"y{period_abbr}{statistic}" if is_climatic else f"{period_abbr}{statistic}"
     
-    if period_abbr == freq_abbrs[3] and season_str:
+    if period_abbr == TIME_FREQUENCIES_SHORTER_1[3] and season_str:
         statname += f" -select,season={season_str}"
 
     file_name_noext = add_to_path(nc_file, return_file_name_noext=True)
-    string2add = f"{splitdelim1}{statname}" if not season_str else f"{splitdelim1}{statname}_{statname[-3:]}"
+    string2add = f"{SPLIT_DELIM1}{statname}" if not season_str else f"{SPLIT_DELIM1}{statname}_{statname[-3:]}"
     output_name = modify_obj_specs(nc_file, "name_noext", add_to_path(file_name_noext, string2add))
 
     cmd = f"cdo {statname} {nc_file} {output_name}"
@@ -410,14 +406,14 @@ def calculate_periodic_deltas(proj_file, hist_file, operator="+", delta_period="
     -------
     None
     """
-    period_idx = find_substring_index(time_freqs_delta, delta_period)
+    period_idx = find_substring_index(TIME_FREQS_DELTA, delta_period)
     if period_idx == -1:
-        raise ValueError(f"Unsupported delta period. Options are {time_freqs_delta}")
+        raise ValueError(f"Unsupported delta period. Options are {TIME_FREQS_DELTA}")
 
     if model is None:
         raise ValueError("Model must be provided to calculate deltas.")
     
-    period_abbr = freq_abbrs_delta[period_idx]
+    period_abbr = TIME_FREQS_DELTA[period_idx]
     hist_mean_cmd = f"-y{period_abbr}mean {hist_file}"
     proj_mean_cmd = f"-y{period_abbr}mean {proj_file}"
     
@@ -425,10 +421,10 @@ def calculate_periodic_deltas(proj_file, hist_file, operator="+", delta_period="
     string2add = f"{period_abbr}Deltas_{model}.nc"
     delta_output = add_to_path(delta_filename, string2add)
     
-    if operator not in basic_four_rules:
-        raise ValueError(f"Unsupported operator. Options are {basic_four_rules}")
+    if operator not in BASIC_FOUR_RULES:
+        raise ValueError(f"Unsupported operator. Options are {BASIC_FOUR_RULES}")
     
-    operator_str = cdo_operator_str_dict[operator]
+    operator_str = CDO_OPERATOR_STR_DICT[operator]
     cmd = f"cdo {operator_str} {hist_mean_cmd} {proj_mean_cmd} {delta_output}"
     process_exit_info = run_system_command(cmd, capture_output=True)
     exit_info(process_exit_info)
@@ -455,24 +451,24 @@ def apply_periodic_deltas(proj_file, hist_file, operator="+", delta_period="mont
     -------
     None
     """
-    period_idx = find_substring_index(time_freqs_delta, delta_period)
+    period_idx = find_substring_index(TIME_FREQS_DELTA, delta_period)
     if period_idx == -1:
-        raise ValueError(f"Unsupported delta period. Options are {time_freqs_delta}")
+        raise ValueError(f"Unsupported delta period. Options are {TIME_FREQS_DELTA}")
 
     if model is None:
         raise ValueError("Model must be provided to apply deltas.")
     
-    period_abbr = freq_abbrs_delta[period_idx]
+    period_abbr = TIME_FREQS_DELTA[period_idx]
     delta_output = add_to_path(hist_file, return_file_name_noext=True)
     string2add = f"{period_abbr}DeltaApplied_{model}.nc"
     delta_applied_output = add_to_path(delta_output, string2add)
     
     hist_mean_cmd = f"-y{period_abbr}mean {hist_file}"
     
-    if operator not in basic_four_rules:
-        raise ValueError(f"Unsupported operator. Options are {basic_four_rules}")
+    if operator not in BASIC_FOUR_RULES:
+        raise ValueError(f"Unsupported operator. Options are {BASIC_FOUR_RULES}")
     
-    operator_str = cdo_operator_str_dict[operator]
+    operator_str = CDO_OPERATOR_STR_DICT[operator]
     cmd = f"cdo {operator_str} {proj_file} {hist_mean_cmd} {delta_applied_output}"
     process_exit_info = run_system_command(cmd, capture_output=True)
     exit_info(process_exit_info)
@@ -531,7 +527,7 @@ def change_filenames_by_var(file_list, varlist_orig, varlist_std):
     """
     for file in file_list:
         std_var = _get_varname_in_filename(file, True, varlist_orig, varlist_std)
-        file_name_parts = obj_path_specs(file, file_spec_key="name_noext_parts", splitdelim=splitdelim1)
+        file_name_parts = obj_path_specs(file, file_spec_key="name_noext_parts", splitdelim=SPLIT_DELIM1)
         new_filename = modify_obj_specs(file, "name_noext_parts", (file_name_parts[0], std_var))
         rename_objects(file, new_filename)
 
@@ -621,8 +617,8 @@ def create_grid_header_file(output_file, **kwargs):
     kwargs_keys = list(kwargs.keys())
     kwargs_keys.sort()
 
-    if kwargs_keys != keylist:
-        kwargs = {key: val for key, val in zip(keylist, kwargs_values)}
+    if kwargs_keys != KEYLIST:
+        kwargs = {key: val for key, val in zip(KEYLIST, kwargs_values)}
 
     grid_template = """gridtype  = lonlat
 xsize     = {0:d}
@@ -637,7 +633,7 @@ xfirst    = {2:.20f}
 xinc      = {3:.20f}
 yfirst    = {4:.20f}
 """
-    grid_str = format_string(grid_template, tuple([kwargs[key] for key in keylist[:6]]))
+    grid_str = format_string(grid_template, tuple([kwargs[key] for key in KEYLIST[:6]]))
     
     with open(output_file, 'w') as output_f:
         output_f.write(grid_str)        
@@ -680,27 +676,27 @@ def custom_cdo_mergetime(file_list, custom_output_name, create_temp_file=False):
 #---------#
 
 # String-splitting delimiters #
-splitdelim1 = common_delim_list[0]
-splitdelim2 = common_delim_list[1]
+SPLIT_DELIM1 = COMMON_DELIM_LIST[0]
+SPLIT_DELIM2 = COMMON_DELIM_LIST[1]
 
 # Grid header file function key list #
-keylist = ['total_columns', 'total_lines', 'xmin', 'xres', 'ymin', 'yres']
+KEYLIST = ['total_columns', 'total_lines', 'xmin', 'xres', 'ymin', 'yres']
 
 # Calendar and date-time parameters #
-time_freqs_delta = [time_freqs[0]] + time_freqs[2:4]
-freq_abbrs_delta = [freq_abbrs[0]] + freq_abbrs[2:4]
+TIME_FREQS_DELTA = [TIME_FREQUENCIES_SHORT_1[0]] + TIME_FREQUENCIES_SHORT_1[2:4]
+FREQ_ABBRS_DELTA = [TIME_FREQUENCIES_SHORTER_1[0]] + TIME_FREQUENCIES_SHORTER_1[2:4]
 
 # Statistics and operators #
 #--------------------------#
 
-# Basic statkit #
-statkit = ["max", "min", "sum", 
+# Basic statistics #
+STATKIT = ["max", "min", "sum", 
            "mean", "avg", 
            "var", "var1",
            "std", "std1"]
   
 # CDO remapping options #
-cdo_remap_option_dict = {
+CDO_REMAP_OPTION_DICT = {
     "ordinary" : "remap",
     "bilinear" : "remapbil",
     "nearest_neighbour" : "remapnn",
@@ -716,13 +712,12 @@ cdo_remap_option_dict = {
     "sum" : "remapsum",
     }
 
-cdo_remap_options = list(cdo_remap_option_dict.keys())
+CDO_REMAP_OPTIONS = list(CDO_REMAP_OPTION_DICT.keys())
 
-                          
 # Basic operator switch case dictionary #
-cdo_operator_str_dict = {
-    basic_four_rules[0] : "add",
-    basic_four_rules[1] : "sub",
-    basic_four_rules[2] : "mul",
-    basic_four_rules[3] : "div"
+CDO_OPERATOR_STR_DICT = {
+    BASIC_FOUR_RULES[0] : "add",
+    BASIC_FOUR_RULES[1] : "sub",
+    BASIC_FOUR_RULES[2] : "mul",
+    BASIC_FOUR_RULES[3] : "div"
     }
