@@ -12,7 +12,7 @@ All notable changes to this project will be documented in this file.
 
 - Module `variables.py`:
   - Convert configuration constants to uppercase (e.g., `UNIT_CONVERSIONS_LIST`, `UNIT_CONVERTER_DICT`)
-  - Note: Formula constants remain in lowercase as implementation details
+  - Formula constants remain in lowercase as implementation details
 
 #### **NetCDF Tools**
 
