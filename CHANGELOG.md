@@ -4,9 +4,37 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [v4.1.0] - 2025-04-24
+## [v4.2.0] - 2025-04-25
 
 ### Changed
+
+#### **Meteorological**
+
+- Module `variables.py`:
+  - Convert configuration constants to uppercase (e.g., `UNIT_CONVERSIONS_LIST`, `UNIT_CONVERTER_DICT`)
+  - Note: Formula constants remain in lowercase as implementation details
+
+#### **NetCDF Tools**
+
+- Module `nco_tools.py`:
+  - Convert all configuration constants to uppercase, including:
+    - Command and progress message templates
+    - Error message templates
+    - Configuration lists and dictionaries
+    - Command template dictionaries
+    - The import of the constant `BASIC_FOUR_RULES` from `global_parameters.py` in the package `paramlib`,
+      as the latter has recently been converted to uppercase.
+
+- Module `cdo_tools.py`:
+  - Convert all configuration constants to uppercase
+  - Reorganise imports to be more direct by removing unnecessary aliases
+  - Import constants and functions directly from their respective modules
+
+---
+
+## [v4.1.0] - 2025-04-24
+
+### Changed (v4.1.0)
 
 #### **General**
 
@@ -21,7 +49,7 @@ All notable changes to this project will be documented in this file.
   - Improved control over exported symbols when using 'from package import *'
   - Maintained consistent public API while following Python best practices
 
-#### **Meteorological**
+#### **Meteorological** (v4.1.0)
 
 - Module `weather_software.py`:
   - Correct the import paths for the functions `approach_value` and `week_range`.
