@@ -19,19 +19,19 @@ from pygenutils.strings.text_formatters import format_string
 
 # Angle converter #
 def angle_converter(angle, conversion):
-    conv_options = unit_conversions_list[:2]
+    conv_options = UNIT_CONVERSIONS_LIST[:2]
     if conversion not in conv_options:
-        raise ValueError(format_string(unsupported_unit_conversion_error, conv_options))
+        raise ValueError(format_string(UNSUPPORTED_UNIT_CONVERSION_ERROR, conv_options))
     else:
-        converted_angle = unit_converter_dict[conversion](angle)
+        converted_angle = UNIT_CONVERTER_DICT[conversion](angle)
         return converted_angle
 
 def ws_unit_converter(wind_speed, conversion):
-    conv_options = unit_conversions_list[2:]
+    conv_options = UNIT_CONVERSIONS_LIST[2:]
     if conversion not in conv_options:
-        raise ValueError(format_string(unsupported_unit_conversion_error, conv_options))
+        raise ValueError(format_string(UNSUPPORTED_UNIT_CONVERSION_ERROR, conv_options))
     else:
-        converted_speed = unit_converter_dict[conversion](wind_speed)
+        converted_speed = UNIT_CONVERTER_DICT[conversion](wind_speed)
         return converted_speed
 
 
@@ -223,21 +223,21 @@ def return_constants():
 #-------------------#
 
 # Magnitude unit conversions #
-unit_conversions_list = ["deg2rad", "rad2deg", "mps_to_kph", "kph_to_mps"]
+UNIT_CONVERSIONS_LIST = ["deg2rad", "rad2deg", "mps_to_kph", "kph_to_mps"]
 
 # Template strings #
 #------------------#
 
 # Error messages #
-unsupported_unit_conversion_error = "Unsupported unit converter. Choose one from {}."
+UNSUPPORTED_UNIT_CONVERSION_ERROR = "Unsupported unit converter. Choose one from {}."
 
 # Switch case dictionaries #
 #--------------------------#
 
 # Magnitude unit conversions #
-unit_converter_dict = {
-    unit_conversions_list[0]: lambda angle: np.deg2rad(angle),
-    unit_conversions_list[1]: lambda angle: np.rad2deg(angle),
-    unit_conversions_list[2]: lambda wind_speed: wind_speed * 3.6,
-    unit_conversions_list[3]: lambda wind_speed: wind_speed / 3.6
+UNIT_CONVERTER_DICT = {
+    UNIT_CONVERSIONS_LIST[0]: lambda angle: np.deg2rad(angle),
+    UNIT_CONVERSIONS_LIST[1]: lambda angle: np.rad2deg(angle),
+    UNIT_CONVERSIONS_LIST[2]: lambda wind_speed: wind_speed * 3.6,
+    UNIT_CONVERSIONS_LIST[3]: lambda wind_speed: wind_speed / 3.6
 }
