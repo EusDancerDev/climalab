@@ -7,9 +7,9 @@
 
 import numpy as np
 
-#-----------------------#
-# Import custom modules #
-#-----------------------#
+#------------------------#
+# Import project modules #
+#------------------------#
 
 from pygenutils.strings.text_formatters import format_string
 

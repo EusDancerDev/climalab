@@ -29,9 +29,9 @@ Execution timing is handled using the `program_exec_timer` function from the
 `time_handling` sub-package to track the start and end times of the process.
 """
 
-#-----------------------#
-# Import custom modules #
-#-----------------------#
+#------------------------#
+# Import project modules #
+#------------------------#
 
 from filewise.xarray_utils import data_manipulation
 from pygenutils.time_handling.program_snippet_exec_timers import program_exec_timer

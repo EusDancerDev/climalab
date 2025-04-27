@@ -8,9 +8,9 @@
 import numpy as np
 import pandas as pd
 
-#-----------------------#
-# Import custom modules #
-#-----------------------#
+#------------------------#
+# Import project modules #
+#------------------------#
 
 from pygenutils.arrays_and_lists.patterns import approach_value
 from pygenutils.time_handling.calendar_utils import week_range

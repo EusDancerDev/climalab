@@ -27,9 +27,9 @@ from the `time_handling` sub-package, which calculates the elapsed time of
 the execution of the program for performance analysis.
 """
 
-#-----------------------#
-# Import custom modules #
-#-----------------------#
+#------------------------#
+# Import project modules #
+#------------------------#
 
 from filewise.xarray_utils.file_utils import scan_ncfiles
 from pygenutils.time_handling.program_snippet_exec_timers import program_exec_timer
