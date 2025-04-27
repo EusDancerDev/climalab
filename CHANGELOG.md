@@ -4,9 +4,19 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [v4.2.0] - 2025-04-25
+## [v4.2.1] - 2025-04-27
 
 ### Changed
+
+#### **General**
+
+- Modify the comment header `Import custom modules` to `Import project modules` in all modules having it.
+
+---
+
+## [v4.2.0] - 2025-04-25
+
+### Changed (v4.2.0)
 
 #### **Meteorological**
 
