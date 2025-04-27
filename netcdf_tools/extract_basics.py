@@ -33,15 +33,12 @@ Execution timing is handled using the `program_exec_timer` function from the
 # Import project modules #
 #------------------------#
 
-from filewise.xarray_utils import data_manipulation
+from filewise.xarray_utils.data_manipulation import (
+    extract_latlon_bounds,
+    extract_time_bounds,
+    extract_time_formats
+)
 from pygenutils.time_handling.program_snippet_exec_timers import program_exec_timer
-
-# Create aliases #
-#----------------#
-
-extract_latlon_bounds = data_manipulation.extract_latlon_bounds 
-extract_time_bounds = data_manipulation.extract_time_bounds
-extract_time_formats = data_manipulation.extract_time_formats
 
 #------------#
 # Parameters #
