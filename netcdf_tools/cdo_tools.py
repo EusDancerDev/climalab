@@ -56,7 +56,7 @@ def _get_varname_in_filename(file, return_std=False, varlist_orig=None, varlist_
     ValueError
         If the variable is not found in the original variable list when `return_std` is True.
     """
-    file_name_parts = obj_path_specs(file, file_spec_key="name_noext_parts", splitdelim=SPLIT_DELIM1)
+    file_name_parts = obj_path_specs(file, file_spec_key="name_noext_parts", SPLIT_DELIM=SPLIT_DELIM1)
     var_file = file_name_parts[0]
 
     if return_std:
@@ -171,7 +171,7 @@ def cdo_selyear(file_list, selyear_str, freq, model, experiment, calc_proc, regi
     -------
     None
     """
-    selyear_split = obj_path_specs(selyear_str, file_spec_key="name_noext_parts", splitdelim=SPLIT_DELIM2)
+    selyear_split = obj_path_specs(selyear_str, file_spec_key="name_noext_parts", SPLIT_DELIM=SPLIT_DELIM2)
     start_year = f"{selyear_split[0]}"
     end_year = f"{selyear_split[-1]}"
     
@@ -527,7 +527,7 @@ def change_filenames_by_var(file_list, varlist_orig, varlist_std):
     """
     for file in file_list:
         std_var = _get_varname_in_filename(file, True, varlist_orig, varlist_std)
-        file_name_parts = obj_path_specs(file, file_spec_key="name_noext_parts", splitdelim=SPLIT_DELIM1)
+        file_name_parts = obj_path_specs(file, file_spec_key="name_noext_parts", SPLIT_DELIM=SPLIT_DELIM1)
         new_filename = modify_obj_specs(file, "name_noext_parts", (file_name_parts[0], std_var))
         rename_objects(file, new_filename)
 
