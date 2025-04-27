@@ -27,6 +27,7 @@ For the following modules to download data from the CDS databases:
 
 #### **NetCDF Tools**
 
+- Module `cdo_tools.py`: modify the constant `splitdelim` to `SPLIT_DELIM`.
 - Module `detect_faulty.py`:
   - Convert all **constant names** under the header `Define parameters` to uppercase following Python naming conventions.
   - Reorganise imports to be more direct, instead of using aliases.
