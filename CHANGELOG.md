@@ -4,13 +4,32 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [v4.2.1] - 2025-04-27
+## [v4.3.0] - 2025-04-27
 
 ### Changed
 
 #### **General**
 
 - Modify the comment header `Import custom modules` to `Import project modules` in all modules having it.
+
+#### **Data Analysis Projects Sample**
+
+For the following modules to download data from the CDS databases:
+
+- `download_cordex.py`
+- `download_eobs.py`
+- `download_era5.py`
+- `download_era5_land.py`
+
+- Refactor all modules to download data from the CDS databases:
+  - Reorganise import structure to be more direct, instead of using aliases.
+  - Correct the import path to the `scan_ncfiles` function.
+
+#### **NetCDF Tools**
+
+- Module `detect_faulty.py`:
+  - Convert all **constant names** under the header `Define parameters` to uppercase following Python naming conventions.
+  - Reorganise imports to be more direct, instead of using aliases.
 
 ---
 
@@ -24,7 +43,7 @@ All notable changes to this project will be documented in this file.
   - Convert configuration constants to uppercase (e.g., `UNIT_CONVERSIONS_LIST`, `UNIT_CONVERTER_DICT`)
   - Formula constants remain in lowercase as implementation details
 
-#### **NetCDF Tools**
+#### **NetCDF Tools** (v4.2.0)
 
 - Module `nco_tools.py`:
   - Convert all configuration constants to uppercase, including:
