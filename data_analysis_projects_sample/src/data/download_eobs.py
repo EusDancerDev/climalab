@@ -9,15 +9,16 @@ Script to download E-OBS data using the configuration file.
 # Import modules #
 #----------------#
 
+import logging
 import os
 import sys
-import yaml
-import logging
 from pathlib import Path
 
-#-----------------------#
-# Import custom modules #
-#-----------------------#
+import yaml
+
+#------------------------#
+# Import project modules #
+#------------------------#
 
 from cds_tools import download_data
 from filewise.file_operations import ops_handler
