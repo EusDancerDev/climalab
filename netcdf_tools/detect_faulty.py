@@ -39,9 +39,9 @@ from pygenutils.time_handling.program_snippet_exec_timers import program_exec_ti
 #-------------------#
 
 # Paths to be scanned #
-path_obj = "/media/jonander/My_Basic/Dokumentuak"
+PATH_OBJ = "/media/jonander/My_Basic/Dokumentuak"
 
-# path_obj = [
+# PATH_OBJ = [
 #     "/media/jonander/My_Basic/Dokumentuak",
 #     "/home/jonander/Documents/03-Ikasketak"
 #     ]
@@ -54,7 +54,7 @@ path_obj = "/media/jonander/My_Basic/Dokumentuak"
 program_exec_timer('start')
 
 # Run program #
-scan_ncfiles(path_obj)
+scan_ncfiles(PATH_OBJ)
 
 # Stop the stopwatch and calculate full program execution time #
 program_exec_timer('stop')
