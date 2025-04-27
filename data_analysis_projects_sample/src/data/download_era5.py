@@ -21,19 +21,15 @@ import yaml
 #------------------------#
 
 from cds_tools import download_data
-from filewise.file_operations import ops_handler
-from filewise.file_operations import scan_ncfiles
+from filewise.file_operations.ops_handler import (
+    make_directories,
+    move_files,
+    find_files
+)
+from filewise.xarray_utils.file_utils import scan_ncfiles
 from pygenutils.time_handling.program_snippet_exec_timers import program_exec_timer
 from pygenutils.strings.string_handler import find_substring_index
-from filewise.xarray_utils import xarray_obj_handler
-
-# Create aliases #
-#----------------#
-
-make_directories = ops_handler.make_directories
-move_files = ops_handler.move_files
-find_files = ops_handler.find_files
-grib2nc = xarray_obj_handler.grib2nc
+from filewise.xarray_utils.xarray_obj_handler import grib2nc
 
 #------------------#
 # Define functions #
