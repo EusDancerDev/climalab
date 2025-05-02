@@ -22,7 +22,7 @@ from pygenutils.strings.string_handler import (
     obj_path_specs, 
     modify_obj_specs
 )
-from pygenutils.time_handling.date_and_time_utils import find_time_key
+from pygenutils.time_handling.date_and_time_utils import find_dt_key
 
 #-------------------------#
 # Define custom functions #
@@ -215,7 +215,7 @@ def cdo_sellonlatbox(file_list, coords, freq, model, experiment, calc_proc, regi
     """
     for file in file_list:
         var = _get_varname_in_filename(file)
-        time_var = find_time_key(file)
+        time_var = find_dt_key(file)
         times = get_times(file, time_var)
         period = f"{times.dt.year.values[0]}-{times.dt.year.values[-1]}"
         output_name = _standardise_filename(var, freq, model, experiment, calc_proc, period, region, ext)
