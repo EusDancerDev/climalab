@@ -4,11 +4,22 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [v4.3.0] - 2025-04-27
+## [v4.3.1] - 2025-05-02
 
 ### Changed
 
 #### **General**
+
+- Replace the deprecated `find_time_key` function with the new `find_dt_key` function in the following modules:
+  - `netcdf_tools/cdo_tools.py`
+
+---
+
+## [v4.3.0] - 2025-04-27
+
+### Changed (v4.3.0)
+
+#### **General** (changing)
 
 - Modify the comment header `Import custom modules` to `Import project modules` in all modules having it.
 
