@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [v4.4.0] - 2025-05-09
+
+- Modules `cdo_tools.py` and `nco_tools.py`:
+  - Improved system command execution to properly handle cases where command output isn't captured.
+
+---
+
 ## [v4.3.1] - 2025-05-02
 
 ### Changed
