@@ -14,11 +14,27 @@ from pygenutils.strings.text_formatters import format_string, print_format_strin
 # Define custom functions #
 #-------------------------#
 
-def modify_variable_units_and_values(file_list,
-                                     variable_name,
-                                     operator,
-                                     value,
-                                     new_unit):
+def modify_variable_units_and_values(
+        file_list,
+        variable_name,
+        operator,
+        value,
+        new_unit,
+        capture_output=False,
+        return_output_name=False,
+        encoding="utf-8",
+        shell=True):
+    
+    """
+    capture_output : bool, optional
+        Whether to capture the command output. Default is False.
+    return_output_name : bool, optional
+        Whether to return file descriptor names. Default is False.
+    encoding : str, optional
+        Encoding to use when decoding command output. Default is "utf-8".
+    shell : bool, optional
+        Whether to execute the command through the shell. Default is True.
+    """
     
     if not isinstance(file_list, list):
         file_list = [file_list]
@@ -31,12 +47,23 @@ def modify_variable_units_and_values(file_list,
         use_integer_format = int(is_whole_number)
         
         var_chunit_formatted\
-        = f"ncatted -a units,{variable_name},o,c,'{new_unit}' '{file_name}'"        
-        process_exit_info = run_system_command(var_chunit_formatted,
-                                               capture_output=True,
-                                               encoding="utf-8")
-        exit_info(process_exit_info)
+        = f"ncatted -a units,{variable_name},o,c,'{new_unit}' '{file_name}'"   
 
+        # Run the command
+        process_exit_info = run_system_command(
+            var_chunit_formatted,
+            capture_output=True,
+            return_output_name=True,
+            encoding="utf-8",
+            shell=True
+        )
+
+        # Call exit_info with parameters based on capture_output
+        exit_info(process_exit_info,
+            check_stdout=True,
+            check_stderr=True,
+            check_return_code=True
+        )
         
         if operator not in BASIC_FOUR_RULES:
             raise ValueError(INVALID_OPERATOR_ERR_TEMPLATE)
@@ -60,19 +87,36 @@ def modify_variable_units_and_values(file_list,
                           format_args)
         
             # Execute the command through the shell #
-            process_exit_info = run_system_command(varval_mod_formatted,
-                                                   capture_output=True,
-                                                   encoding="utf-8")
-            exit_info(process_exit_info)            
+            process_exit_info = run_system_command(
+                varval_mod_formatted,
+                capture_output=capture_output,
+                return_output_name=return_output_name,
+                encoding=encoding,
+                shell=shell
+            )        
+
+            # Call exit_info with parameters based on capture_output
+            exit_info(process_exit_info,
+                check_stdout=capture_output,
+                check_stderr=capture_output,
+                check_return_code=capture_output
+            )
+            
+            # Rename the temporary file to the given file
             rename_objects(temp_file, file_name)
             
 
-def modify_coordinate_values_by_threshold(file_list,
-                                          dimension_name,
-                                          threshold,
-                                          operator,
-                                          value,
-                                          threshold_mode="max"):
+def modify_coordinate_values_by_threshold(
+        file_list,
+        dimension_name,
+        threshold,
+        operator,
+        value,
+        threshold_mode="max",
+        capture_output=False,
+        return_output_name=False,
+        encoding="utf-8",
+        shell=True):
     
     if not isinstance(file_list, list):
         file_list = [file_list]
@@ -115,19 +159,44 @@ def modify_coordinate_values_by_threshold(file_list,
                               format_args)
             
                 # Execute the command through the shell #
-                process_exit_info = run_system_command(dimval_mod_formatted,
-                                                       capture_output=True,
-                                                       encoding="utf-8")
-                exit_info(process_exit_info)                 
+                process_exit_info = run_system_command(
+                    dimval_mod_formatted,
+                    capture_output=capture_output,
+                    return_output_name=return_output_name,
+                    encoding=encoding,
+                    shell=shell
+                )
+                
+                # Call exit_info with parameters based on capture_output
+                exit_info(process_exit_info,
+                    check_stdout=capture_output,
+                    check_stderr=capture_output,
+                    check_return_code=capture_output
+                )
+                
+                # Rename the temporary file to the given file
                 rename_objects(temp_file, file_name)
             
 
-def modify_coordinate_all_values(file_list,
-                                 dimension_name,
-                                 threshold,
-                                 operator,
-                                 value,
-                                 threshold_mode="max"):
+def modify_coordinate_all_values(
+        file_list,
+        dimension_name,
+        operator,
+        value,
+        threshold_mode="max",
+        capture_output=False,
+        return_output_name=False,
+        encoding="utf-8",
+        shell=True):
+    """
+    Modify the values of all coordinates of a given dimension.
+    
+    Parameters
+    ----------
+    file_list : list
+        List of file names to modify.
+        
+    """
     
     if not isinstance(file_list, list):
         file_list = [file_list]
@@ -169,13 +238,24 @@ def modify_coordinate_all_values(file_list,
                               format_args)
             
                 # Execute the command through the shell #
-                process_exit_info = run_system_command(dimval_mod_formatted,
-                                                       capture_output=True,
-                                                       encoding="utf-8")
-                exit_info(process_exit_info)    
+                process_exit_info = run_system_command(
+                    dimval_mod_formatted,
+                    capture_output=capture_output,
+                    return_output_name=return_output_name,
+                    encoding=encoding,
+                    shell=shell
+                )
+                
+                # Call exit_info with parameters based on capture_output
+                exit_info(process_exit_info,
+                    check_stdout=capture_output,
+                    check_stderr=capture_output,
+                    check_return_code=capture_output
+                )
+                
+                # Rename the temporary file to the given file
                 rename_objects(temp_file, file_name)
 
-            
 #--------------------------#
 # Parameters and constants #
 #--------------------------#

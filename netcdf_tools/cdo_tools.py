@@ -105,7 +105,21 @@ def _standardise_filename(variable, freq, model, experiment, calc_proc, period, 
 # Core Data Processing Functions #
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-def cdo_mergetime(file_list, variable, freq, model, experiment, calc_proc, period, region, ext):
+def cdo_mergetime(
+        file_list, 
+        variable, 
+        freq, 
+        model, 
+        experiment, 
+        calc_proc, 
+        period, 
+        region, 
+        ext,
+        capture_output=False,
+        return_output_name=False,
+        encoding="utf-8",
+        shell=True
+        ):
     """
     Merges time steps of multiple files into one using CDO's mergetime operator.
 
@@ -129,6 +143,14 @@ def cdo_mergetime(file_list, variable, freq, model, experiment, calc_proc, perio
         Region or geographic area.
     ext : str
         File extension (e.g., 'nc').
+    capture_output : bool, optional
+        Whether to capture the command output. Default is False.
+    return_output_name : bool, optional
+        Whether to return file descriptor names. Default is False.
+    encoding : str, optional
+        Encoding to use when decoding command output. Default is "utf-8".
+    shell : bool, optional
+        Whether to execute the command through the shell. Default is True.
 
     Returns
     -------
@@ -140,11 +162,36 @@ def cdo_mergetime(file_list, variable, freq, model, experiment, calc_proc, perio
 
     allfiles_string = flatten_to_string(file_list_selyear)
     cmd = f"cdo -b F64 -f nc4 mergetime '{allfiles_string}' {output_name}"
-    process_exit_info = run_system_command(cmd, capture_output=True)
-    exit_info(process_exit_info)
+
+    # Run the command and capture the output
+    process_exit_info = run_system_command(
+        cmd, 
+        capture_output=capture_output,
+        return_output_name=return_output_name,
+        encoding=encoding,
+        shell=shell
+    )
+    
+    # Call exit_info with parameters based on capture_output
+    exit_info(process_exit_info,
+        check_stdout=capture_output,
+        check_stderr=capture_output,
+        check_return_code=True
+    )
 
 
-def cdo_selyear(file_list, selyear_str, freq, model, experiment, calc_proc, region, ext):
+def cdo_selyear(
+        file_list, 
+        selyear_str, 
+        freq, 
+        model, 
+        experiment, 
+        calc_proc, 
+        region, ext, 
+        capture_output=False,
+        return_output_name=False,
+        encoding="utf-8",
+        shell=True):
     """
     Selects data for specific years from a file list using CDO's selyear operator.
 
@@ -166,6 +213,14 @@ def cdo_selyear(file_list, selyear_str, freq, model, experiment, calc_proc, regi
         Region or geographic area.
     ext : str
         File extension (e.g., 'nc').
+    capture_output : bool, optional
+        Whether to capture the command output. Default is False.
+    return_output_name : bool, optional
+        Whether to return file descriptor names. Default is False.
+    encoding : str, optional
+        Encoding to use when decoding command output. Default is "utf-8".
+    shell : bool, optional
+        Whether to execute the command through the shell. Default is True.
 
     Returns
     -------
@@ -182,11 +237,37 @@ def cdo_selyear(file_list, selyear_str, freq, model, experiment, calc_proc, regi
         var = _get_varname_in_filename(file)
         output_name = _standardise_filename(var, freq, model, experiment, calc_proc, period, region, ext)
         cmd = f"cdo selyear,{selyear_cdo} '{file}' {output_name}"
-        process_exit_info = run_system_command(cmd, capture_output=True)
-        exit_info(process_exit_info)
+
+        # Run the command and capture the output
+        process_exit_info = run_system_command(
+            cmd, 
+            capture_output=capture_output,
+            return_output_name=return_output_name,
+            encoding=encoding,
+            shell=shell
+        )
+
+        # Call exit_info with parameters based on capture_output
+        exit_info(process_exit_info,
+            check_stdout=capture_output,
+            check_stderr=capture_output,
+            check_return_code=True
+        )
 
 
-def cdo_sellonlatbox(file_list, coords, freq, model, experiment, calc_proc, region, ext):
+def cdo_sellonlatbox(
+        file_list, 
+        coords, 
+        freq, 
+        model, 
+        experiment, 
+        calc_proc, 
+        region, ext, 
+        capture_output=False,
+        return_output_name=False,
+        encoding="utf-8",
+        shell=True
+        ):
     """
     Applies CDO's sellonlatbox operator to select a geographical box from the input files.
 
@@ -208,6 +289,14 @@ def cdo_sellonlatbox(file_list, coords, freq, model, experiment, calc_proc, regi
         Region or geographic area.
     ext : str
         File extension (e.g., 'nc').
+    capture_output : bool, optional
+        Whether to capture the command output. Default is False.
+    return_output_name : bool, optional
+        Whether to return file descriptor names. Default is False.
+    encoding : str, optional
+        Encoding to use when decoding command output. Default is "utf-8".
+    shell : bool, optional
+        Whether to execute the command through the shell. Default is True.
 
     Returns
     -------
@@ -220,11 +309,36 @@ def cdo_sellonlatbox(file_list, coords, freq, model, experiment, calc_proc, regi
         period = f"{times.dt.year.values[0]}-{times.dt.year.values[-1]}"
         output_name = _standardise_filename(var, freq, model, experiment, calc_proc, period, region, ext)
         cmd = f"cdo sellonlatbox,{coords} '{file}' {output_name}"
-        process_exit_info = run_system_command(cmd, capture_output=True)
-        exit_info(process_exit_info)
+
+        # Run the command and capture the output
+        process_exit_info = run_system_command(
+            cmd, 
+            capture_output=capture_output,
+            return_output_name=return_output_name,
+            encoding=encoding,
+            shell=shell
+        )
+
+        # Call exit_info with parameters based on capture_output
+        exit_info(process_exit_info,
+            check_stdout=capture_output,
+            check_stderr=capture_output,
+            check_return_code=True
+        )
         
 
-def cdo_remap(file_list, remap_str, var, freq, model, experiment, calc_proc, period, region, ext, remap_proc="bilinear"):
+def cdo_remap(
+        file_list, 
+        remap_str, 
+        var, 
+        freq, 
+        model, 
+        experiment, 
+        calc_proc, period, region, ext, remap_proc="bilinear",
+        capture_output=False,
+        return_output_name=False,
+        encoding="utf-8", shell=True
+        ):
     """
     Applies remapping to the files using CDO's remap procedure.
 
@@ -252,6 +366,14 @@ def cdo_remap(file_list, remap_str, var, freq, model, experiment, calc_proc, per
         File extension (e.g., 'nc').
     remap_proc : str, optional
         Remapping procedure (default is "bilinear").
+    capture_output : bool, optional
+        Whether to capture the command output. Default is False.
+    return_output_name : bool, optional
+        Whether to return file descriptor names. Default is False.
+    encoding : str, optional
+        Encoding to use when decoding command output. Default is "utf-8".
+    shell : bool, optional
+        Whether to execute the command through the shell. Default is True.
 
     Returns
     -------
@@ -266,14 +388,42 @@ def cdo_remap(file_list, remap_str, var, freq, model, experiment, calc_proc, per
     
     for file in file_list:
         cmd = f"cdo {remap_cdo},{remap_str} '{file}' {output_name}"
-        process_exit_info = run_system_command(cmd, capture_output=True)
-        exit_info(process_exit_info)
+
+        # Run the command and capture the output
+        process_exit_info = run_system_command(
+            cmd, 
+            capture_output=capture_output,
+            return_output_name=return_output_name,
+            encoding=encoding,
+            shell=shell
+        )
+        
+        # Call exit_info with parameters based on capture_output
+        exit_info(process_exit_info,
+            check_stdout=capture_output,
+            check_stderr=capture_output,
+            check_return_code=True
+        )
 
 
 # Statistical and Analytical Functions #
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-def cdo_time_mean(input_file, var, freq, model, experiment, calc_proc, period, region, ext):
+def cdo_time_mean(
+        input_file, 
+        var, 
+        freq, 
+        model, 
+        experiment, 
+        calc_proc, 
+        period, 
+        region, 
+        ext,
+        capture_output=False,
+        return_output_name=False,
+        encoding="utf-8", 
+        shell=True
+        ):
     """
     Calculates the time mean for a specific variable using CDO.
 
@@ -297,6 +447,14 @@ def cdo_time_mean(input_file, var, freq, model, experiment, calc_proc, period, r
         Region or geographic area.
     ext : str
         File extension (e.g., 'nc').
+    capture_output : bool, optional
+        Whether to capture the command output. Default is False.
+    return_output_name : bool, optional
+        Whether to return file descriptor names. Default is False.
+    encoding : str, optional
+        Encoding to use when decoding command output. Default is "utf-8".
+    shell : bool, optional
+        Whether to execute the command through the shell. Default is True.
 
     Returns
     -------
@@ -304,11 +462,34 @@ def cdo_time_mean(input_file, var, freq, model, experiment, calc_proc, period, r
     """
     output_name = _standardise_filename(var, freq, model, experiment, calc_proc, period, region, ext)
     cmd = f"cdo -{calc_proc} '{input_file}' {output_name}"
-    process_exit_info = run_system_command(cmd, capture_output=True)
-    exit_info(process_exit_info)
+
+    # Run the command and capture the output
+    process_exit_info = run_system_command(
+        cmd, 
+        capture_output=capture_output,
+        return_output_name=return_output_name,
+        encoding=encoding,
+        shell=shell
+    )
+
+    # Call exit_info with parameters based on capture_output
+    exit_info(process_exit_info,
+        check_stdout=capture_output,
+        check_stderr=capture_output,
+        check_return_code=True
+    )
         
 
-def cdo_periodic_statistics(nc_file, statistic, is_climatic, freq, season_str=None):
+def cdo_periodic_statistics(
+        nc_file, 
+        statistic, 
+        is_climatic, 
+        freq, 
+        season_str=None,
+        capture_output=False,
+        return_output_name=False,
+        encoding="utf-8", shell=True
+        ):
     """
     Calculates basic periodic statistics on a netCDF file using CDO.
 
@@ -324,6 +505,14 @@ def cdo_periodic_statistics(nc_file, statistic, is_climatic, freq, season_str=No
         Time frequency (e.g., 'monthly', 'yearly').
     season_str : str, optional
         Season to calculate if applicable, by default None.
+    capture_output : bool, optional
+        Whether to capture the command output. Default is False.
+    return_output_name : bool, optional
+        Whether to return file descriptor names. Default is False.
+    encoding : str, optional
+        Encoding to use when decoding command output. Default is "utf-8".
+    shell : bool, optional
+        Whether to execute the command through the shell. Default is True.
 
     Returns
     -------
@@ -344,11 +533,39 @@ def cdo_periodic_statistics(nc_file, statistic, is_climatic, freq, season_str=No
     output_name = modify_obj_specs(nc_file, "name_noext", add_to_path(file_name_noext, string2add))
 
     cmd = f"cdo {statname} {nc_file} {output_name}"
-    process_exit_info = run_system_command(cmd, capture_output=True)
-    exit_info(process_exit_info)    
+
+    # Run the command and capture the output
+    process_exit_info = run_system_command(
+        cmd, 
+        capture_output=capture_output,
+        return_output_name=return_output_name,
+        encoding=encoding,
+        shell=shell
+    )
+
+    # Call exit_info with parameters based on capture_output
+    exit_info(process_exit_info,
+        check_stdout=capture_output,
+        check_stderr=capture_output,
+        check_return_code=True
+    )
     
 
-def cdo_anomalies(input_file_full, input_file_avg, var, freq, model, experiment, calc_proc, period, region, ext):
+def cdo_anomalies(
+        input_file_full, 
+        input_file_avg,
+        var,
+        freq,
+        model, 
+        experiment, 
+        calc_proc,
+        period,
+        region,
+        ext,
+        capture_output=False,
+        return_output_name=False,
+        encoding="utf-8", shell=True
+        ):
     """
     Calculates anomalies by subtracting the average from the full time series using CDO's sub operator.
 
@@ -374,6 +591,14 @@ def cdo_anomalies(input_file_full, input_file_avg, var, freq, model, experiment,
         Region or geographic area.
     ext : str
         File extension (e.g., 'nc').
+    capture_output : bool, optional
+        Whether to capture the command output. Default is False.
+    return_output_name : bool, optional
+        Whether to return file descriptor names. Default is False.
+    encoding : str, optional
+        Encoding to use when decoding command output. Default is "utf-8".
+    shell : bool, optional
+        Whether to execute the command through the shell. Default is True.
 
     Returns
     -------
@@ -381,11 +606,34 @@ def cdo_anomalies(input_file_full, input_file_avg, var, freq, model, experiment,
     """
     output_name = _standardise_filename(var, freq, model, experiment, calc_proc, period, region, ext)
     cmd = f"cdo sub '{input_file_avg}' '{input_file_full}' {output_name}"
-    process_exit_info = run_system_command(cmd, capture_output=True)
-    exit_info(process_exit_info)
+
+    # Run the command and capture the output
+    process_exit_info = run_system_command(
+        cmd, 
+        capture_output=capture_output,
+        return_output_name=return_output_name,
+        encoding=encoding,
+        shell=shell
+    )
+
+    # Call exit_info with parameters based on capture_output
+    exit_info(process_exit_info,
+        check_stdout=capture_output,
+        check_stderr=capture_output,
+        check_return_code=True
+    )
 
 
-def calculate_periodic_deltas(proj_file, hist_file, operator="+", delta_period="monthly", model=None):
+def calculate_periodic_deltas(
+        proj_file, 
+        hist_file, 
+        operator="+", 
+        delta_period="monthly", 
+        model=None,
+        capture_output=False,
+        return_output_name=False,
+        encoding="utf-8", shell=True
+        ):
     """
     Calculates periodic deltas between projected and historical data using CDO.
 
@@ -401,6 +649,14 @@ def calculate_periodic_deltas(proj_file, hist_file, operator="+", delta_period="
         Period for delta calculation (e.g., 'monthly', 'yearly'). Default is 'monthly'.
     model : str, optional
         Model name, required if not inferred from the file name.
+    capture_output : bool, optional
+        Whether to capture the command output. Default is False.
+    return_output_name : bool, optional
+        Whether to return file descriptor names. Default is False.
+    encoding : str, optional
+        Encoding to use when decoding command output. Default is "utf-8".
+    shell : bool, optional
+        Whether to execute the command through the shell. Default is True.
 
     Returns
     -------
@@ -426,11 +682,34 @@ def calculate_periodic_deltas(proj_file, hist_file, operator="+", delta_period="
     
     operator_str = CDO_OPERATOR_STR_DICT[operator]
     cmd = f"cdo {operator_str} {hist_mean_cmd} {proj_mean_cmd} {delta_output}"
-    process_exit_info = run_system_command(cmd, capture_output=True)
-    exit_info(process_exit_info)
+
+    # Run the command and capture the output
+    process_exit_info = run_system_command(
+        cmd, 
+        capture_output=capture_output,
+        return_output_name=return_output_name,
+        encoding=encoding,
+        shell=shell
+    )
+
+    # Call exit_info with parameters based on capture_output
+    exit_info(process_exit_info,
+        check_stdout=capture_output,
+        check_stderr=capture_output,
+        check_return_code=True
+    )
 
 
-def apply_periodic_deltas(proj_file, hist_file, operator="+", delta_period="monthly", model=None):
+def apply_periodic_deltas(
+        proj_file,
+        hist_file, 
+        operator="+",
+        delta_period="monthly",
+        model=None,
+        capture_output=False,
+        return_output_name=False,
+        encoding="utf-8", shell=True
+        ):
     """
     Applies periodic deltas between projected and historical data using CDO.
 
@@ -446,6 +725,14 @@ def apply_periodic_deltas(proj_file, hist_file, operator="+", delta_period="mont
         Period for delta application (e.g., 'monthly', 'yearly'). Default is 'monthly'.
     model : str, optional
         Model name, required if not inferred from the file name.
+    capture_output : bool, optional
+        Whether to capture the command output. Default is False.
+    return_output_name : bool, optional
+        Whether to return file descriptor names. Default is False.
+    encoding : str, optional
+        Encoding to use when decoding command output. Default is "utf-8".
+    shell : bool, optional
+        Whether to execute the command through the shell. Default is True.
 
     Returns
     -------
@@ -470,14 +757,35 @@ def apply_periodic_deltas(proj_file, hist_file, operator="+", delta_period="mont
     
     operator_str = CDO_OPERATOR_STR_DICT[operator]
     cmd = f"cdo {operator_str} {proj_file} {hist_mean_cmd} {delta_applied_output}"
-    process_exit_info = run_system_command(cmd, capture_output=True)
-    exit_info(process_exit_info)
+
+    # Run the command and capture the output
+    process_exit_info = run_system_command(
+        cmd, 
+        capture_output=capture_output,
+        return_output_name=return_output_name,
+        encoding=encoding,
+        shell=shell
+    )
+
+    # Call exit_info with parameters based on capture_output
+    exit_info(process_exit_info,
+        check_stdout=capture_output,
+        check_stderr=capture_output,
+        check_return_code=True
+    )
 
 
 # File Renaming and Organisational Functions #
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
     
-def cdo_rename(file_list, varlist_orig, varlist_std):
+def cdo_rename(
+        file_list, 
+        varlist_orig, 
+        varlist_std,
+        capture_output=False,
+        return_output_name=False,
+        encoding="utf-8", shell=True
+        ):
     """
     Renames variables in the files using a standardised variable list via CDO's chname operator.
 
@@ -489,6 +797,14 @@ def cdo_rename(file_list, varlist_orig, varlist_std):
         List of original variable names.
     varlist_std : list
         List of standardised variable names corresponding to varlist_orig.
+    capture_output : bool, optional
+        Whether to capture the command output. Default is False.
+    return_output_name : bool, optional
+        Whether to return file descriptor names. Default is False.
+    encoding : str, optional
+        Encoding to use when decoding command output. Default is "utf-8".
+    shell : bool, optional
+        Whether to execute the command through the shell. Default is True.
 
     Returns
     -------
@@ -502,12 +818,27 @@ def cdo_rename(file_list, varlist_orig, varlist_std):
         
         temp_file = add_to_path(file)
         cmd = f"cdo chname,{var_file},{var_std} '{file}' '{temp_file}'"
-        process_exit_info = run_system_command(cmd, capture_output=True)
-        exit_info(process_exit_info)
+
+        # Run the command and capture the output
+        process_exit_info = run_system_command(
+            cmd, 
+            capture_output=capture_output,
+            return_output_name=return_output_name,
+            encoding=encoding,
+            shell=shell
+        )
+
+        # Call exit_info with parameters based on capture_output
+        exit_info(process_exit_info,
+            check_stdout=capture_output,
+            check_stderr=capture_output,
+            check_return_code=True
+        )
         
+        # Rename the temporary file to the given file
         rename_objects(temp_file, file)
         
-
+    
 def change_filenames_by_var(file_list, varlist_orig, varlist_std):
     """
     Renames files by updating the variable name in their filenames using a standardised variable list.
@@ -536,7 +867,13 @@ def change_filenames_by_var(file_list, varlist_orig, varlist_std):
 # Time and Date Adjustment Functions #
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-def cdo_inttime(file_list, year0, month0, day0, hour0, minute0, second0, time_step):
+def cdo_inttime(
+        file_list, 
+        year0, month0, day0, hour0, minute0, second0, time_step,
+        capture_output=False,
+        return_output_name=False,
+        encoding="utf-8", shell=True
+        ):
     """
     Initialises time steps in the files with a specific starting date and step using CDO's inttime operator.
 
@@ -558,6 +895,14 @@ def cdo_inttime(file_list, year0, month0, day0, hour0, minute0, second0, time_st
         Start second.
     time_step : str
         Time step size (e.g., '6hour').
+    capture_output : bool, optional
+        Whether to capture the command output. Default is False.
+    return_output_name : bool, optional
+        Whether to return file descriptor names. Default is False.
+    encoding : str, optional
+        Encoding to use when decoding command output. Default is "utf-8".
+    shell : bool, optional
+        Whether to execute the command through the shell. Default is True.
 
     Returns
     -------
@@ -567,12 +912,35 @@ def cdo_inttime(file_list, year0, month0, day0, hour0, minute0, second0, time_st
         temp_file = add_to_path(file)
         start_date = f"{year0}-{month0:02d}-{day0:02d} {hour0:02d}:{minute0:02d}:{second0:02d}"
         cmd = f"cdo inttime,{start_date},{time_step} '{file}' '{temp_file}'"
-        process_exit_info = run_system_command(cmd, capture_output=True)
-        exit_info(process_exit_info)
+
+        # Run the command and capture the output
+        process_exit_info = run_system_command(
+            cmd, 
+            capture_output=capture_output,
+            return_output_name=return_output_name,
+            encoding=encoding,
+            shell=shell
+        )
+
+        # Call exit_info with parameters based on capture_output    
+        exit_info(process_exit_info,
+            check_stdout=capture_output,
+            check_stderr=capture_output,
+            check_return_code=True
+        )
+
+        # Rename the temporary file to the given file
         rename_objects(temp_file, file)
         
 
-def cdo_shifttime(file_list, shift_val):
+def cdo_shifttime(
+        file_list, 
+        shift_val,
+        capture_output=False,
+        return_output_name=False,
+        encoding="utf-8",
+        shell=True
+        ):
     """
     Shifts time steps in the files by a specified value using CDO's shifttime operator.
 
@@ -582,7 +950,14 @@ def cdo_shifttime(file_list, shift_val):
         List of file paths.
     shift_val : str
         Time shift value (e.g., '+1day', '-6hours').
-
+    capture_output : bool, optional
+        Whether to capture the command output. Default is False.
+    return_output_name : bool, optional
+        Whether to return file descriptor names. Default is False.
+    encoding : str, optional
+        Encoding to use when decoding command output. Default is "utf-8".
+    shell : bool, optional
+        Whether to execute the command through the shell. Default is True.
     Returns
     -------
     None
@@ -590,8 +965,24 @@ def cdo_shifttime(file_list, shift_val):
     for file in file_list:
         temp_file = add_to_path(file)
         cmd = f"cdo shifttime,{shift_val} '{file}' '{temp_file}'"
-        process_exit_info = run_system_command(cmd, capture_output=True)
-        exit_info(process_exit_info)
+
+        # Run the command and capture the output
+        process_exit_info = run_system_command(
+            cmd, 
+            capture_output=capture_output,
+            return_output_name=return_output_name,
+            encoding=encoding,
+            shell=shell
+        )   
+
+        # Call exit_info with parameters based on capture_output
+        exit_info(process_exit_info,
+            check_stdout=capture_output,
+            check_stderr=capture_output,
+            check_return_code=True
+        )   
+
+        # Rename the temporary file to the given file
         rename_objects(temp_file, file)
 
 
@@ -639,7 +1030,15 @@ yfirst    = {4:.20f}
         output_f.write(grid_str)        
         
 
-def custom_cdo_mergetime(file_list, custom_output_name, create_temp_file=False):
+def custom_cdo_mergetime(
+        file_list, 
+        custom_output_name, 
+        create_temp_file=False,
+        capture_output=False,
+        return_output_name=False,
+        encoding="utf-8",
+        shell=True
+        ):
     """
     Custom CDO mergetime operation that optionally uses a temporary file.
 
@@ -651,6 +1050,14 @@ def custom_cdo_mergetime(file_list, custom_output_name, create_temp_file=False):
         Custom output file name.
     create_temp_file : bool, optional
         Whether to use a temporary file for intermediate steps, by default False.
+    capture_output : bool, optional
+        Whether to capture the command output. Default is False.
+    return_output_name : bool, optional
+        Whether to return file descriptor names. Default is False.
+    encoding : str, optional
+        Encoding to use when decoding command output. Default is "utf-8".
+    shell : bool, optional
+        Whether to execute the command through the shell. Default is True.
 
     Returns
     -------
@@ -664,8 +1071,21 @@ def custom_cdo_mergetime(file_list, custom_output_name, create_temp_file=False):
         temp_file = add_to_path(file_list[0])
         cmd = f"cdo -b F64 -f nc4 mergetime '{allfiles_string}' {temp_file}"
                      
-    process_exit_info = run_system_command(cmd, capture_output=True)
-    exit_info(process_exit_info)
+    # Run the command and capture the output
+    process_exit_info = run_system_command(
+        cmd, 
+        capture_output=capture_output,
+        return_output_name=return_output_name,
+        encoding=encoding,
+        shell=shell
+    )
+
+    # Call exit_info with parameters based on capture_output
+    exit_info(process_exit_info,
+        check_stdout=capture_output,
+        check_stderr=capture_output,
+        check_return_code=True
+    )
 
 
 #--------------------------#
