@@ -19,14 +19,58 @@ from pygenutils.time_handling.calendar_utils import week_range
 # Define custom functions #
 #-------------------------#
 
-def temperature_typical_extreme_period(hdy_df_t2m):
-    
+def temperature_typical_extreme_period(hdy_df_t2m: pd.DataFrame) -> str:
     """
-    Function that calculates the typical and extreme periods
-    concerning the 2 metre temperature, required for E+ software
-    as the third part of the header.
-    Only temperature is needed to work with, 
-    together with a date and time column.    
+    Calculates typical and extreme temperature periods for EnergyPlus weather files.
+    
+    Function that calculates the typical and extreme periods concerning the 
+    2 metre temperature, required for EnergyPlus software as the third part 
+    of the header. The function identifies representative weeks for seasonal
+    extremes and typical conditions based on temperature statistics.
+    
+    Parameters
+    ----------
+    hdy_df_t2m : pd.DataFrame
+        DataFrame containing hourly temperature data with the following required columns:
+        - 'date': datetime column with date and time information
+        - 't2m': 2-metre temperature values in appropriate units
+        The DataFrame should contain at least one full year of data for accurate
+        seasonal analysis.
+    
+    Returns
+    -------
+    str
+        Formatted header string for EnergyPlus weather file containing:
+        - Summer week with maximum temperature (extreme)
+        - Summer week with average temperature (typical)  
+        - Winter week with minimum temperature (extreme)
+        - Winter week with average temperature (typical)
+        - Autumn week with average temperature (typical)
+        - Spring week with average temperature (typical)
+        
+    Examples
+    --------
+    >>> import pandas as pd
+    >>> import numpy as np
+    >>> dates = pd.date_range('2020-01-01', '2020-12-31', freq='H')
+    >>> temps = 15 + 10 * np.sin(2 * np.pi * np.arange(len(dates)) / (365.25 * 24))
+    >>> df = pd.DataFrame({'date': dates, 't2m': temps})
+    >>> header = temperature_typical_extreme_period(df)
+    >>> print(type(header))
+    <class 'str'>
+    
+    Notes
+    -----
+    The function defines seasons as:
+    - Winter: December, January, February
+    - Spring: March, April, May  
+    - Summer: June, July, August
+    - Autumn: September, October, November
+    
+    Week ranges are calculated using the approach_value function to find dates
+    closest to statistical measures (min, max, average) for each season.
+    Only temperature is required for the analysis, but a proper date column
+    is essential for seasonal splitting and week range calculations.
     """
     
     # HDY winter #
@@ -183,9 +227,74 @@ def temperature_typical_extreme_period(hdy_df_t2m):
     return header_3
     
 
-def epw_creator(HDY_df_epw,
-                header_list,
-                file_name_noext):
+def epw_creator(HDY_df_epw: pd.DataFrame,
+                header_list: list[str],
+                file_name_noext: str) -> None:
+    """
+    Creates an EnergyPlus Weather (EPW) file from hourly weather data and headers.
+    
+    This function generates a complete EPW file by combining header information
+    with hourly weather data. It writes the headers first, followed by the
+    formatted weather data in comma-separated format suitable for EnergyPlus
+    building energy simulation software.
+    
+    Parameters
+    ----------
+    HDY_df_epw : pd.DataFrame
+        DataFrame containing hourly weather data for a full year (8760 hours).
+        Each row represents one hour of weather data with multiple meteorological
+        variables as columns (temperature, humidity, wind, solar radiation, etc.).
+    header_list : list[str]
+        List of header strings to be written at the beginning of the EPW file.
+        Typically contains 8 header lines including location information,
+        design conditions, typical/extreme periods, ground temperatures,
+        holidays/daylight saving, comments, and data periods.
+    file_name_noext : str
+        Base filename without extension for the output EPW file. The function
+        will automatically append '.epw' extension.
+    
+    Returns
+    -------
+    None
+        The function writes directly to disk and does not return any value.
+        Creates a file named '{file_name_noext}.epw' in the current directory.
+        
+    Examples
+    --------
+    >>> import pandas as pd
+    >>> import numpy as np
+    >>> 
+    >>> # Create sample hourly data (8760 hours)
+    >>> hours = 8760
+    >>> data = np.random.randn(hours, 10)  # 10 weather variables
+    >>> df = pd.DataFrame(data, columns=[f'var_{i}' for i in range(10)])
+    >>> 
+    >>> # Create sample headers
+    >>> headers = [
+    ...     "LOCATION,City,State,Country,Source,WMO,Lat,Lon,TZ,Elev",
+    ...     "DESIGN CONDITIONS,0",
+    ...     # ... other headers
+    ... ]
+    >>> 
+    >>> # Create EPW file
+    >>> epw_creator(df, headers, "my_weather_file")
+    >>> # Creates 'my_weather_file.epw' in current directory
+    
+    Notes
+    -----
+    The EPW format is a standardised weather file format used by EnergyPlus
+    and other building energy simulation programs. The file structure consists of:
+    
+    1. 8 header lines containing metadata
+    2. 8760 lines of hourly weather data (one full year)
+    
+    Each data line contains comma-separated values representing various
+    meteorological parameters. The function handles the formatting automatically
+    and ensures proper line endings and structure.
+    
+    The function opens the file in write mode, so any existing file with the
+    same name will be overwritten.
+    """
         
     # Open the writable file #
     epw_file_name = f"{file_name_noext}.epw"
