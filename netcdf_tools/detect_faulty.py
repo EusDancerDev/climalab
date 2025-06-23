@@ -4,27 +4,32 @@
 """
 **Program Note**
 
-- This program is an application of the `scan_ncfiles` function from the 
-  `file_utils` module within the `xarray_utils` sub-package.
-- It is designed to scan specified directories for netCDF (`.nc`) files,
-  check their integrity if necessary, and generate a report of faulty files.
-- The `scan_ncfiles` function offers various configurations for returning 
-  file paths, directory paths, and integrity checks.
+- This program uses the `scan_ncfiles` function from the `file_utils` module
+  within the `xarray_utils` sub-package to detect faulty NetCDF files.
+- It scans specified directories for NetCDF (`.nc`) files, automatically
+  checks the integrity of all found files, and generates a comprehensive
+  report listing any faulty files organised by directory.
+- The function automatically handles file discovery, integrity testing,
+  and report generation without requiring additional configuration.
 
 **Redistribution Notice**
-- You may redistribute this program in any other directory as needed.
-- However, keep in mind that it is designed to operate with absolute paths,
-  so ensure that any paths provided are properly configured to reflect your system's directory structure.
+- You may redistribute this program to any other directory as needed.
+- The program operates on the directory paths specified in the `PATH_OBJ`
+  variable, so ensure that any paths provided are properly configured to
+  reflect your system's directory structure.
 
-**Main Functions and sub-packages Used**
+**Main Functions and Sub-packages Used**
 - `scan_ncfiles` (from `file_utils`, part of the `xarray_utils` sub-package):
-   The core function used to scan directories and check for `.nc` file integrity.
-- `ncfile_integrity_status` (from `file_utils`, part of the `xarray_utils` sub-package):
-   This function checks the integrity of `.nc` files and flags any issues.
+   Automatically scans directories for `.nc` files, checks their integrity
+   using xarray, and generates a detailed report of faulty files.
+- `program_exec_timer` (from `time_handling` sub-package):
+   Measures and reports the total execution time of the scanning process
+   for performance analysis.
 
-The execution of the program is timed using the `program_exec_timer` function 
-from the `time_handling` sub-package, which calculates the elapsed time of 
-the execution of the program for performance analysis.
+**Output**
+- Creates a text report file (`faulty_netcdf_file_report.txt`) in the
+  current working directory with statistics and details of any faulty
+  NetCDF files found during the scan.
 """
 
 #------------------------#
