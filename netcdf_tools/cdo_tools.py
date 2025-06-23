@@ -13,7 +13,7 @@ from paramlib.global_parameters import (
     TIME_FREQUENCIES_SHORTER_1,
     TIME_FREQUENCIES_SHORT_1
 )
-from pygenutils.arrays_and_lists.data_manipulation import flatten_to_string
+from pygenutils.arrays_and_lists.data_manipulation import flatten_to_string, flatten_list
 from pygenutils.operative_systems.os_operations import exit_info, run_system_command
 from pygenutils.strings.text_formatters import format_string
 from pygenutils.strings.string_handler import (
@@ -31,35 +31,60 @@ from pygenutils.time_handling.date_and_time_utils import find_dt_key
 # Internal Helper Functions #
 #---------------------------#
 
-def _get_varname_in_filename(file, return_std=False, varlist_orig=None, varlist_std=None):
+def _get_varname_in_filename(
+        file: str, 
+        return_std: bool = False, 
+        varlist_orig: list[str] | None = None, 
+        varlist_std: list[str] | None = None) -> str:
     """
-    Extracts the variable name from the file name or returns its standardised name.
+    Extract the variable name from a file name or return its standardised name.
+    
+    This function parses the filename to extract the variable name from the first
+    part (before the first delimiter) and optionally converts it to a standardised
+    name using provided mapping lists.
 
     Parameters
     ----------
     file : str
-        The file path or file name.
+        The file path or file name to extract the variable name from.
     return_std : bool, optional
-        If True, returns the standardised variable name, by default False.
-    varlist_orig : list, optional
-        List of original variable names.
-    varlist_std : list, optional
-        List of standardised variable names corresponding to varlist_orig.
+        If True, returns the standardised variable name using the mapping lists.
+        Default is False.
+    varlist_orig : list[str] | None, optional
+        List of original variable names for standardisation mapping. Required if
+        `return_std` is True. Default is None.
+    varlist_std : list[str] | None, optional
+        List of standardised variable names corresponding to `varlist_orig`.
+        Required if `return_std` is True. Default is None.
 
     Returns
     -------
     str
-        The variable name extracted from the file name or its standardised counterpart.
+        The variable name extracted from the file name, or its standardised
+        counterpart if `return_std` is True.
 
     Raises
     ------
     ValueError
-        If the variable is not found in the original variable list when `return_std` is True.
+        If the variable is not found in the original variable list when
+        `return_std` is True, or if required parameters are missing.
+        
+    Examples
+    --------
+    >>> _get_varname_in_filename('temperature_daily_model_exp.nc')
+    'temperature'
+    
+    >>> _get_varname_in_filename('temp_daily_model_exp.nc', return_std=True,
+    ...                         varlist_orig=['temp'], varlist_std=['temperature'])
+    'temperature'
     """
     file_name_parts = obj_path_specs(file, file_spec_key="name_noext_parts", SPLIT_DELIM=SPLIT_DELIM1)
     var_file = file_name_parts[0]
 
     if return_std:
+        if varlist_orig is None or varlist_std is None:
+            raise ValueError("Both varlist_orig and varlist_std must be provided when return_std=True")
+            
         var_pos = find_substring_index(varlist_orig, var_file)
         if var_pos != -1:
             return varlist_std[var_pos]
@@ -68,33 +93,50 @@ def _get_varname_in_filename(file, return_std=False, varlist_orig=None, varlist_
     return var_file
 
 
-def _standardise_filename(variable, freq, model, experiment, calc_proc, period, region, ext):
+def _standardise_filename(
+        variable: str, 
+        freq: str, 
+        model: str, 
+        experiment: str, 
+        calc_proc: str, 
+        period: str, 
+        region: str, 
+        ext: str) -> str:
     """
-    Creates a standardised filename based on input components.
+    Create a standardised filename based on climate data components.
+    
+    This function generates a consistent filename following the pattern:
+    {variable}_{freq}_{model}_{experiment}_{calc_proc}_{region}_{period}.{ext}
 
     Parameters
     ----------
     variable : str
-        Variable name.
+        Variable name (e.g., 'temperature', 'precipitation').
     freq : str
-        Frequency of the data (e.g., daily, monthly).
+        Frequency of the data (e.g., 'daily', 'monthly', 'yearly').
     model : str
-        Model name.
+        Climate model name (e.g., 'HadGEM3', 'ECMWF').
     experiment : str
-        Experiment name or type.
+        Experiment name or type (e.g., 'historical', 'rcp85').
     calc_proc : str
-        Calculation procedure.
+        Calculation procedure applied (e.g., 'mean', 'sum', 'anomaly').
     period : str
-        Time period string (e.g., '2000-2020').
+        Time period string (e.g., '2000-2020', '1981-2010').
     region : str
-        Region or geographic area.
+        Region or geographic area (e.g., 'europe', 'global').
     ext : str
-        File extension (e.g., 'nc').
+        File extension without dot (e.g., 'nc', 'grib').
 
     Returns
     -------
     str
-        Standardised filename.
+        Standardised filename following the consistent naming convention.
+        
+    Examples
+    --------
+    >>> _standardise_filename('temperature', 'daily', 'HadGEM3', 'historical',
+    ...                      'mean', '2000-2020', 'europe', 'nc')
+    'temperature_daily_HadGEM3_historical_mean_europe_2000-2020.nc'
     """
     return f"{variable}_{freq}_{model}_{experiment}_{calc_proc}_{region}_{period}.{ext}"
 
@@ -106,43 +148,46 @@ def _standardise_filename(variable, freq, model, experiment, calc_proc, period, 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 def cdo_mergetime(
-        file_list, 
-        variable, 
-        freq, 
-        model, 
-        experiment, 
-        calc_proc, 
-        period, 
-        region, 
-        ext,
-        capture_output=False,
-        return_output_name=False,
-        encoding="utf-8",
-        shell=True
-        ):
+        file_list: str | list[str], 
+        variable: str, 
+        freq: str, 
+        model: str, 
+        experiment: str, 
+        calc_proc: str, 
+        period: str, 
+        region: str, 
+        ext: str,
+        capture_output: bool = False,
+        return_output_name: bool = False,
+        encoding: str = "utf-8",
+        shell: bool = True) -> None:
     """
-    Merges time steps of multiple files into one using CDO's mergetime operator.
+    Merge time steps of multiple files into one using CDO's mergetime operator.
+    
+    This function combines multiple NetCDF files with different time steps into
+    a single file, filtering files by the specified period and using CDO's
+    mergetime operator for the actual merging process.
 
     Parameters
     ----------
-    file_list : list
-        List of file paths to merge.
+    file_list : str | list[str]
+        Single file path or list of NetCDF file paths to merge.
     variable : str
-        Variable name.
+        Variable name for the output file naming.
     freq : str
-        Frequency of the data (e.g., daily, monthly).
+        Frequency of the data (e.g., 'daily', 'monthly').
     model : str
-        Model name.
+        Model name for the output file naming.
     experiment : str
-        Experiment name or type.
+        Experiment name or type for the output file naming.
     calc_proc : str
-        Calculation procedure.
+        Calculation procedure for the output file naming.
     period : str
-        Time period string (e.g., '2000-2020').
+        Time period string (e.g., '2000-2020') for filtering and naming.
     region : str
-        Region or geographic area.
+        Region or geographic area for the output file naming.
     ext : str
-        File extension (e.g., 'nc').
+        File extension for the output file (e.g., 'nc').
     capture_output : bool, optional
         Whether to capture the command output. Default is False.
     return_output_name : bool, optional
@@ -155,7 +200,26 @@ def cdo_mergetime(
     Returns
     -------
     None
+        The function creates a merged NetCDF file as output.
+        
+    Notes
+    -----
+    This function filters input files by the specified period, extracting
+    the year from the filename and only including files within the period range.
+    
+    Examples
+    --------
+    >>> # Merge daily temperature files for 2000-2010
+    >>> cdo_mergetime(['temp_2000.nc', 'temp_2005.nc', 'temp_2010.nc'],
+    ...               'temperature', 'daily', 'HadGEM3', 'historical',
+    ...               'mean', '2000-2010', 'europe', 'nc')
     """
+    # Defensive programming: handle nested lists
+    if not isinstance(file_list, list):
+        file_list = [file_list]
+    else:
+        file_list = list(flatten_list(file_list))
+    
     output_name = _standardise_filename(variable, freq, model, experiment, calc_proc, period, region, ext)
     start_year, end_year = period.split(SPLIT_DELIM2)
     file_list_selyear = [f for f in file_list if (year := obj_path_specs(f, "name_noext_parts", SPLIT_DELIM1)[-1]) >= start_year and year <= end_year]
@@ -181,38 +245,42 @@ def cdo_mergetime(
 
 
 def cdo_selyear(
-        file_list, 
-        selyear_str, 
-        freq, 
-        model, 
-        experiment, 
-        calc_proc, 
-        region, ext, 
-        capture_output=False,
-        return_output_name=False,
-        encoding="utf-8",
-        shell=True):
+        file_list: str | list[str], 
+        selyear_str: str, 
+        freq: str, 
+        model: str, 
+        experiment: str, 
+        calc_proc: str, 
+        region: str, 
+        ext: str, 
+        capture_output: bool = False,
+        return_output_name: bool = False,
+        encoding: str = "utf-8",
+        shell: bool = True) -> None:
     """
-    Selects data for specific years from a file list using CDO's selyear operator.
+    Select data for specific years from files using CDO's selyear operator.
+    
+    This function applies CDO's selyear operator to extract data for specific
+    years from NetCDF files, creating new files with the filtered data.
 
     Parameters
     ----------
-    file_list : list
-        List of file paths to select years from.
+    file_list : str | list[str]
+        Single file path or list of NetCDF file paths to select years from.
     selyear_str : str
-        Start and end years (e.g., '2000/2010').
+        Start and end years separated by '/' (e.g., '2000/2010').
     freq : str
-        Frequency of the data (e.g., daily, monthly).
+        Frequency of the data (e.g., 'daily', 'monthly').
     model : str
-        Model name.
+        Model name for the output file naming.
     experiment : str
-        Experiment name or type.
+        Experiment name or type for the output file naming.
     calc_proc : str
-        Calculation procedure.
+        Calculation procedure for the output file naming.
     region : str
-        Region or geographic area.
+        Region or geographic area for the output file naming.
     ext : str
-        File extension (e.g., 'nc').
+        File extension for the output files (e.g., 'nc').
     capture_output : bool, optional
         Whether to capture the command output. Default is False.
     return_output_name : bool, optional
@@ -225,7 +293,20 @@ def cdo_selyear(
     Returns
     -------
     None
+        The function creates new NetCDF files with selected years as output.
+        
+    Examples
+    --------
+    >>> # Select years 2000-2010 from temperature files
+    >>> cdo_selyear(['temp_full.nc'], '2000/2010', 'daily', 'HadGEM3',
+    ...             'historical', 'mean', 'europe', 'nc')
     """
+    # Defensive programming: handle nested lists
+    if not isinstance(file_list, list):
+        file_list = [file_list]
+    else:
+        file_list = list(flatten_list(file_list))
+    
     selyear_split = obj_path_specs(selyear_str, file_spec_key="name_noext_parts", SPLIT_DELIM=SPLIT_DELIM2)
     start_year = f"{selyear_split[0]}"
     end_year = f"{selyear_split[-1]}"
@@ -256,39 +337,44 @@ def cdo_selyear(
 
 
 def cdo_sellonlatbox(
-        file_list, 
-        coords, 
-        freq, 
-        model, 
-        experiment, 
-        calc_proc, 
-        region, ext, 
-        capture_output=False,
-        return_output_name=False,
-        encoding="utf-8",
-        shell=True
-        ):
+        file_list: str | list[str], 
+        coords: str, 
+        freq: str, 
+        model: str, 
+        experiment: str, 
+        calc_proc: str, 
+        region: str, 
+        ext: str, 
+        capture_output: bool = False,
+        return_output_name: bool = False,
+        encoding: str = "utf-8",
+        shell: bool = True) -> None:
     """
-    Applies CDO's sellonlatbox operator to select a geographical box from the input files.
+    Apply CDO's sellonlatbox operator to select a geographical box from input files.
+    
+    This function extracts a specific geographical region from NetCDF files using
+    longitude-latitude box coordinates. It processes multiple files and creates
+    new files containing only the selected geographic area.
 
     Parameters
     ----------
-    file_list : list
-        List of file paths.
+    file_list : str | list[str]
+        Single file path or list of NetCDF file paths to process.
     coords : str
-        Coordinates for the longitude-latitude box.
+        Coordinates for the longitude-latitude box in the format
+        'lonwest,loneast,latsouth,latnorth' (e.g., '-10,40,30,70').
     freq : str
-        Frequency of the data (e.g., daily, monthly).
+        Frequency of the data (e.g., 'daily', 'monthly').
     model : str
-        Model name.
+        Model name for the output file naming.
     experiment : str
-        Experiment name or type.
+        Experiment name or type for the output file naming.
     calc_proc : str
-        Calculation procedure.
+        Calculation procedure for the output file naming.
     region : str
-        Region or geographic area.
+        Region or geographic area for the output file naming.
     ext : str
-        File extension (e.g., 'nc').
+        File extension for the output files (e.g., 'nc').
     capture_output : bool, optional
         Whether to capture the command output. Default is False.
     return_output_name : bool, optional
@@ -301,7 +387,20 @@ def cdo_sellonlatbox(
     Returns
     -------
     None
+        The function creates new NetCDF files with the selected geographic region.
+        
+    Examples
+    --------
+    >>> # Extract European region from global temperature files
+    >>> cdo_sellonlatbox(['global_temp.nc'], '-10,40,35,70', 'daily',
+    ...                  'HadGEM3', 'historical', 'mean', 'europe', 'nc')
     """
+    # Defensive programming: handle nested lists
+    if not isinstance(file_list, list):
+        file_list = [file_list]
+    else:
+        file_list = list(flatten_list(file_list))
+    
     for file in file_list:
         var = _get_varname_in_filename(file)
         time_var = find_dt_key(file)
@@ -328,44 +427,53 @@ def cdo_sellonlatbox(
         
 
 def cdo_remap(
-        file_list, 
-        remap_str, 
-        var, 
-        freq, 
-        model, 
-        experiment, 
-        calc_proc, period, region, ext, remap_proc="bilinear",
-        capture_output=False,
-        return_output_name=False,
-        encoding="utf-8", shell=True
-        ):
+        file_list: str | list[str], 
+        remap_str: str, 
+        var: str, 
+        freq: str, 
+        model: str, 
+        experiment: str, 
+        calc_proc: str, 
+        period: str, 
+        region: str, 
+        ext: str, 
+        remap_proc: str = "bilinear",
+        capture_output: bool = False,
+        return_output_name: bool = False,
+        encoding: str = "utf-8", 
+        shell: bool = True) -> None:
     """
-    Applies remapping to the files using CDO's remap procedure.
+    Apply remapping to files using CDO's remap procedures.
+    
+    This function remaps NetCDF files to a different grid using various 
+    interpolation methods available in CDO. The remapping can be done using
+    different procedures like bilinear, nearest neighbor, conservative, etc.
 
     Parameters
     ----------
-    file_list : list
-        List of file paths.
+    file_list : str | list[str]
+        Single file path or list of NetCDF file paths to remap.
     remap_str : str
-        The remapping procedure to use (e.g., 'bil', 'nearest').
+        Target grid specification or grid description file path.
     var : str
-        Variable name.
+        Variable name for the output file naming.
     freq : str
-        Frequency of the data (e.g., daily, monthly).
+        Frequency of the data (e.g., 'daily', 'monthly').
     model : str
-        Model name.
+        Model name for the output file naming.
     experiment : str
-        Experiment name or type.
+        Experiment name or type for the output file naming.
     calc_proc : str
-        Calculation procedure.
+        Calculation procedure for the output file naming.
     period : str
-        Time period string (e.g., '2000-2020').
+        Time period string (e.g., '2000-2020') for the output file naming.
     region : str
-        Region or geographic area.
+        Region or geographic area for the output file naming.
     ext : str
-        File extension (e.g., 'nc').
+        File extension for the output files (e.g., 'nc').
     remap_proc : str, optional
-        Remapping procedure (default is "bilinear").
+        Remapping procedure to use. Must be one of the supported CDO remap
+        options. Default is 'bilinear'.
     capture_output : bool, optional
         Whether to capture the command output. Default is False.
     return_output_name : bool, optional
@@ -378,7 +486,26 @@ def cdo_remap(
     Returns
     -------
     None
+        The function creates remapped NetCDF files as output.
+        
+    Raises
+    ------
+    ValueError
+        If `remap_proc` is not one of the supported CDO remap options.
+        
+    Examples
+    --------
+    >>> # Remap temperature data to a regular 1x1 degree grid
+    >>> cdo_remap(['temp_irregular.nc'], 'r360x180', 'temperature', 
+    ...           'daily', 'HadGEM3', 'historical', 'regridded', 
+    ...           '2000-2010', 'global', 'nc')
     """
+    # Defensive programming: handle nested lists
+    if not isinstance(file_list, list):
+        file_list = [file_list]
+    else:
+        file_list = list(flatten_list(file_list))
+    
     output_name = _standardise_filename(var, freq, model, experiment, calc_proc, period, region, ext)
     
     if remap_proc not in CDO_REMAP_OPTIONS:
@@ -779,24 +906,29 @@ def apply_periodic_deltas(
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
     
 def cdo_rename(
-        file_list, 
-        varlist_orig, 
-        varlist_std,
-        capture_output=False,
-        return_output_name=False,
-        encoding="utf-8", shell=True
-        ):
+        file_list: str | list[str], 
+        varlist_orig: list[str], 
+        varlist_std: list[str],
+        capture_output: bool = False,
+        return_output_name: bool = False,
+        encoding: str = "utf-8", 
+        shell: bool = True) -> None:
     """
-    Renames variables in the files using a standardised variable list via CDO's chname operator.
+    Rename variables in files using a standardised variable list via CDO's chname operator.
+    
+    This function systematically renames variables within NetCDF files using CDO's
+    chname operator. It maps original variable names to standardised names and
+    creates new files with the updated variable names.
 
     Parameters
     ----------
-    file_list : list
-        List of file paths to rename.
-    varlist_orig : list
-        List of original variable names.
-    varlist_std : list
-        List of standardised variable names corresponding to varlist_orig.
+    file_list : str | list[str]
+        Single file path or list of NetCDF file paths to process.
+    varlist_orig : list[str]
+        List of original variable names to be renamed.
+    varlist_std : list[str]
+        List of standardised variable names corresponding to `varlist_orig`.
+        Must have the same length as `varlist_orig`.
     capture_output : bool, optional
         Whether to capture the command output. Default is False.
     return_output_name : bool, optional
@@ -809,7 +941,25 @@ def cdo_rename(
     Returns
     -------
     None
+        The function modifies the files in-place by renaming variables.
+        
+    Notes
+    -----
+    This function creates temporary files during processing and renames them
+    back to the original filenames after successful variable renaming.
+    
+    Examples
+    --------
+    >>> # Rename temperature variables in multiple files
+    >>> cdo_rename(['file1.nc', 'file2.nc'], ['temp', 'tmp'], 
+    ...            ['temperature', 'temperature'])
     """
+    # Defensive programming: handle nested lists
+    if not isinstance(file_list, list):
+        file_list = [file_list]
+    else:
+        file_list = list(flatten_list(file_list))
+    
     for i, file in enumerate(file_list, start=1):
         var_file = get_file_variables(file)
         var_std = _get_varname_in_filename(file, True, varlist_orig, varlist_std)
@@ -839,23 +989,56 @@ def cdo_rename(
         rename_objects(temp_file, file)
         
     
-def change_filenames_by_var(file_list, varlist_orig, varlist_std):
+def change_filenames_by_var(
+        file_list: str | list[str], 
+        varlist_orig: list[str], 
+        varlist_std: list[str]) -> None:
     """
-    Renames files by updating the variable name in their filenames using a standardised variable list.
+    Rename files by updating the variable name in their filenames using a standardised variable list.
+    
+    This function systematically renames files by extracting the variable name from
+    the filename, finding its standardised equivalent, and updating the filename
+    accordingly. This is useful for standardising file naming conventions across
+    different datasets.
 
     Parameters
     ----------
-    file_list : list
-        List of file paths to rename.
-    varlist_orig : list
-        List of original variable names.
-    varlist_std : list
-        List of standardised variable names corresponding to varlist_orig.
+    file_list : str | list[str]
+        Single file path or list of file paths to rename.
+    varlist_orig : list[str]
+        List of original variable names to be replaced.
+    varlist_std : list[str]
+        List of standardised variable names corresponding to `varlist_orig`.
+        Must have the same length as `varlist_orig`.
     
     Returns
     -------
     None
+        The function renames files in-place.
+        
+    Raises
+    ------
+    ValueError
+        If a variable name in the filename is not found in `varlist_orig`.
+        
+    Notes
+    -----
+    This function modifies the actual filenames on the filesystem. Ensure you
+    have backups if the original filenames are important.
+    
+    Examples
+    --------
+    >>> # Standardise temperature variable names in filenames
+    >>> change_filenames_by_var(['temp_daily.nc', 'tmp_monthly.nc'],
+    ...                        ['temp', 'tmp'], ['temperature', 'temperature'])
+    # Results in files renamed to: ['temperature_daily.nc', 'temperature_monthly.nc']
     """
+    # Defensive programming: handle nested lists
+    if not isinstance(file_list, list):
+        file_list = [file_list]
+    else:
+        file_list = list(flatten_list(file_list))
+    
     for file in file_list:
         std_var = _get_varname_in_filename(file, True, varlist_orig, varlist_std)
         file_name_parts = obj_path_specs(file, file_spec_key="name_noext_parts", SPLIT_DELIM=SPLIT_DELIM1)
@@ -868,33 +1051,43 @@ def change_filenames_by_var(file_list, varlist_orig, varlist_std):
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 def cdo_inttime(
-        file_list, 
-        year0, month0, day0, hour0, minute0, second0, time_step,
-        capture_output=False,
-        return_output_name=False,
-        encoding="utf-8", shell=True
-        ):
+        file_list: str | list[str], 
+        year0: int, 
+        month0: int, 
+        day0: int, 
+        hour0: int, 
+        minute0: int, 
+        second0: int, 
+        time_step: str,
+        capture_output: bool = False,
+        return_output_name: bool = False,
+        encoding: str = "utf-8", 
+        shell: bool = True) -> None:
     """
-    Initialises time steps in the files with a specific starting date and step using CDO's inttime operator.
+    Initialise time steps in files with a specific starting date and step using CDO's inttime operator.
+    
+    This function sets up time coordinates in NetCDF files by defining a starting
+    date/time and a time step interval. It's useful for files that lack proper
+    time coordinates or need time coordinate correction.
 
     Parameters
     ----------
-    file_list : list
-        List of file paths.
+    file_list : str | list[str]
+        Single file path or list of NetCDF file paths to process.
     year0 : int
-        Start year.
+        Starting year for the time coordinate.
     month0 : int
-        Start month.
+        Starting month for the time coordinate (1-12).
     day0 : int
-        Start day.
+        Starting day for the time coordinate (1-31).
     hour0 : int
-        Start hour.
+        Starting hour for the time coordinate (0-23).
     minute0 : int
-        Start minute.
+        Starting minute for the time coordinate (0-59).
     second0 : int
-        Start second.
+        Starting second for the time coordinate (0-59).
     time_step : str
-        Time step size (e.g., '6hour').
+        Time step size and unit (e.g., '6hour', '1day', '1month').
     capture_output : bool, optional
         Whether to capture the command output. Default is False.
     return_output_name : bool, optional
@@ -907,7 +1100,19 @@ def cdo_inttime(
     Returns
     -------
     None
+        The function modifies the files in-place by updating time coordinates.
+        
+    Examples
+    --------
+    >>> # Set time coordinates starting from 2000-01-01 00:00:00 with daily steps
+    >>> cdo_inttime(['data.nc'], 2000, 1, 1, 0, 0, 0, '1day')
     """
+    # Defensive programming: handle nested lists
+    if not isinstance(file_list, list):
+        file_list = [file_list]
+    else:
+        file_list = list(flatten_list(file_list))
+    
     for file in file_list:
         temp_file = add_to_path(file)
         start_date = f"{year0}-{month0:02d}-{day0:02d} {hour0:02d}:{minute0:02d}:{second0:02d}"
@@ -934,22 +1139,26 @@ def cdo_inttime(
         
 
 def cdo_shifttime(
-        file_list, 
-        shift_val,
-        capture_output=False,
-        return_output_name=False,
-        encoding="utf-8",
-        shell=True
-        ):
+        file_list: str | list[str], 
+        shift_val: str,
+        capture_output: bool = False,
+        return_output_name: bool = False,
+        encoding: str = "utf-8",
+        shell: bool = True) -> None:
     """
-    Shifts time steps in the files by a specified value using CDO's shifttime operator.
+    Shift time steps in files by a specified value using CDO's shifttime operator.
+    
+    This function adjusts time coordinates in NetCDF files by adding or subtracting
+    a specified time amount. This is useful for correcting time zones, adjusting
+    time references, or synchronising datasets.
 
     Parameters
     ----------
-    file_list : list
-        List of file paths.
+    file_list : str | list[str]
+        Single file path or list of NetCDF file paths to process.
     shift_val : str
-        Time shift value (e.g., '+1day', '-6hours').
+        Time shift value with sign and unit (e.g., '+1day', '-6hours', '+3months').
+        Positive values shift time forward, negative values shift backward.
     capture_output : bool, optional
         Whether to capture the command output. Default is False.
     return_output_name : bool, optional
@@ -958,10 +1167,26 @@ def cdo_shifttime(
         Encoding to use when decoding command output. Default is "utf-8".
     shell : bool, optional
         Whether to execute the command through the shell. Default is True.
+        
     Returns
     -------
     None
+        The function modifies the files in-place by shifting time coordinates.
+        
+    Examples
+    --------
+    >>> # Shift time forward by one day
+    >>> cdo_shifttime(['data.nc'], '+1day')
+    
+    >>> # Shift time backward by 6 hours
+    >>> cdo_shifttime(['hourly_data.nc'], '-6hours')
     """
+    # Defensive programming: handle nested lists
+    if not isinstance(file_list, list):
+        file_list = [file_list]
+    else:
+        file_list = list(flatten_list(file_list))
+    
     for file in file_list:
         temp_file = add_to_path(file)
         cmd = f"cdo shifttime,{shift_val} '{file}' '{temp_file}'"
@@ -1031,25 +1256,29 @@ yfirst    = {4:.20f}
         
 
 def custom_cdo_mergetime(
-        file_list, 
-        custom_output_name, 
-        create_temp_file=False,
-        capture_output=False,
-        return_output_name=False,
-        encoding="utf-8",
-        shell=True
-        ):
+        file_list: str | list[str], 
+        custom_output_name: str, 
+        create_temp_file: bool = False,
+        capture_output: bool = False,
+        return_output_name: bool = False,
+        encoding: str = "utf-8",
+        shell: bool = True) -> None:
     """
     Custom CDO mergetime operation that optionally uses a temporary file.
+    
+    This function provides a flexible version of CDO's mergetime operation,
+    allowing for custom output naming and optional temporary file creation
+    for intermediate processing steps.
 
     Parameters
     ----------
-    file_list : list
-        List of file paths to merge.
+    file_list : str | list[str]
+        Single file path or list of NetCDF file paths to merge.
     custom_output_name : str
-        Custom output file name.
+        Custom name for the output merged file.
     create_temp_file : bool, optional
-        Whether to use a temporary file for intermediate steps, by default False.
+        Whether to use a temporary file for intermediate steps. If True,
+        creates a temporary file first. Default is False.
     capture_output : bool, optional
         Whether to capture the command output. Default is False.
     return_output_name : bool, optional
@@ -1062,7 +1291,28 @@ def custom_cdo_mergetime(
     Returns
     -------
     None
+        The function creates a merged NetCDF file with the specified name.
+        
+    Notes
+    -----
+    This function uses 64-bit floating point precision (-b F64) and NetCDF4
+    format (-f nc4) for the output file.
+    
+    Examples
+    --------
+    >>> # Merge files with custom output name
+    >>> custom_cdo_mergetime(['file1.nc', 'file2.nc'], 'merged_data.nc')
+    
+    >>> # Merge with temporary file creation
+    >>> custom_cdo_mergetime(['file1.nc', 'file2.nc'], 'output.nc', 
+    ...                      create_temp_file=True)
     """
+    # Defensive programming: handle nested lists
+    if not isinstance(file_list, list):
+        file_list = [file_list]
+    else:
+        file_list = list(flatten_list(file_list))
+    
     allfiles_string = flatten_to_string(file_list)
     
     if not create_temp_file:
