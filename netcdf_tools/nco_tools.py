@@ -15,34 +15,17 @@ from pygenutils.strings.text_formatters import format_string, print_format_strin
 #-------------------------#
 
 def modify_variable_units_and_values(
-        file_list: str | list[str],
-        variable_name: str,
-        operator: str,
-        value: int | float,
-        new_unit: str,
-        capture_output: bool = False,
-        return_output_name: bool = False,
-        encoding: str = "utf-8",
-        shell: bool = True) -> None:
+        file_list,
+        variable_name,
+        operator,
+        value,
+        new_unit,
+        capture_output=False,
+        return_output_name=False,
+        encoding="utf-8",
+        shell=True):
+    
     """
-    Modify variable units and values in NetCDF files using NCO tools.
-    
-    This function changes both the units attribute and numerical values of a specified
-    variable in NetCDF files. It uses ncatted to modify units and ncap2 to perform
-    mathematical operations on the variable values.
-    
-    Parameters
-    ----------
-    file_list : str | list[str]
-        Single file path or list of NetCDF file paths to modify.
-    variable_name : str
-        Name of the variable to modify.
-    operator : {'+', '-', '*', '/'}
-        Mathematical operator to apply.
-    value : int | float
-        Numerical value to use with the operator.
-    new_unit : str
-        New unit string to assign to the variable.
     capture_output : bool, optional
         Whether to capture the command output. Default is False.
     return_output_name : bool, optional
@@ -51,28 +34,6 @@ def modify_variable_units_and_values(
         Encoding to use when decoding command output. Default is "utf-8".
     shell : bool, optional
         Whether to execute the command through the shell. Default is True.
-        
-    Raises
-    ------
-    ValueError
-        If the operator is not one of the basic four mathematical rules.
-        
-    Notes
-    -----
-    This function creates temporary files during processing and automatically
-    cleans them up by renaming them back to the original filenames.
-    
-    Examples
-    --------
-    >>> # Convert temperature from Celsius to Kelvin
-    >>> modify_variable_units_and_values(
-    ...     'temperature.nc', 'temp', '+', 273.15, 'K'
-    ... )
-    
-    >>> # Scale precipitation values and change units
-    >>> modify_variable_units_and_values(
-    ...     ['precip1.nc', 'precip2.nc'], 'pr', '*', 86400, 'mm/day'
-    ... )
     """
     
     if not isinstance(file_list, list):
@@ -146,72 +107,16 @@ def modify_variable_units_and_values(
             
 
 def modify_coordinate_values_by_threshold(
-        file_list: str | list[str],
-        dimension_name: str,
-        threshold: int | float,
-        operator: str,
-        value: int | float,
-        threshold_mode: str = "max",
-        capture_output: bool = False,
-        return_output_name: bool = False,
-        encoding: str = "utf-8",
-        shell: bool = True) -> None:
-    """
-    Conditionally modify coordinate values based on a threshold in NetCDF files.
-    
-    This function applies mathematical operations to coordinate values only when
-    they meet certain threshold conditions. It uses ncap2 with conditional 'where'
-    statements to selectively modify coordinate values.
-    
-    Parameters
-    ----------
-    file_list : str | list[str]
-        Single file path or list of NetCDF file paths to modify.
-    dimension_name : str
-        Name of the dimension/coordinate to modify.
-    threshold : int | float
-        Threshold value for the conditional operation.
-    operator : {'+', '-', '*', '/'} 
-        Mathematical operator to apply.
-    value : int | float
-        Numerical value to use with the operator.
-    threshold_mode : str, optional
-        Threshold comparison mode. Either 'max' or 'min'. Default is 'max'.
-        - 'max': Apply operation where coordinate < threshold
-        - 'min': Apply operation where coordinate > threshold
-    capture_output : bool, optional
-        Whether to capture the command output. Default is False.
-    return_output_name : bool, optional
-        Whether to return file descriptor names. Default is False.
-    encoding : str, optional
-        Encoding to use when decoding command output. Default is "utf-8".
-    shell : bool, optional
-        Whether to execute the command through the shell. Default is True.
-        
-    Raises
-    ------
-    ValueError
-        If the operator is not one of the basic four mathematical rules.
-    ValueError
-        If threshold_mode is not 'max' or 'min'.
-        
-    Notes
-    -----
-    This function creates temporary files during processing and automatically
-    cleans them up by renaming them back to the original filenames.
-    
-    Examples
-    --------
-    >>> # Add 360 to longitude values less than 0 (convert from [-180,180] to [0,360])
-    >>> modify_coordinate_values_by_threshold(
-    ...     'data.nc', 'lon', 0, '+', 360, threshold_mode='min'
-    ... )
-    
-    >>> # Subtract 360 from longitude values greater than 180
-    >>> modify_coordinate_values_by_threshold(
-    ...     'data.nc', 'lon', 180, '-', 360, threshold_mode='max'
-    ... )
-    """
+        file_list,
+        dimension_name,
+        threshold,
+        operator,
+        value,
+        threshold_mode="max",
+        capture_output=False,
+        return_output_name=False,
+        encoding="utf-8",
+        shell=True):
     
     if not isinstance(file_list, list):
         file_list = [file_list]
@@ -274,76 +179,23 @@ def modify_coordinate_values_by_threshold(
             
 
 def modify_coordinate_all_values(
-        file_list: str | list[str],
-        dimension_name: str,
-        operator: str,
-        value: int | float,
-        threshold_mode: str = "max",
-        capture_output: bool = False,
-        return_output_name: bool = False,
-        encoding: str = "utf-8",
-        shell: bool = True) -> None:
+        file_list,
+        dimension_name,
+        operator,
+        value,
+        threshold_mode="max",
+        capture_output=False,
+        return_output_name=False,
+        encoding="utf-8",
+        shell=True):
     """
-    Modify all coordinate values of a specified dimension in NetCDF files.
-    
-    This function applies mathematical operations to all values of a specified
-    coordinate/dimension in NetCDF files using ncap2. Unlike the threshold-based
-    version, this modifies all coordinate values unconditionally.
+    Modify the values of all coordinates of a given dimension.
     
     Parameters
     ----------
-    file_list : str | list[str]
-        Single file path or list of NetCDF file paths to modify.
-    dimension_name : str
-        Name of the dimension/coordinate whose values will be modified.
-    operator : {'+', '-', '*', '/'}
-        Mathematical operator to apply.
-    value : int | float
-        Numerical value to use with the operator.
-    threshold_mode : str, optional
-        Threshold comparison mode (kept for consistency with other functions).
-        Either 'max' or 'min'. Default is 'max'. Note: This parameter doesn't
-        affect behaviour in this function as all values are modified.
-    capture_output : bool, optional
-        Whether to capture the command output. Default is False.
-    return_output_name : bool, optional
-        Whether to return file descriptor names. Default is False.
-    encoding : str, optional
-        Encoding to use when decoding command output. Default is "utf-8".
-    shell : bool, optional
-        Whether to execute the command through the shell. Default is True.
+    file_list : list
+        List of file names to modify.
         
-    Raises
-    ------
-    ValueError
-        If the operator is not one of the basic four mathematical rules.
-    ValueError
-        If threshold_mode is not 'max' or 'min'.
-        
-    Notes
-    -----
-    This function creates temporary files during processing and automatically
-    cleans them up by renaming them back to the original filenames.
-    
-    The threshold_mode parameter is maintained for API consistency but doesn't
-    affect the operation since all coordinate values are modified regardless.
-    
-    Examples
-    --------
-    >>> # Convert all longitude values from degrees to radians
-    >>> modify_coordinate_all_values(
-    ...     'data.nc', 'lon', '*', 3.14159/180
-    ... )
-    
-    >>> # Shift all time values by adding 30 days
-    >>> modify_coordinate_all_values(
-    ...     ['file1.nc', 'file2.nc'], 'time', '+', 30
-    ... )
-        
-    >>> # Scale all latitude values
-    >>> modify_coordinate_all_values(
-    ...     'grid.nc', 'lat', '*', 1.5
-    ... )
     """
     
     if not isinstance(file_list, list):
