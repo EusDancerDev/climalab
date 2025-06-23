@@ -4,6 +4,82 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+
+## [4.5.0] - 2025-06-23
+
+### Fixed (4.5.0)
+
+#### **NetCDF Tools** (fixing; 4.5.0)
+
+- Module `detect_faulty.py`:
+  - **Docstring Corrections**:
+    - Fix major inaccuracies in module docstring by correcting function descriptions to match actual implementations
+  - **Function Descriptions**:
+    - Correct `scan_ncfiles` description: function takes single path parameter, not "various configurations"
+  - **Integrity Checking**:
+    - Remove incorrect claims about optional integrity checking (it's automatic)
+  - **Reference Fixes**:
+    - Fix misleading reference to non-existent `ncfile_integrity_status` function
+  - **Output Documentation**:
+    - Add accurate "Output" section describing `faulty_netcdf_file_report.txt` generation
+
+- Module `extract_basics.py`:
+  - **Docstring Updates**:
+    - Comprehensively update module docstring to accurately reflect imported function behaviour and program capabilities
+  - **Documentation Corrections**:
+    - Fix typos in documentation text
+  - **Output File Names**:
+    - Add specific output file names (latlon_bounds.txt, period_bounds.txt, time_formats.txt)
+  - **Function Requirements**:
+    - Clarify `extract_latlon_bounds` requires two rounding precision parameters
+  - **Function Descriptions**:
+    - Correct `program_exec_timer` description: returns formatted elapsed time string
+  - **Integrity and Error Handling**:
+    - Document automatic file integrity checking with error handling
+    - Add "File Integrity and Error Handling" section explaining fault tolerance
+
+### Added (4.5.0)
+
+#### **NetCDF Tools** (adding; 4.5.0)
+
+- **Comprehensive Nested List Support**: Enhanced defensive programming across NetCDF processing modules
+  - Modules `cdo_tools.py` and `nco_tools.py`: **Already implemented**
+    - Import `flatten_list` from `pygenutils.arrays_and_lists.data_manipulation` for robust nested list handling
+    - Enhanced functions to handle arbitrarily deep nested list structures in file processing
+    - Maintains backward compatibility with existing file list processing
+
+### Changed (4.5.0)
+
+#### **General** (changing; 4.5.0)
+
+- **Modernisation Requirements Analysis**: Systematic assessment of type annotation and nested list support needs across modules
+
+**Files Requiring Both `flatten_list` and PEP-604 Modernisation:**
+- No additional files identified (NetCDF tools already modernised)
+
+**Files Requiring PEP-604 Modernisation Only:**
+- `meteorological/variables.py`: Already uses modern `float | np.ndarray` syntax - **No changes needed**
+- `meteorological/weather_software.py`: Already uses modern type hints - **No changes needed**  
+- `supplementary_tools/*.py`: Simple analysis modules - **Assessment needed**
+  - Functions primarily use basic data types without complex list processing
+  - May benefit from type hint improvements for consistency
+
+**Files Already Modernised (No Changes Required):**
+- `netcdf_tools/cdo_tools.py`: Modern `str | list[str]` syntax with `flatten_list` defensive programming
+- `netcdf_tools/nco_tools.py`: Modern type hints with proper list handling
+- `netcdf_tools/detect_faulty.py`: Simple program with basic types
+- `netcdf_tools/extract_basics.py`: Simple program with basic types
+- `data_analysis_projects_sample/src/data/*.py`: Download scripts with specific data handling, no nested list requirements
+
+#### **NetCDF Tools** (changing; 4.5.0)
+
+- **Already Completed**: Both `cdo_tools.py` and `nco_tools.py` modules have been modernised with:
+  - PEP-604 union syntax: `str | list[str]` for file parameters
+  - Defensive programming with `flatten_list` for nested list handling
+  - Enhanced type safety and robustness for file processing operations
+
+---
+
 ## [4.4.0] - 2025-05-09
 
 ### Fixed
