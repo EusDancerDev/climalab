@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [4.5.1] - 2025-06-24
+
+### Changed (4.5.1)
+
+#### **General** (changing; 4.5.1)
+
+- Update variable names:
+  - Changes have been made in the original file `global_parameters.py` in the `paramlib` package.
+  - These include abbreviation addressing.
+
+| Module | Old variable name | New variable name |
+|:------:|:-----------------:|:-----------------:|
+| `netcdf_tools/cdo_tools.py` | `COMMON_DELIM_LIST` | `COMMON_DELIMITER_LIST` |
+| `netcdf_tools/cdo_tools.py` | `TIME_FREQUENCIES_SHORT_1` | `TIME_FREQUENCIES_ABBREVIATED` |
+| `netcdf_tools/cdo_tools.py` | `TIME_FREQUENCIES_SHORTER_1` | `TIME_FREQUENCIES_BRIEF` |
+| `netcdf_tools/cdo_tools.py` | `BASIC_FOUR_RULES` | `BASIC_ARITHMETIC_OPERATORS` |
+| `netcdf_tools/nco_tools.py` | `BASIC_FOUR_RULES` | `BASIC_ARITHMETIC_OPERATORS` |
+
+---
 
 ## [4.5.0] - 2025-06-23
 
