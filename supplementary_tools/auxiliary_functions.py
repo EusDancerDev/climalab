@@ -135,5 +135,3 @@ def ba_parametric_qm(sim, sim_ref, obs_ref):
     
     return stats.norm.ppf(F_sim, dist_obs_ref_mean, dist_obs_ref_std)
 
-"""
-
