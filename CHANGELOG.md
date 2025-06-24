@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [4.5.2] - 2025-06-25
+
+### Changed (4.5.2)
+
+#### **Supplementary Tools** (changing; 4.5.2)
+
+- Module `auxiliary_functions.py`: remove spurious triple quotes at the end of the file (not a docstring).
+
+---
+
 ## [4.5.1] - 2025-06-24
 
 ### Changed (4.5.1)
