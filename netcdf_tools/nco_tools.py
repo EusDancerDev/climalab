@@ -6,7 +6,7 @@
 #------------------------#
 
 from filewise.file_operations.ops_handler import add_to_path, rename_objects
-from paramlib.global_parameters import BASIC_FOUR_RULES
+from paramlib.global_parameters import BASIC_ARITHMETIC_OPERATORS
 from pygenutils.operative_systems.os_operations import run_system_command, exit_info
 from pygenutils.strings.text_formatters import format_string, print_format_string
 
@@ -104,7 +104,7 @@ def modify_variable_units_and_values(
             check_return_code=True
         )
         
-        if operator not in BASIC_FOUR_RULES:
+        if operator not in BASIC_ARITHMETIC_OPERATORS:
             raise ValueError(INVALID_OPERATOR_ERR_TEMPLATE)
         else:            
             # Print progress information #
@@ -223,7 +223,7 @@ def modify_coordinate_values_by_threshold(
         is_whole_number = (abs(value-int(value)) == 0)
         use_integer_format = int(is_whole_number)
         
-        if operator not in BASIC_FOUR_RULES:
+        if operator not in BASIC_ARITHMETIC_OPERATORS:
             raise ValueError(INVALID_OPERATOR_ERR_TEMPLATE)
         else:
             if threshold_mode not in THRESHOLD_MODE_OPTS:
@@ -356,7 +356,7 @@ def modify_coordinate_all_values(
         is_whole_number = (abs(value-int(value)) == 0)
         use_integer_format = int(is_whole_number)
         
-        if operator not in BASIC_FOUR_RULES:
+        if operator not in BASIC_ARITHMETIC_OPERATORS:
             raise ValueError(INVALID_OPERATOR_ERR_TEMPLATE)
         else:
             if threshold_mode not in THRESHOLD_MODE_OPTS:
@@ -464,7 +464,7 @@ DIVVALUE_WHERE_MIN_FLOAT_COMMAND_TEMPLATE = """{} 'where({}>{}) {}={}/{}.0f' '{}
 
 # Error messages #
 INVALID_OPERATOR_ERR_TEMPLATE = \
-f"Invalid basic operator chosen. Options are {BASIC_FOUR_RULES}."
+f"Invalid basic operator chosen. Options are {BASIC_ARITHMETIC_OPERATORS}."
 INVALID_THRESHOLD_MODE_ERR_TEMPLATE = \
 """Invalid threshold mode. Options are {}."""
 
@@ -478,33 +478,33 @@ THRESHOLD_MODE_OPTS = ["max", "min"]
 #--------------------------#
 
 OPERATOR_GERUND_DICT = {
-    BASIC_FOUR_RULES[0] : "Adding",
-    BASIC_FOUR_RULES[1] : "Subtracting",
-    BASIC_FOUR_RULES[2] : "Multiplying",
-    BASIC_FOUR_RULES[3] : "Dividing"
+    BASIC_ARITHMETIC_OPERATORS[0] : "Adding",
+    BASIC_ARITHMETIC_OPERATORS[1] : "Subtracting",
+    BASIC_ARITHMETIC_OPERATORS[2] : "Multiplying",
+    BASIC_ARITHMETIC_OPERATORS[3] : "Dividing"
     }
 
 VARVAL_MOD_COMMAND_TEMPLATES_UV = {
-    BASIC_FOUR_RULES[0] : {
+    BASIC_ARITHMETIC_OPERATORS[0] : {
         1 : ADDVALUE_COMMAND_TEMPLATE,
         0 : ADDVALUE_FLOAT_COMMAND_TEMPLATE
     },
-    BASIC_FOUR_RULES[1] : {
+    BASIC_ARITHMETIC_OPERATORS[1] : {
         1 : SUBTRVALUE_COMMAND_TEMPLATE,
         0 : SUBTRVALUE_FLOAT_COMMAND_TEMPLATE
     },
-    BASIC_FOUR_RULES[2] : {
+    BASIC_ARITHMETIC_OPERATORS[2] : {
         1 : MULTVALUE_COMMAND_TEMPLATE,
         0 : MULTVALUE_FLOAT_COMMAND_TEMPLATE
     },
-    BASIC_FOUR_RULES[3] : {
+    BASIC_ARITHMETIC_OPERATORS[3] : {
         1 : DIVVALUE_COMMAND_TEMPLATE,
         0 : DIVVALUE_FLOAT_COMMAND_TEMPLATE
     }
 }
 
 VARVAL_MOD_COMMAND_TEMPLATES_BTH = {
-    BASIC_FOUR_RULES[0] : {
+    BASIC_ARITHMETIC_OPERATORS[0] : {
         "max" : {
             1 : ADDVALUE_WHERE_MAX_COMMAND_TEMPLATE,
             0 : ADDVALUE_WHERE_MAX_FLOAT_COMMAND_TEMPLATE
@@ -514,7 +514,7 @@ VARVAL_MOD_COMMAND_TEMPLATES_BTH = {
             0 : ADDVALUE_WHERE_MIN_FLOAT_COMMAND_TEMPLATE
         },
     },
-    BASIC_FOUR_RULES[1] : {
+    BASIC_ARITHMETIC_OPERATORS[1] : {
         "max" : {
             1 : SUBTRVALUE_WHERE_MAX_COMMAND_TEMPLATE,
             0 : SUBTRVALUE_WHERE_MAX_FLOAT_COMMAND_TEMPLATE
@@ -524,7 +524,7 @@ VARVAL_MOD_COMMAND_TEMPLATES_BTH = {
             0 : SUBTRVALUE_WHERE_MIN_FLOAT_COMMAND_TEMPLATE
         },
     },
-    BASIC_FOUR_RULES[2] : {
+    BASIC_ARITHMETIC_OPERATORS[2] : {
         "max" : {
             1 : MULTVALUE_WHERE_MAX_COMMAND_TEMPLATE,
             0 : MULTVALUE_WHERE_MAX_FLOAT_COMMAND_TEMPLATE
@@ -534,7 +534,7 @@ VARVAL_MOD_COMMAND_TEMPLATES_BTH = {
             0 : MULTVALUE_WHERE_MIN_FLOAT_COMMAND_TEMPLATE
         },
     },
-    BASIC_FOUR_RULES[3] : {
+    BASIC_ARITHMETIC_OPERATORS[3] : {
         "max" : {
             1 : DIVVALUE_WHERE_MAX_COMMAND_TEMPLATE,
             0 : DIVVALUE_WHERE_MAX_FLOAT_COMMAND_TEMPLATE
@@ -547,7 +547,7 @@ VARVAL_MOD_COMMAND_TEMPLATES_BTH = {
 }
 
 VARVAL_MOD_COMMAND_TEMPLATES_ALL = {
-    BASIC_FOUR_RULES[0] : {
+    BASIC_ARITHMETIC_OPERATORS[0] : {
         "max" : {
             1 : ADDVALUE_COMMAND_TEMPLATE,
             0 : ADDVALUE_FLOAT_COMMAND_TEMPLATE
@@ -557,7 +557,7 @@ VARVAL_MOD_COMMAND_TEMPLATES_ALL = {
             0 : ADDVALUE_FLOAT_COMMAND_TEMPLATE
         },
     },
-    BASIC_FOUR_RULES[1] : {
+    BASIC_ARITHMETIC_OPERATORS[1] : {
         "max" : {
             1 : SUBTRVALUE_COMMAND_TEMPLATE,
             0 : SUBTRVALUE_FLOAT_COMMAND_TEMPLATE
@@ -567,7 +567,7 @@ VARVAL_MOD_COMMAND_TEMPLATES_ALL = {
             0 : SUBTRVALUE_FLOAT_COMMAND_TEMPLATE
         },
     },
-    BASIC_FOUR_RULES[2] : {
+    BASIC_ARITHMETIC_OPERATORS[2] : {
         "max" : {
             1 : MULTVALUE_COMMAND_TEMPLATE,
             0 : MULTVALUE_FLOAT_COMMAND_TEMPLATE
@@ -577,7 +577,7 @@ VARVAL_MOD_COMMAND_TEMPLATES_ALL = {
             0 : MULTVALUE_FLOAT_COMMAND_TEMPLATE
         },
     },
-    BASIC_FOUR_RULES[3] : {
+    BASIC_ARITHMETIC_OPERATORS[3] : {
         "max" : {
             1 : DIVVALUE_COMMAND_TEMPLATE,
             0 : DIVVALUE_FLOAT_COMMAND_TEMPLATE
