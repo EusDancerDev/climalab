@@ -8,10 +8,10 @@
 from filewise.file_operations.ops_handler import rename_objects
 from filewise.xarray_utils.patterns import get_file_variables, get_times
 from paramlib.global_parameters import (
-    BASIC_FOUR_RULES, 
-    COMMON_DELIM_LIST, 
-    TIME_FREQUENCIES_SHORTER_1,
-    TIME_FREQUENCIES_SHORT_1
+    BASIC_ARITHMETIC_OPERATORS, 
+    COMMON_DELIMITER_LIST, 
+    TIME_FREQUENCIES_BRIEF,
+    TIME_FREQUENCIES_ABBREVIATED
 )
 from pygenutils.arrays_and_lists.data_manipulation import flatten_to_string, flatten_list
 from pygenutils.operative_systems.os_operations import exit_info, run_system_command
@@ -804,8 +804,8 @@ def calculate_periodic_deltas(
     string2add = f"{period_abbr}Deltas_{model}.nc"
     delta_output = add_to_path(delta_filename, string2add)
     
-    if operator not in BASIC_FOUR_RULES:
-        raise ValueError(f"Unsupported operator. Options are {BASIC_FOUR_RULES}")
+    if operator not in BASIC_ARITHMETIC_OPERATORS:
+        raise ValueError(f"Unsupported operator. Options are {BASIC_ARITHMETIC_OPERATORS}")
     
     operator_str = CDO_OPERATOR_STR_DICT[operator]
     cmd = f"cdo {operator_str} {hist_mean_cmd} {proj_mean_cmd} {delta_output}"
@@ -879,8 +879,8 @@ def apply_periodic_deltas(
     
     hist_mean_cmd = f"-y{period_abbr}mean {hist_file}"
     
-    if operator not in BASIC_FOUR_RULES:
-        raise ValueError(f"Unsupported operator. Options are {BASIC_FOUR_RULES}")
+    if operator not in BASIC_ARITHMETIC_OPERATORS:
+        raise ValueError(f"Unsupported operator. Options are {BASIC_ARITHMETIC_OPERATORS}")
     
     operator_str = CDO_OPERATOR_STR_DICT[operator]
     cmd = f"cdo {operator_str} {proj_file} {hist_mean_cmd} {delta_applied_output}"
@@ -1346,24 +1346,26 @@ def custom_cdo_mergetime(
 #---------#
 
 # String-splitting delimiters #
-SPLIT_DELIM1 = COMMON_DELIM_LIST[0]
-SPLIT_DELIM2 = COMMON_DELIM_LIST[1]
+SPLIT_DELIM1 = COMMON_DELIMITER_LIST[0]
+SPLIT_DELIM2 = COMMON_DELIMITER_LIST[1]
 
 # Grid header file function key list #
 KEYLIST = ['total_columns', 'total_lines', 'xmin', 'xres', 'ymin', 'yres']
 
 # Calendar and date-time parameters #
-TIME_FREQS_DELTA = [TIME_FREQUENCIES_SHORT_1[0]] + TIME_FREQUENCIES_SHORT_1[2:4]
-FREQ_ABBRS_DELTA = [TIME_FREQUENCIES_SHORTER_1[0]] + TIME_FREQUENCIES_SHORTER_1[2:4]
+TIME_FREQS_DELTA = [TIME_FREQUENCIES_ABBREVIATED[0]] + TIME_FREQUENCIES_ABBREVIATED[2:4]
+FREQ_ABBRS_DELTA = [TIME_FREQUENCIES_BRIEF[0]] + TIME_FREQUENCIES_BRIEF[2:4]
 
 # Statistics and operators #
 #--------------------------#
 
 # Basic statistics #
-STATKIT = ["max", "min", "sum", 
-           "mean", "avg", 
-           "var", "var1",
-           "std", "std1"]
+STATKIT = [
+    "max", "min", "sum", 
+    "mean", "avg", 
+    "var", "var1",
+    "std", "std1"
+]
   
 # CDO remapping options #
 CDO_REMAP_OPTION_DICT = {
@@ -1380,14 +1382,14 @@ CDO_REMAP_OPTION_DICT = {
     "vertical_hybrid_z" : "remapeta_z",
     "largest_area_fraction" : "remaplaf",
     "sum" : "remapsum",
-    }
+}
 
 CDO_REMAP_OPTIONS = list(CDO_REMAP_OPTION_DICT.keys())
 
 # Basic operator switch case dictionary #
 CDO_OPERATOR_STR_DICT = {
-    BASIC_FOUR_RULES[0] : "add",
-    BASIC_FOUR_RULES[1] : "sub",
-    BASIC_FOUR_RULES[2] : "mul",
-    BASIC_FOUR_RULES[3] : "div"
-    }
+    BASIC_ARITHMETIC_OPERATORS[0] : "add",
+    BASIC_ARITHMETIC_OPERATORS[1] : "sub",
+    BASIC_ARITHMETIC_OPERATORS[2] : "mul",
+    BASIC_ARITHMETIC_OPERATORS[3] : "div"
+}
