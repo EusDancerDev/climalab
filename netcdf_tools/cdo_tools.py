@@ -218,7 +218,7 @@ def cdo_mergetime(
     if not isinstance(file_list, list):
         file_list = [file_list]
     else:
-        file_list = list(flatten_list(file_list))
+        file_list = flatten_list(file_list)
     
     output_name = _standardise_filename(variable, freq, model, experiment, calc_proc, period, region, ext)
     start_year, end_year = period.split(SPLIT_DELIM2)
