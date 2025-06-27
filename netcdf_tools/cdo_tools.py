@@ -1220,7 +1220,7 @@ def create_grid_header_file(output_file, **kwargs):
 
     Parameters
     ----------
-    output_file : str or Path
+    output_file : str | Path
         Path to the txt file where the reference grid will be stored.
     kwargs : dict
         Parameters that define the grid (e.g., xmin, ymax, total lines, total columns, etc.).
