@@ -12,7 +12,9 @@ Script to download E-OBS data using the configuration file.
 import logging
 import os
 import sys
+
 from pathlib import Path
+from typing import Any
 
 import yaml
 
@@ -38,8 +40,17 @@ from pygenutils.strings.string_handler import find_substring_index, substring_re
 #------------------------#
 
 # Set up logging #
-def set_up_logging():
-    """Set up logging."""
+def set_up_logging() -> None:
+    """
+    Set up logging configuration for the E-OBS download script.
+    
+    Configures the logging module with INFO level and a standard format
+    that includes timestamp, logger name, level, and message.
+    
+    Returns
+    -------
+    None
+    """
     logging.basicConfig(
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -47,8 +58,42 @@ def set_up_logging():
 logger = logging.getLogger(__name__)
 
 # Load configuration #
-def load_config(config_path):
-    """Load the configuration file."""
+def load_config(config_path: str | Path) -> dict[str, Any]:
+    """
+    Load the E-OBS configuration file from the specified path.
+    
+    Reads and parses a YAML configuration file containing parameters
+    for E-OBS observational data download including products, periods,
+    variables, and output settings.
+    
+    Parameters
+    ----------
+    config_path : str | Path
+        Path to the YAML configuration file. Can be a string path
+        or pathlib.Path object.
+    
+    Returns
+    -------
+    dict[str, Any]
+        Dictionary containing all configuration parameters loaded
+        from the YAML file.
+        
+    Raises
+    ------
+    FileNotFoundError
+        If the configuration file does not exist at the specified path.
+    yaml.YAMLError
+        If the YAML file is malformed or cannot be parsed.
+    SystemExit
+        If any error occurs during file loading, the programme exits
+        with an error message logged.
+        
+    Examples
+    --------
+    >>> config = load_config('config/eobs_config.yaml')
+    >>> print(config['product_type'])
+    'gridded'
+    """
     try:
         with open(config_path, 'r') as f:
             config = yaml.safe_load(f)
@@ -58,8 +103,36 @@ def load_config(config_path):
         sys.exit(1)
 
 # Validate configuration #
-def validate_config(config):
-    """Validate the configuration parameters."""
+def validate_config(config: dict[str, Any]) -> None:
+    """
+    Validate that all required E-OBS configuration parameters are present and valid.
+    
+    Performs comprehensive validation of the configuration dictionary to ensure
+    all required parameters are present and their values are within acceptable
+    ranges for the E-OBS data download.
+    
+    Parameters
+    ----------
+    config : dict[str, Any]
+        Configuration dictionary containing E-OBS download parameters.
+        Must include required fields such as product type, periods, variables,
+        resolution, and file format specifications.
+    
+    Returns
+    -------
+    None
+    
+    Raises
+    ------
+    SystemExit
+        If any required parameter is missing or contains invalid values.
+        Error details are logged before exit.
+        
+    Examples
+    --------
+    >>> config = {'product_type': 'gridded', 'resolution': '0.25deg', ...}
+    >>> validate_config(config)  # Validates successfully
+    """
     required_params = [
         'project_name', 'product_type', 'periods', 'variable_list',
         'file_format', 'version', 'resolution', 'dataset', 'dataset_lower',
@@ -88,8 +161,38 @@ def validate_config(config):
         sys.exit(1)
 
 # Return file extension #
-def return_file_extension(config):
-    """Return the file extension based on the file format."""
+def return_file_extension(config: dict[str, Any]) -> str:
+    """
+    Return the file extension based on the configured file format.
+    
+    Maps the file format specification in the configuration to the
+    corresponding file extension for proper file naming.
+    
+    Parameters
+    ----------
+    config : dict[str, Any]
+        Configuration dictionary containing file format and available
+        extensions mapping.
+    
+    Returns
+    -------
+    str
+        File extension corresponding to the specified format (e.g., 'nc', 'zip').
+        
+    Raises
+    ------
+    ValueError
+        If the specified file format is not supported or not found in
+        the available formats list.
+        
+    Examples
+    --------
+    >>> config = {'file_format': 'netcdf', 'available_formats': ['netcdf'], 
+    ...           'available_extensions': ['nc']}
+    >>> ext = return_file_extension(config)
+    >>> print(ext)
+    nc
+    """
     extension_idx = find_substring_index(config['available_formats'], config['file_format'])
     
     if extension_idx == -1:
@@ -99,8 +202,36 @@ def return_file_extension(config):
         return extension
 
 # Return grid resolution #
-def return_grid_resolution(config):
-    """Return the grid resolution with the appropriate suffix."""
+def return_grid_resolution(config: dict[str, Any]) -> str:
+    """
+    Return the grid resolution with the appropriate suffix for API requests.
+    
+    Formats the resolution specification by adding the 'deg' suffix
+    required by the CDS API for grid resolution parameters.
+    
+    Parameters
+    ----------
+    config : dict[str, Any]
+        Configuration dictionary containing resolution specification
+        and available resolutions list.
+    
+    Returns
+    -------
+    str
+        Formatted grid resolution string with 'deg' suffix (e.g., '0.25deg').
+        
+    Raises
+    ------
+    ValueError
+        If the specified resolution is not in the list of available resolutions.
+        
+    Examples
+    --------
+    >>> config = {'resolution': '0.25', 'available_resolutions': ['0.25', '0.5']}
+    >>> res = return_grid_resolution(config)
+    >>> print(res)
+    0.25deg
+    """
     if config['resolution'] not in config['available_resolutions']:
         raise ValueError(f"Invalid grid resolution. Choose from {config['available_resolutions']}")
     else:
@@ -110,8 +241,47 @@ def return_grid_resolution(config):
 # Download data #
 #---------------#
 
-def download_eobs_data(config):
-    """Download the E-OBS data using the CDS API."""
+def download_eobs_data(config: dict[str, Any]) -> None:
+    """
+    Download E-OBS observational data using the CDS API based on configuration parameters.
+    
+    This function handles the complete E-OBS data download workflow including
+    parameter preparation, file checking, downloading via CDS API for multiple
+    time periods, and file organisation. It includes robust error handling
+    and avoids duplicate downloads.
+    
+    Parameters
+    ----------
+    config : dict[str, Any]
+        Complete configuration dictionary containing all necessary parameters
+        for E-OBS data download including product type, periods, variables,
+        resolution, and file paths.
+    
+    Returns
+    -------
+    None
+        Downloads data files to the specified directory structure.
+        
+    Raises
+    ------
+    SystemExit
+        If critical errors occur during the download process, such as
+        network failures, invalid credentials, or file system issues.
+        
+    Notes
+    -----
+    - Creates temporary directories for intermediate file handling
+    - Loops through multiple time periods for batch downloading
+    - Checks for existing files to avoid unnecessary re-downloads
+    - Validates downloaded files using netCDF integrity checking
+    - Automatically organises files in the specified directory structure
+    - Cleans up temporary files after successful completion
+    
+    Examples
+    --------
+    >>> config = load_config('eobs_config.yaml')
+    >>> download_eobs_data(config)  # Downloads data according to config
+    """
     # Get file extension and grid resolution
     extension = return_file_extension(config)
     resolution_std = return_grid_resolution(config)
@@ -198,8 +368,17 @@ def download_eobs_data(config):
 # Main function #
 #---------------#
 
-def main():
-    """Main function."""
+def main() -> None:
+    """
+    Main function to orchestrate the E-OBS data download process.
+    
+    Loads configuration, validates parameters, and initiates the download
+    process for E-OBS observational gridded data from the CDS.
+    
+    Returns
+    -------
+    None
+    """
     # Get the configuration file path
     script_dir = Path(__file__).parent.parent.parent
     config_path = script_dir / 'config' / 'eobs_config.yaml'

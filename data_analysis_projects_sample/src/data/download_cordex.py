@@ -12,7 +12,9 @@ Script to download CORDEX data using the configuration file.
 import logging
 import os
 import sys
+
 from pathlib import Path
+from typing import Any
 
 import yaml
 
@@ -37,8 +39,17 @@ from pygenutils.time_handling.program_snippet_exec_timers import program_exec_ti
 #------------------------#
 
 # Set up logging #
-def set_up_logging():
-    """Set up logging."""
+def set_up_logging() -> None:
+    """
+    Set up logging configuration for the CORDEX download script.
+    
+    Configures the logging module with INFO level and a standard format
+    that includes timestamp, logger name, level, and message.
+    
+    Returns
+    -------
+    None
+    """
     logging.basicConfig(
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -46,8 +57,42 @@ def set_up_logging():
 logger = logging.getLogger(__name__)
 
 # Load configuration #
-def load_config(config_path):
-    """Load the configuration file."""
+def load_config(config_path: str | Path) -> dict[str, Any]:
+    """
+    Load the CORDEX configuration file from the specified path.
+    
+    Reads and parses a YAML configuration file containing parameters
+    for CORDEX data download including domains, scenarios, models,
+    and output settings.
+    
+    Parameters
+    ----------
+    config_path : str | Path
+        Path to the YAML configuration file. Can be a string path
+        or pathlib.Path object.
+    
+    Returns
+    -------
+    dict[str, Any]
+        Dictionary containing all configuration parameters loaded
+        from the YAML file.
+        
+    Raises
+    ------
+    FileNotFoundError
+        If the configuration file does not exist at the specified path.
+    yaml.YAMLError
+        If the YAML file is malformed or cannot be parsed.
+    SystemExit
+        If any error occurs during file loading, the programme exits
+        with an error message logged.
+        
+    Examples
+    --------
+    >>> config = load_config('config/cordex_config.yaml')
+    >>> print(config['domain'])
+    'europe'
+    """
     try:
         with open(config_path, 'r') as f:
             config = yaml.safe_load(f)
@@ -57,8 +102,39 @@ def load_config(config_path):
         sys.exit(1)
 
 # Validate configuration #
-def validate_config(config):
-    """Validate the configuration parameters."""
+def validate_config(config: dict[str, Any]) -> None:
+    """
+    Validate that all required CORDEX configuration parameters are present and valid.
+    
+    Performs comprehensive validation of the configuration dictionary to ensure
+    all required parameters are present and their values are within acceptable
+    ranges for the CORDEX data download.
+    
+    Parameters
+    ----------
+    config : dict[str, Any]
+        Configuration dictionary containing CORDEX download parameters.
+        Must include required fields such as domain, RCP scenario, resolutions,
+        model names, and file format specifications.
+    
+    Returns
+    -------
+    None
+    
+    Raises
+    ------
+    SystemExit
+        If any required parameter is missing or contains invalid values.
+        Error details are logged before exit.
+        
+    Examples
+    --------
+    >>> config = {'domain': 'europe', 'rcp': 'rcp_8_5', ...}
+    >>> validate_config(config)  # Validates successfully
+    >>> 
+    >>> invalid_config = {'domain': 'invalid_domain'}
+    >>> validate_config(invalid_config)  # Logs error and exits
+    """
     required_params = [
         'project_name', 'domain', 'rcp', 'h_resolution', 't_resolution',
         'variable_list', 'gcm', 'rcm', 'ensemble', 'file_format', 'raw_input_data_dir'
@@ -103,8 +179,31 @@ def validate_config(config):
         sys.exit(1)
 
 # Get date range #
-def get_date_range(config):
-    """Get the date range based on the RCP scenario."""
+def get_date_range(config: dict[str, Any]) -> tuple[str, str]:
+    """
+    Determine the appropriate date range based on the RCP scenario.
+    
+    Extracts the start and end years for data download based on the
+    specified RCP scenario (evaluation, historical, or future projections).
+    
+    Parameters
+    ----------
+    config : dict[str, Any]
+        Configuration dictionary containing RCP scenario and available
+        year ranges for different experiment types.
+    
+    Returns
+    -------
+    tuple[str, str]
+        A tuple containing (start_year, end_year) as strings.
+        
+    Examples
+    --------
+    >>> config = {'rcp': 'historical', 'hist_start_ys': ['1950'], 'hist_end_ys': ['2005']}
+    >>> start, end = get_date_range(config)
+    >>> print(f"Date range: {start} to {end}")
+    Date range: 1950 to 2005
+    """
     if config['rcp'].lower() == 'evaluation':
         return config['eval_start_ys'][0], config['eval_end_ys'][-1]
     elif config['rcp'].lower() == 'historical':
@@ -115,8 +214,45 @@ def get_date_range(config):
 # Download data #
 #---------------#
 
-def download_cordex_data(config):
-    """Download the CORDEX data using the CDS API."""
+def download_cordex_data(config: dict[str, Any]) -> None:
+    """
+    Download CORDEX climate data using the CDS API based on configuration parameters.
+    
+    This function handles the complete CORDEX data download workflow including
+    parameter preparation, file checking, downloading via CDS API, and file
+    organisation. It includes robust error handling and avoids duplicate downloads.
+    
+    Parameters
+    ----------
+    config : dict[str, Any]
+        Complete configuration dictionary containing all necessary parameters
+        for CORDEX data download including domain, models, variables, temporal
+        settings, and file paths.
+    
+    Returns
+    -------
+    None
+        Downloads data files to the specified directory structure.
+        
+    Raises
+    ------
+    SystemExit
+        If critical errors occur during the download process, such as
+        network failures, invalid credentials, or file system issues.
+        
+    Notes
+    -----
+    - Creates temporary directories for intermediate file handling
+    - Checks for existing files to avoid unnecessary re-downloads
+    - Validates downloaded files using netCDF integrity checking
+    - Automatically organises files in the specified directory structure
+    - Cleans up temporary files after successful completion
+    
+    Examples
+    --------
+    >>> config = load_config('cordex_config.yaml')
+    >>> download_cordex_data(config)  # Downloads data according to config
+    """
     # Get date range
     start_year, end_year = get_date_range(config)
     
@@ -211,8 +347,17 @@ def download_cordex_data(config):
 # Main function #
 #---------------#
 
-def main():
-    """Main function."""
+def main() -> None:
+    """
+    Main function to orchestrate the CORDEX data download process.
+    
+    Loads configuration, validates parameters, and initiates the download
+    process for CORDEX climate projection data from the CDS.
+    
+    Returns
+    -------
+    None
+    """
     # Get the configuration file path
     script_dir = Path(__file__).parent.parent.parent
     config_path = script_dir / 'config' / 'cordex_config.yaml'

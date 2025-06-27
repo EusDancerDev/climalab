@@ -13,6 +13,7 @@ import logging
 import os
 import sys
 from pathlib import Path
+from typing import Any
 
 import yaml
 
@@ -39,8 +40,17 @@ from filewise.xarray_utils.xarray_obj_handler import grib2nc
 #------------------------#
 
 # Set up logging #
-def set_up_logging():
-    """Set up logging."""
+def set_up_logging() -> None:
+    """
+    Set up logging configuration for the ERA5 download script.
+    
+    Configures the logging module with INFO level and a standard format
+    that includes timestamp, logger name, level, and message.
+    
+    Returns
+    -------
+    None
+    """
     logging.basicConfig(
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -48,8 +58,42 @@ def set_up_logging():
 logger = logging.getLogger(__name__)
 
 # Load configuration #
-def load_config(config_path):
-    """Load the configuration file."""
+def load_config(config_path: str | Path) -> dict[str, Any]:
+    """
+    Load the ERA5 configuration file from the specified path.
+    
+    Reads and parses a YAML configuration file containing parameters
+    for ERA5 reanalysis data download including geographical areas,
+    temporal settings, variables, and output options.
+    
+    Parameters
+    ----------
+    config_path : str | Path
+        Path to the YAML configuration file. Can be a string path
+        or pathlib.Path object.
+    
+    Returns
+    -------
+    dict[str, Any]
+        Dictionary containing all configuration parameters loaded
+        from the YAML file.
+        
+    Raises
+    ------
+    FileNotFoundError
+        If the configuration file does not exist at the specified path.
+    yaml.YAMLError
+        If the YAML file is malformed or cannot be parsed.
+    SystemExit
+        If any error occurs during file loading, the programme exits
+        with an error message logged.
+        
+    Examples
+    --------
+    >>> config = load_config('config/era5_config.yaml')
+    >>> print(config['dataset'])
+    'ERA5'
+    """
     try:
         with open(config_path, 'r') as f:
             config = yaml.safe_load(f)
@@ -59,8 +103,36 @@ def load_config(config_path):
         sys.exit(1)
 
 # Validate configuration #
-def validate_config(config):
-    """Validate the configuration parameters."""
+def validate_config(config: dict[str, Any]) -> None:
+    """
+    Validate that all required ERA5 configuration parameters are present and valid.
+    
+    Performs comprehensive validation of the configuration dictionary to ensure
+    all required parameters are present and their values are within acceptable
+    ranges for the ERA5 data download.
+    
+    Parameters
+    ----------
+    config : dict[str, Any]
+        Configuration dictionary containing ERA5 download parameters.
+        Must include required fields such as geographical areas, temporal ranges,
+        variables, and file format specifications.
+    
+    Returns
+    -------
+    None
+    
+    Raises
+    ------
+    SystemExit
+        If any required parameter is missing or contains invalid values.
+        Error details are logged before exit.
+        
+    Examples
+    --------
+    >>> config = {'file_format': 'netcdf', 'variable_list': ['2m_temperature'], ...}
+    >>> validate_config(config)  # Validates successfully
+    """
     required_params = [
         'project_name', 'country_list', 'area_lists', 'year_range',
         'month_range', 'day_range', 'hour_range', 'variable_list',
@@ -80,8 +152,38 @@ def validate_config(config):
         sys.exit(1)
 
 # Return file extension #
-def return_file_extension(config):
-    """Return the file extension based on the file format."""
+def return_file_extension(config: dict[str, Any]) -> str:
+    """
+    Return the file extension based on the configured file format.
+    
+    Maps the file format specification in the configuration to the
+    corresponding file extension for proper file naming.
+    
+    Parameters
+    ----------
+    config : dict[str, Any]
+        Configuration dictionary containing file format and available
+        extensions mapping.
+    
+    Returns
+    -------
+    str
+        File extension corresponding to the specified format (e.g., 'nc', 'grib').
+        
+    Raises
+    ------
+    ValueError
+        If the specified file format is not supported or not found in
+        the available formats list.
+        
+    Examples
+    --------
+    >>> config = {'file_format': 'netcdf', 'available_formats': ['netcdf'], 
+    ...           'available_extensions': ['nc']}
+    >>> ext = return_file_extension(config)
+    >>> print(ext)
+    nc
+    """
     extension_idx = find_substring_index(config['available_formats'], config['file_format'])
     
     if extension_idx == -1:
@@ -93,8 +195,48 @@ def return_file_extension(config):
 # Download data #
 #---------------#
 
-def download_era5_data(config):
-    """Download the ERA5 data using the CDS API."""
+def download_era5_data(config: dict[str, Any]) -> None:
+    """
+    Download ERA5 reanalysis data using the CDS API based on configuration parameters.
+    
+    This function handles the complete ERA5 data download workflow including
+    parameter preparation, file checking, downloading via CDS API for multiple
+    countries/areas and time periods, format conversion, and file organisation.
+    It includes robust error handling and avoids duplicate downloads.
+    
+    Parameters
+    ----------
+    config : dict[str, Any]
+        Complete configuration dictionary containing all necessary parameters
+        for ERA5 data download including geographical areas, temporal settings,
+        variables, format options, and file paths.
+    
+    Returns
+    -------
+    None
+        Downloads data files to the specified directory structure.
+        
+    Raises
+    ------
+    SystemExit
+        If critical errors occur during the download process, such as
+        network failures, invalid credentials, or file system issues.
+        
+    Notes
+    -----
+    - Creates temporary directories for intermediate file handling
+    - Loops through multiple countries, years, months, days, and hours
+    - Checks for existing files to avoid unnecessary re-downloads
+    - Optionally converts GRIB files to netCDF format
+    - Validates downloaded files using netCDF integrity checking
+    - Automatically organises files in the specified directory structure
+    - Cleans up temporary files after successful completion
+    
+    Examples
+    --------
+    >>> config = load_config('era5_config.yaml')
+    >>> download_era5_data(config)  # Downloads data according to config
+    """
     # Get file extension
     extension = return_file_extension(config)
     
@@ -192,8 +334,17 @@ def download_era5_data(config):
 # Main function #
 #---------------#
 
-def main():
-    """Main function."""
+def main() -> None:
+    """
+    Main function to orchestrate the ERA5 data download process.
+    
+    Loads configuration, validates parameters, and initiates the download
+    process for ERA5 reanalysis data from the CDS.
+    
+    Returns
+    -------
+    None
+    """
     # Get the configuration file path
     script_dir = Path(__file__).parent.parent.parent
     config_path = script_dir / 'config' / 'era5_config.yaml'
