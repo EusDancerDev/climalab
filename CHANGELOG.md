@@ -4,6 +4,45 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [4.5.4] - 2025-06-27
+
+### Changed (4.5.4)
+
+#### **Data Analysis Projects Sample: Data Downloads** (changing; 4.5.4)
+
+- **Complete modernisation** of the directory `data_analysis_projects_sample/src/data/` with Python 3.10+ compliance, comprehensive type hints, and professional documentation.
+
+- **Type Hinting & Documentation**
+  - **Python 3.10+ Union Syntax**: Modern `|` operator throughout all modules
+  - **Comprehensive Type Annotations**: All function parameters and return values
+  - **NumPy/SciPy Style Docstrings**: Professional documentation with examples
+  - **Path Handling**: `str | Path` support for flexible file operations
+
+- **Code Quality**
+  - **Import Optimisation**: Standardised import structure
+  - **Error Documentation**: Exception handling and recovery proceduress
+  - **Usage Examples**: Practical code examples for key functions
+
+- **Files Enhanced**
+  - `cds_tools.py`
+  - `download_cordex.py`
+  - `download_eobs.py`
+  - `download_era5.py`
+  - `download_era5_land.py`
+
+---
+
+## [4.5.3] - 2025-06-26
+
+### Changed (4.5.3)
+
+#### **NetCDF Tools** (changing; 4.5.3)
+
+- Module `cdo_tools.py`:
+  - Removed `list` call on function `flatten_list`, as by default it returns a list
+
+---
+
 ## [4.5.2] - 2025-06-25
 
 ### Changed (4.5.2)
@@ -84,16 +123,20 @@ All notable changes to this project will be documented in this file.
 - **Modernisation Requirements Analysis**: Systematic assessment of type annotation and nested list support needs across modules
 
 **Files Requiring Both `flatten_list` and PEP-604 Modernisation:**
+
 - No additional files identified (NetCDF tools already modernised)
 
 **Files Requiring PEP-604 Modernisation Only:**
+
 - `meteorological/variables.py`: Already uses modern `float | np.ndarray` syntax - **No changes needed**
+
 - `meteorological/weather_software.py`: Already uses modern type hints - **No changes needed**  
 - `supplementary_tools/*.py`: Simple analysis modules - **Assessment needed**
   - Functions primarily use basic data types without complex list processing
   - May benefit from type hint improvements for consistency
 
 **Files Already Modernised (No Changes Required):**
+
 - `netcdf_tools/cdo_tools.py`: Modern `str | list[str]` syntax with `flatten_list` defensive programming
 - `netcdf_tools/nco_tools.py`: Modern type hints with proper list handling
 - `netcdf_tools/detect_faulty.py`: Simple program with basic types
