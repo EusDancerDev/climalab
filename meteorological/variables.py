@@ -6,7 +6,6 @@
 #----------------#
 
 import numpy as np
-from typing import Any
 
 #------------------------#
 # Import project modules #
@@ -351,7 +350,7 @@ def relative_humidity(T: np.ndarray | list[float] | float, Td: np.ndarray | list
     return rh
 
 # Constant mini data base #
-def return_constants() -> tuple[tuple[float, ...], float, float, float]:
+def return_constants() -> tuple[float, float, float, float]:
     """
     Returns Magnus formula constants for dewpoint and relative humidity calculations.
     
@@ -365,7 +364,7 @@ def return_constants() -> tuple[tuple[float, ...], float, float, float]:
     
     Returns
     -------
-    tuple[tuple[float, ...], float, float, float]
+    tuple[float, float, float, float]
         A tuple containing four constants in the following order:
         - c2p (float): Magnus constant for T > 0°C (17.08085)
         - c2n (float): Magnus constant for T < 0°C (17.84362)  
@@ -376,7 +375,7 @@ def return_constants() -> tuple[tuple[float, ...], float, float, float]:
     --------
     >>> c2p, c2n, c3p, c3n = return_constants()
     >>> print(f"Positive temp constants: c2p={c2p}, c3p={c3p}")
-    Positive temp constants: c2p=(17.08085,), c3p=234.175
+    Positive temp constants: c2p=17.08085, c3p=234.175
     >>> print(f"Negative temp constants: c2n={c2n}, c3n={c3n}")
     Negative temp constants: c2n=17.84362, c3n=245.425
     
@@ -388,7 +387,7 @@ def return_constants() -> tuple[tuple[float, ...], float, float, float]:
     """
     
     # Constants for T > 0:
-    c2p = 17.08085,
+    c2p = 17.08085
     c3p = 234.175 
  
     # Constants for T < 0:
