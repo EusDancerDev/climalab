@@ -67,10 +67,12 @@ Before installing, please ensure the following dependencies are available on you
 **For regular users** who want to use the package in their projects:
 
 ```bash
+# Install climalab with all dependencies including Git packages
+pip install -r requirements.txt
 pip install climalab
 ```
 
-This automatically installs `climalab` and all its dependencies from PyPI and GitHub repositories.
+This installs `climalab` and all its dependencies, including the required interdependent packages from GitHub repositories.
 
 ### Package Updates
 
@@ -93,13 +95,16 @@ If you're planning to contribute to the project or work with the source code, fo
 git clone https://github.com/EusDancerDev/climalab.git
 cd climalab
 
-# Install in editable mode with all dependencies
+# Install all dependencies including Git packages
+pip install -r requirements.txt
+
+# Install in editable mode
 pip install -e .
 ```
 
 **Note**: The `-e` flag installs the package in "editable" mode, meaning changes to the source code are immediately reflected without reinstalling.
 
-This will automatically install all dependencies, including the required `filewise`, `pygenutils`, and `paramlib` packages directly from their GitHub repositories.
+This will install all dependencies, including the required `filewise`, `pygenutils`, and `paramlib` packages directly from their GitHub repositories.
 
 #### Manual Setup (Alternative)
 
@@ -146,8 +151,8 @@ try:
     
 except ImportError as e:
     print(f"❌ Import error: {e}")
-    print("💡 For regular users: pip install climalab")
-    print("💡 For developers: pip install -e .")
+    print("💡 For regular users: pip install -r requirements.txt && pip install climalab")
+    print("💡 For developers: pip install -r requirements.txt && pip install -e .")
 ```
 
 ### Implementation Notes
@@ -155,10 +160,10 @@ except ImportError as e:
 This project implements **Git-based dependencies** to solve the interdependent packages problem:
 
 - **Dependencies**: `filewise`, `pygenutils`, and `paramlib` packages are installed directly from GitHub repositories
-- **Automatic Resolution**: Works for both scenarios:
-  - **Regular users**: `pip install climalab` automatically installs all dependencies
-  - **Developers**: `pip install -e .` automatically installs interdependent packages from GitHub
-- **No Import Errors**: Contributors can clone the repository and immediately start working without manual dependency installation
+- **Installation Process**:
+  - **Regular users**: `pip install -r requirements.txt && pip install climalab` installs all dependencies
+  - **Developers**: `pip install -r requirements.txt && pip install -e .` installs interdependent packages from GitHub
+- **No Import Errors**: Contributors can clone the repository and immediately start working after installing dependencies
 - **Seamless Setup**: All imports work correctly after installation
 
 ## Usage
