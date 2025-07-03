@@ -62,25 +62,23 @@ Before installing, please ensure the following dependencies are available on you
   pip install filewise paramlib pygenutils
   ```
 
-### Installation Instructions
-
-**For regular users** who want to use the package in their projects:
+### For regular users (from PyPI)
 
 ```bash
-# Install climalab with all dependencies including Git packages
-pip install -r requirements.txt
 pip install climalab
 ```
 
-This installs `climalab` and all its dependencies, including the required interdependent packages from GitHub repositories.
-
-### Package Updates
-
-To stay up-to-date with the latest version of this package, simply run:
+### For contributors/developers (with interdependent packages)
 
 ```bash
-pip install --upgrade climalab
+pip install -r requirements.txt
+pip install -e .
 ```
+
+- `requirements.txt` will install the interdependent packages from GitHub.
+- `pip install -e .` will install climalab in editable mode for development.
+
+**Note:** If you want to publish to PyPI, keep git dependencies out of pyproject.toml. For development, use requirements.txt as above.
 
 ## Development Setup
 
