@@ -44,45 +44,15 @@ Before installing, please ensure the following dependencies are available on you
   - CDO (Climate Data Operators) - for netCDF processing
   - NCO (NetCDF Operators) - for netCDF manipulation
 
-- **Required Third-Party Libraries**:
-
-  ```bash
-  pip install numpy pandas scipy cdsapi PyYAML xarray netCDF4
-  ```
-
-  Or via Anaconda (recommended channel: `conda-forge`):
-
-  ```bash
-  conda install -c conda-forge numpy pandas scipy cdsapi pyyaml xarray netcdf4
-  ```
-
-- **Internal Package Dependencies**:
-
-  ```bash
-  pip install filewise paramlib pygenutils
-  ```
-
 ### For regular users (from PyPI)
 
 ```bash
 pip install climalab
 ```
 
+**Note:** PyPI installation includes all core dependencies automatically. The interdependent packages (`filewise`, `pygenutils`, `paramlib`) are available as separate packages on PyPI.
+
 ### For contributors/developers (with interdependent packages)
-
-```bash
-pip install -r requirements.txt
-pip install -e .
-```
-
-- `requirements.txt` will install the interdependent packages from GitHub.
-- `pip install -e .` will install climalab in editable mode for development.
-
-**Note:** If you want to publish to PyPI, keep git dependencies out of pyproject.toml. For development, use requirements.txt as above.
-
-## Development Setup
-
-### For Contributors and Developers
 
 If you're planning to contribute to the project or work with the source code, follow these setup instructions:
 

@@ -1,0 +1,42 @@
+{% set name = "climalab" %}
+{% set version = "4.4.0" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  path: ..
+
+build:
+  noarch: python
+  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv"
+
+requirements:
+  host:
+    - python >=3.10
+    - pip
+    - setuptools >=68.0
+    - wheel
+  run:
+    - python >=3.10
+    - pip
+    - numpy >=1.21.0,<2.0.0
+    - pandas >=1.3.0,<2.0.0
+    # Add other dependencies as needed
+
+test:
+  imports:
+    - climalab
+
+about:
+  home: https://github.com/EusDancerDev/climalab
+  license: MIT
+  license_file: LICENSE
+  summary: Python package climalab
+  doc_url: https://github.com/EusDancerDev/climalab#readme
+  dev_url: https://github.com/EusDancerDev/climalab.git
+
+extra:
+  recipe-maintainers:
+    - EusDancerDev
