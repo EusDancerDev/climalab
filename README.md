@@ -83,22 +83,22 @@ If you prefer to set up dependencies manually:
 git clone https://github.com/EusDancerDev/climalab.git
 cd climalab
 
-# Install dependencies manually
-pip install numpy pandas xarray netCDF4 matplotlib cartopy arrow
-pip install git+https://github.com/EusDancerDev/filewise.git
-pip install git+https://github.com/EusDancerDev/pygenutils.git
-pip install git+https://github.com/EusDancerDev/paramlib.git
+# Install with development dependencies (includes latest Git versions)
+pip install -e .[dev]
 
-# Install the package in editable mode
+# Alternative: Use requirements-dev.txt for explicit Git dependencies
+pip install -r requirements-dev.txt
 pip install -e .
 ```
+
+This approach gives you the latest development versions of all interdependent packages for testing and development.
 
 ### Troubleshooting
 
 If you encounter import errors after cloning:
 
-1. **Ensure dependencies are installed**: Run `pip install -e .` in the project directory
-2. **Check for missing packages**: The main interdependent packages are `filewise`, `pygenutils`, and `paramlib`
+1. **For regular users**: Run `pip install climalab` (all dependencies included)
+2. **For developers**: Run `pip install -e .[dev]` to include development dependencies
 3. **Verify Python environment**: Make sure you're using a compatible Python version (3.10+)
 
 ### Verify Installation
@@ -119,20 +119,21 @@ try:
     
 except ImportError as e:
     print(f"❌ Import error: {e}")
-    print("💡 For regular users: pip install -r requirements.txt && pip install climalab")
-    print("💡 For developers: pip install -r requirements.txt && pip install -e .")
+    print("💡 For regular users: pip install climalab")
+    print("💡 For developers: pip install -e .[dev]")
 ```
 
 ### Implementation Notes
 
-This project implements **Git-based dependencies** to solve the interdependent packages problem:
+This project implements a **dual-approach dependency management** system:
 
-- **Dependencies**: `filewise`, `pygenutils`, and `paramlib` packages are installed directly from GitHub repositories
-- **Installation Process**:
-  - **Regular users**: `pip install -r requirements.txt && pip install climalab` installs all dependencies
-  - **Developers**: `pip install -r requirements.txt && pip install -e .` installs interdependent packages from GitHub
-- **No Import Errors**: Contributors can clone the repository and immediately start working after installing dependencies
-- **Seamless Setup**: All imports work correctly after installation
+- **Production Dependencies**: Version-constrained dependencies for PyPI compatibility
+- **Development Dependencies**: Git-based dependencies for latest development versions
+- **Installation Methods**:
+  - **Regular users**: Simple `pip install climalab` with all dependencies included
+  - **Developers**: `pip install -e .[dev]` for latest Git versions and development tools
+- **PyPI Compatibility**: All packages can be published without Git dependency issues
+- **Development Flexibility**: Contributors get access to latest versions for testing and development
 
 ## Usage
 
