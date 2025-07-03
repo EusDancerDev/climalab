@@ -1,6 +1,6 @@
 # climalab
 
-[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
+[![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![PyPI Version](https://img.shields.io/pypi/v/climalab.svg)](https://pypi.org/project/climalab/)
 
@@ -62,23 +62,104 @@ Before installing, please ensure the following dependencies are available on you
   pip install filewise paramlib pygenutils
   ```
 
-### Installation (from PyPI)
+### Installation Instructions
 
-Install the package using pip:
+**For regular users** who want to use the package in their projects:
 
 ```bash
 pip install climalab
 ```
 
-### Development Installation
+This automatically installs `climalab` and all its dependencies from PyPI and GitHub repositories.
 
-For development purposes, you can install the package in editable mode:
+### Package Updates
+
+To stay up-to-date with the latest version of this package, simply run:
 
 ```bash
-git clone https://github.com/yourusername/climalab.git
+pip install --upgrade climalab
+```
+
+## Development Setup
+
+### For Contributors and Developers
+
+If you're planning to contribute to the project or work with the source code, follow these setup instructions:
+
+#### Quick Setup (Recommended)
+
+```bash
+# Clone the repository
+git clone https://github.com/EusDancerDev/climalab.git
 cd climalab
+
+# Install in editable mode with all dependencies
 pip install -e .
 ```
+
+**Note**: The `-e` flag installs the package in "editable" mode, meaning changes to the source code are immediately reflected without reinstalling.
+
+This will automatically install all dependencies, including the required `filewise`, `pygenutils`, and `paramlib` packages directly from their GitHub repositories.
+
+#### Manual Setup (Alternative)
+
+If you prefer to set up dependencies manually:
+
+```bash
+# Clone the repository
+git clone https://github.com/EusDancerDev/climalab.git
+cd climalab
+
+# Install dependencies manually
+pip install numpy pandas xarray netCDF4 matplotlib cartopy arrow
+pip install git+https://github.com/EusDancerDev/filewise.git
+pip install git+https://github.com/EusDancerDev/pygenutils.git
+pip install git+https://github.com/EusDancerDev/paramlib.git
+
+# Install the package in editable mode
+pip install -e .
+```
+
+### Troubleshooting
+
+If you encounter import errors after cloning:
+
+1. **Ensure dependencies are installed**: Run `pip install -e .` in the project directory
+2. **Check for missing packages**: The main interdependent packages are `filewise`, `pygenutils`, and `paramlib`
+3. **Verify Python environment**: Make sure you're using a compatible Python version (3.10+)
+
+### Verify Installation
+
+To verify that your installation is working correctly, you can run this quick test:
+
+```python
+# Test script to verify installation
+try:
+    import climalab
+    from filewise.general.introspection_utils import get_type_str
+    from pygenutils.strings.text_formatters import format_string
+    from paramlib.global_parameters import BASIC_ARITHMETIC_OPERATORS
+    
+    print("✅ All imports successful!")
+    print(f"✅ climalab version: {climalab.__version__}")
+    print("✅ Installation is working correctly.")
+    
+except ImportError as e:
+    print(f"❌ Import error: {e}")
+    print("💡 For regular users: pip install climalab")
+    print("💡 For developers: pip install -e .")
+```
+
+### Implementation Notes
+
+This project implements **Git-based dependencies** to solve the interdependent packages problem:
+
+- **Dependencies**: `filewise`, `pygenutils`, and `paramlib` packages are installed directly from GitHub repositories
+- **Automatic Resolution**: Works for both scenarios:
+  - **Regular users**: `pip install climalab` automatically installs all dependencies
+  - **Developers**: `pip install -e .` automatically installs interdependent packages from GitHub
+- **No Import Errors**: Contributors can clone the repository and immediately start working without manual dependency installation
+- **Seamless Setup**: All imports work correctly after installation
 
 ## Usage
 
@@ -212,6 +293,7 @@ climalab/
 ## Key Functions
 
 ### Meteorological Tools
+
 - `angle_converter()` - Convert between degrees and radians
 - `ws_unit_converter()` - Convert wind speeds between m/s and km/h
 - `dewpoint_temperature()` - Calculate dewpoint using Magnus' formula
@@ -219,6 +301,7 @@ climalab/
 - `meteorological_wind_direction()` - Calculate wind direction from u/v components
 
 ### NetCDF Tools (CDO)
+
 - `cdo_mergetime()` - Merge files with different time steps
 - `cdo_selyear()` - Select specific years from datasets
 - `cdo_sellonlatbox()` - Extract geographical regions
@@ -226,11 +309,13 @@ climalab/
 - `cdo_periodic_statistics()` - Calculate temporal statistics
 
 ### NetCDF Tools (NCO)
+
 - `modify_variable_units_and_values()` - Modify variable values and units
 - `modify_coordinate_values_by_threshold()` - Conditional coordinate modifications
 - `modify_coordinate_all_values()` - Apply operations to all coordinate values
 
 ### Bias Correction
+
 - `ba_mean()` - Delta (mean bias) correction
 - `ba_mean_and_var()` - Mean and variance correction  
 - `ba_nonparametric_qm()` - Non-parametric quantile mapping
