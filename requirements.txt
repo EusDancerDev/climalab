@@ -1,13 +1,14 @@
-# Core dependencies (redundant with pyproject.toml, but harmless)
+# Core dependencies
 numpy>=1.21.0
 pandas>=1.3.0
-xarray>=2024.2.0
-netCDF4>=1.6.0
-matplotlib>=3.8.0
+xarray>=2022.1.0
+netcdf4>=1.6.0
+matplotlib>=3.5.0
 cartopy>=0.20.0
-arrow>=1.2.0
+cdsapi>=0.6.0
+cfgrib>=0.9.0
 
-# Git dependencies (interdependent packages)
-git+https://github.com/EusDancerDev/filewise.git#egg=filewise
-git+https://github.com/EusDancerDev/pygenutils.git#egg=pygenutils
-git+https://github.com/EusDancerDev/paramlib.git#egg=paramlib 
+# Interdependent packages (version constraints for PyPI publishing)
+filewise>=0.1.0
+pygenutils>=0.1.0
+paramlib>=0.1.0 
