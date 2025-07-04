@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [4.6.0] - 2025-07-04
+
+### Changed (4.6.0)
+
+#### **CDO Tools** (changing; 4.6.0)
+
+- Update remaining variable names
+  - Changes have been made in the original file `global_parameters.py` in the `paramlib` package.
+  - These include abbreviation addressing and variable/key name standardisation.
+
+| Old variable name | New variable name |
+|:-----------------:|:-----------------:|
+| `TIME_FREQUENCIES_SHORT_1` | `TIME_FREQUENCIES_ABBREVIATED` |
+| `TIME_FREQUENCIES_SHORTER_1` | `TIME_FREQUENCIES_BRIEF` |
+
+---
+
 ## [4.5.8] - 2025-06-27
 
 ### Changed (4.5.8)
