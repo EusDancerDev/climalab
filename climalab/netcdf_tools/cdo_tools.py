@@ -648,11 +648,11 @@ def cdo_periodic_statistics(
     if statistic not in STATKIT:
         raise ValueError(f"Unsupported statistic {statistic}. Options are {STATKIT}")
     
-    period_abbr = TIME_FREQUENCIES_SHORTER_1[find_substring_index(TIME_FREQUENCIES_SHORT_1, freq)]
+    period_abbr = TIME_FREQUENCIES_BRIEF[find_substring_index(TIME_FREQUENCIES_ABBREVIATED, freq)]
 
     statname = f"y{period_abbr}{statistic}" if is_climatic else f"{period_abbr}{statistic}"
     
-    if period_abbr == TIME_FREQUENCIES_SHORTER_1[3] and season_str:
+    if period_abbr == TIME_FREQUENCIES_BRIEF[3] and season_str:
         statname += f" -select,season={season_str}"
 
     file_name_noext = add_to_path(nc_file, return_file_name_noext=True)
