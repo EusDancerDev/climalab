@@ -4,11 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [4.5.7] - 2025-06-27
+## [4.5.8] - 2025-06-27
 
-### Changed (4.5.7)
+### Changed (4.5.8)
 
-#### **Data Analysis Projects Sample: Data Downloads** (changing; 4.5.7)
+#### **Data Analysis Projects Sample: Data Downloads** (changing; 4.5.8)
 
 - **Complete modernisation** of the directory `data_analysis_projects_sample/src/data/` with Python 3.10+ compliance, comprehensive type hints, and professional documentation.
 
