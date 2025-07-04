@@ -9,6 +9,6 @@ cdsapi>=0.6.0
 cfgrib>=0.9.0
 
 # Interdependent packages (version constraints for PyPI publishing)
-filewise>=0.1.0
-pygenutils>=0.1.0
-paramlib>=0.1.0 
+filewise>=3.11.0
+pygenutils>=16.1.0
+paramlib>=3.4.3
