@@ -30,7 +30,6 @@ dependencies = [
     "netCDF4>=1.6.0",
     "matplotlib>=3.8.0",
     "cartopy>=0.20.0",
-    "arrow>=1.2.0",
 ]
 
 [project.optional-dependencies]
