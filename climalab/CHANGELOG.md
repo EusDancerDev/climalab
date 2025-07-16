@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [4.6.1] - 2025-07-16
+
+### Changed (4.6.1)
+
+#### **Package Dependencies** (changing; 4.6.1)
+
+- Configuration file for packaging tools: `pyproject.toml`
+  - Remove the `arrow` package from the `project.dependencies` (must-have dependencies) section.
+
+---
+
 ## [4.6.0] - 2025-07-04
 
 ### Changed (4.6.0)
