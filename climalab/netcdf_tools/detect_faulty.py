@@ -51,9 +51,9 @@ PATH_OBJ = "/media/jonander/My_Basic/Dokumentuak"
 #     "/home/jonander/Documents/03-Ikasketak"
 #     ]
 
-#------------#
-# Operations #
-#------------#
+#---------------------#
+# Program progression #
+#---------------------#
 
 # Initialise stopwatch #
 program_exec_timer('start')

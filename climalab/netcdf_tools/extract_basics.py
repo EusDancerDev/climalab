@@ -60,9 +60,9 @@ from pygenutils.time_handling.program_snippet_exec_timers import program_exec_ti
 DELTA_ROUNDOFF = 3
 VALUE_ROUNDOFF = 5
 
-#------------#
-# Operations #
-#------------#
+#---------------------#
+# Program progression #
+#---------------------#
 
 # Initialise stopwatch #
 program_exec_timer("start")
