@@ -4,11 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [4.6.5] - 2025-08-19
+## [4.6.6] - 2025-08-19
 
-### Changed (4.6.5)
+### Changed (4.6.6)
 
-#### **NetCDF Tools** (changing; 4.6.5)
+#### **NetCDF Tools** (changing; 4.6.6)
 
 - Modules `detect_faulty.py` and `extract_basics.py`:
   - Change the header section comment `Operations` to `Program progression` to better reflect what it contains.
