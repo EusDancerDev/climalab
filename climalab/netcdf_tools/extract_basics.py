@@ -56,9 +56,9 @@ from pygenutils.time_handling.program_snippet_exec_timers import program_exec_ti
 # Parameters #
 #------------#
 
-# Delta and value roundoffs for coordinate values #
-DELTA_ROUNDOFF = 3
-VALUE_ROUNDOFF = 5
+# Delta and value decimal places for coordinate values #
+DELTA_DECIMAL_PLACES = 3
+VALUE_DECIMAL_PLACES = 5
 
 #---------------------#
 # Program progression #
@@ -68,7 +68,7 @@ VALUE_ROUNDOFF = 5
 program_exec_timer("start")
 
 # Extract every netCDF file's basic information present in this project #
-extract_latlon_bounds(DELTA_ROUNDOFF, VALUE_ROUNDOFF)
+extract_latlon_bounds(DELTA_DECIMAL_PLACES, VALUE_DECIMAL_PLACES)
 extract_time_bounds()
 extract_time_formats()
 
