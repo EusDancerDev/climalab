@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [4.6.7] - 2025-10-08
+
+### Changed (4.6.7)
+
+#### **NetCDF Tools** (changing; 4.6.7)
+
+- Module `extract_basics.py`:
+  - Improve constant naming for semantic clarity:
+    - Rename `DELTA_ROUNDOFF` constant to `DELTA_DECIMAL_PLACES`
+    - Rename `VALUE_ROUNDOFF` constant to `VALUE_DECIMAL_PLACES`
+    - Update function calls to `extract_latlon_bounds()` with new constant names
+    - Update comment from "Delta and value roundoffs" to "Delta and value decimal places"
+
+---
+
 ## [4.6.6] - 2025-08-19
 
 ### Changed (4.6.6)
