@@ -1,5 +1,5 @@
 {% set name = "climalab" %}
-{% set version = "4.4.0" %}
+{% set version = "4.6.7" %}
 
 package:
   name: {{ name|lower }}
@@ -28,6 +28,8 @@ requirements:
 test:
   imports:
     - climalab
+  commands:
+    - python -c "import climalab; print(climalab.__version__)"
 
 about:
   home: https://github.com/EusDancerDev/climalab
