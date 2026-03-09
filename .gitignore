@@ -73,6 +73,3 @@ logs/
 
 # Ignore Copernicus-ECMWF data download directory
 data_downloads/input_data
-
-# Ignore the Spyder project manager directory
-.spyproject 
