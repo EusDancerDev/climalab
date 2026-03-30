@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [4.6.8] - 2026-03-30
+
+### Changed (4.6.8)
+
+#### **Data Analysis Projects Sample** (changing; 4.6.8)
+
+- Rename the sample code package from `src.data` to **`src.app`** so it is not confused with the repository’s top-level `data/` directory used for downloaded files.
+- **`climalab.data_analysis_projects_sample.src`**: export **`app`** instead of **`data`** (`__all__` in `src/__init__.py`).
+- **`src/app/__init__.py`**: path comments and `from climalab.data_analysis_projects_sample.src.app import *` wording.
+- **`config/cordex_config.yaml`**: set **`codes_dir`** to the `.../data_analysis_projects_sample/src/app` path.
+
+#### **Documentation** (changing; 4.6.8)
+
+- **`README.md`**: example import uses `src.app`; directory tree shows `src/app/`; **Current version** set to **4.6.8**.
+- **`CHANGELOG.md`**: historical notes that referred to `src/data` now point at **`src/app`** where they describe the current layout.
+
+#### **Package Dependencies** (changing; 4.6.8)
+
+- **`pyproject.toml`**: add **`climarraykit`** and **`PyYAML`** to `project.dependencies` (climarraykit for NetCDF/xarray helpers used across the package and samples; PyYAML for `import yaml` in the sample download scripts).
+- **`requirements.txt`** / **`requirements-dev.txt`**: add **`PyYAML`**; list **`climarraykit`** where missing so requirement-based installs match the wheel metadata.
+
+---
+
 ## [4.6.7] - 2025-10-08
 
 ### Changed (4.6.7)
@@ -64,7 +87,7 @@ All notable changes to this project will be documented in this file.
 
 #### **Data Analysis Projects Sample: Data Downloads** (changing; 4.5.8)
 
-- **Complete modernisation** of the directory `data_analysis_projects_sample/src/data/` with Python 3.10+ compliance, comprehensive type hints, and professional documentation.
+- **Complete modernisation** of the directory `data_analysis_projects_sample/src/app/` with Python 3.10+ compliance, comprehensive type hints, and professional documentation.
 
 - **Type Hinting & Documentation**
   - **Python 3.10+ Union Syntax**: Modern `|` operator throughout all modules
@@ -195,7 +218,7 @@ All notable changes to this project will be documented in this file.
 - `netcdf_tools/nco_tools.py`: Modern type hints with proper list handling
 - `netcdf_tools/detect_faulty.py`: Simple program with basic types
 - `netcdf_tools/extract_basics.py`: Simple program with basic types
-- `data_analysis_projects_sample/src/data/*.py`: Download scripts with specific data handling, no nested list requirements
+- `data_analysis_projects_sample/src/app/*.py`: Download scripts with specific data handling, no nested list requirements
 
 #### **NetCDF Tools** (changing; 4.5.0)
 
@@ -296,7 +319,7 @@ For the following modules to download data from the CDS databases:
   - Replace direct imports with `__all__` definitions in package initiator files:
     - `climalab/__init__.py`
     - `climalab/data_analysis_projects_sample/src/__init__.py`
-    - `climalab/data_analysis_projects_sample/src/data/__init__.py`
+    - `climalab/data_analysis_projects_sample/src/app/__init__.py`
     - `climalab/netcdf_tools/__init__.py`
     - `climalab/meteorological/__init__.py`
     - `climalab/supplementary_tools/__init__.py`
@@ -352,7 +375,7 @@ For the following modules to download data from the CDS databases:
 | `detect_faulty_ncfiles.py` | `climalab/` | `climalab/netcdf_tools/` | `detect_faulty.py` |
 | `meteorological_variables.py` | `climalab/` | `climalab/meteorological/` | `variables.py` |
 | `weather_software_file_creator.py` | `climalab/` | `climalab/meteorological/` | `weather_software.py` |
-| `cds_tools.py` | `climalab/` | `climalab/data_analysis_projects_sample/src/data/` | `cds_tools.py` |
+| `cds_tools.py` | `climalab/` | `climalab/data_analysis_projects_sample/src/app/` | `cds_tools.py` |
 
 After these changes, absolute imports in all affected files have been updated accordingly.
 
