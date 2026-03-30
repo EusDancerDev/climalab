@@ -52,7 +52,7 @@ All notable changes to this project will be documented in this file.
   - These include abbreviation addressing and variable/key name standardisation.
 
 | Old variable name | New variable name |
-|:-----------------:|:-----------------:|
+| :--- | :--- |
 | `TIME_FREQUENCIES_SHORT_1` | `TIME_FREQUENCIES_ABBREVIATED` |
 | `TIME_FREQUENCIES_SHORTER_1` | `TIME_FREQUENCIES_BRIEF` |
 
@@ -118,7 +118,7 @@ All notable changes to this project will be documented in this file.
   - These include abbreviation addressing.
 
 | Module | Old variable name | New variable name |
-|:------:|:-----------------:|:-----------------:|
+| :--- | :---: | :---: |
 | `netcdf_tools/cdo_tools.py` | `COMMON_DELIM_LIST` | `COMMON_DELIMITER_LIST` |
 | `netcdf_tools/cdo_tools.py` | `TIME_FREQUENCIES_SHORT_1` | `TIME_FREQUENCIES_ABBREVIATED` |
 | `netcdf_tools/cdo_tools.py` | `TIME_FREQUENCIES_SHORTER_1` | `TIME_FREQUENCIES_BRIEF` |
@@ -345,7 +345,7 @@ For the following modules to download data from the CDS databases:
 - Next, some modules originally in the top-level directory have been moved to new sub-packages:
 
 | Module | Original Location | New Location | New module name |
-|:------:|:-----------------:|:------------:|:---------------:|
+| :--- | :---: | :---: | :---: |
 | `cdo_tools.py` | `climalab/` | `climalab/netcdf_tools/` | `cdo_tools.py` |
 | `nco_tools.py` | `climalab/` | `climalab/netcdf_tools/` | `nco_tools.py` |
 | `extract_netcdf_basics.py` | `climalab/` | `climalab/netcdf_tools/` | `extract_basics.py` |
