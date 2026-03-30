@@ -4,23 +4,30 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [4.6.8] - 2026-03-30
+## [5.0.0] - 2026-03-30
 
-### Changed (4.6.8)
+### Breaking (5.0.0)
 
-#### **Data Analysis Projects Sample** (changing; 4.6.8)
+#### **Data Analysis Projects Sample** (breaking; 5.0.0)
 
-- Rename the sample code package from `src.data` to **`src.app`** so it is not confused with the repository’s top-level `data/` directory used for downloaded files.
-- **`climalab.data_analysis_projects_sample.src`**: export **`app`** instead of **`data`** (`__all__` in `src/__init__.py`).
-- **`src/app/__init__.py`**: path comments and `from climalab.data_analysis_projects_sample.src.app import *` wording.
-- **`config/cordex_config.yaml`**: set **`codes_dir`** to the `.../data_analysis_projects_sample/src/app` path.
+- The sample download package no longer lives under **`climalab.data_analysis_projects_sample.src.data`**. It is now **`climalab.data_analysis_projects_sample.src.app`** (directory `src/app/`). Update imports accordingly, for example:
+  - Before: `from climalab.data_analysis_projects_sample.src.data import download_era5`
+  - After: `from climalab.data_analysis_projects_sample.src.app import download_era5`
+- **`climalab.data_analysis_projects_sample.src`**: `__all__` now exports **`app`** instead of **`data`**.
 
-#### **Documentation** (changing; 4.6.8)
+### Changed (5.0.0)
 
-- **`README.md`**: example import uses `src.app`; directory tree shows `src/app/`; **Current version** set to **4.6.8**.
+#### **Data Analysis Projects Sample** (changing; 5.0.0)
+
+- **`src/app/__init__.py`**: path comments and star-import note for `src.app`.
+- **`config/cordex_config.yaml`**: **`codes_dir`** points at `.../data_analysis_projects_sample/src/app`.
+
+#### **Documentation** (changing; 5.0.0)
+
+- **`README.md`**: example import and directory tree use **`src.app`** / `src/app/`; **Current version** set to **5.0.0**.
 - **`CHANGELOG.md`**: historical notes that referred to `src/data` now point at **`src/app`** where they describe the current layout.
 
-#### **Package Dependencies** (changing; 4.6.8)
+#### **Package Dependencies** (changing; 5.0.0)
 
 - **`pyproject.toml`**: add **`climarraykit`** and **`PyYAML`** to `project.dependencies` (climarraykit for NetCDF/xarray helpers used across the package and samples; PyYAML for `import yaml` in the sample download scripts).
 - **`requirements.txt`** / **`requirements-dev.txt`**: add **`PyYAML`**; list **`climarraykit`** where missing so requirement-based installs match the wheel metadata.

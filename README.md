@@ -316,7 +316,7 @@ For any questions or suggestions, please open an issue on GitHub or contact the 
 
 ## Version
 
-Current version: 4.6.8
+Current version: 5.0.0
 
 For detailed changelog, see [CHANGELOG.md](CHANGELOG.md).
 For versioning information, see [VERSIONING.md](VERSIONING.md).
