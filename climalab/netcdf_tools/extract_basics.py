@@ -45,7 +45,7 @@
 # Import project modules #
 #------------------------#
 
-from filewise.xarray_utils.data_manipulation import (
+from climarraykit.data_manipulation import (
     extract_latlon_bounds,
     extract_time_bounds,
     extract_time_formats
