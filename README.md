@@ -222,7 +222,7 @@ corrected_qm = auxiliary_functions.ba_nonparametric_qm(
 
 # 1. Configure your dataset in the YAML files (config/)
 # 2. Run the download scripts:
-from climalab.data_analysis_projects_sample.src.data import download_era5
+from climalab.data_analysis_projects_sample.src.app import download_era5
 # download_era5.main()  # Downloads ERA5 data based on configuration
 ```
 
@@ -253,7 +253,7 @@ climalab/
     │   ├── eobs_config.yaml
     │   ├── era5_config.yaml
     │   └── era5_land_config.yaml
-    ├── src/data/                 # Data download scripts
+    ├── src/app/                  # Download scripts (sample package module)
     │   ├── cds_tools.py
     │   ├── download_cordex.py
     │   ├── download_eobs.py
@@ -316,7 +316,7 @@ For any questions or suggestions, please open an issue on GitHub or contact the 
 
 ## Version
 
-Current version: 4.5.1
+Current version: 4.6.8
 
 For detailed changelog, see [CHANGELOG.md](CHANGELOG.md).
 For versioning information, see [VERSIONING.md](VERSIONING.md).
