@@ -19,7 +19,7 @@ file_format: "zip"
 # Fixed parameters
 char_split_delim1: "."
 char_split_delim2: "_"
-codes_dir: "/home/jonander/Documents/05-Proiektu_pertsonalak/gordetegiak/python_packages/climalab/climalab/data_analysis_projects_sample/src/data"
+codes_dir: "/home/jonander/Documents/05-Proiektu_pertsonalak/gordetegiak/python_packages/climalab/climalab/data_analysis_projects_sample/src/app"
 raw_input_data_dir: "/home/jonander/Documents/05-Proiektu_pertsonalak/gordetegiak/python_packages/climalab/climalab/data_analysis_projects_sample/data/raw/CORDEX"
 
 # Dataset
