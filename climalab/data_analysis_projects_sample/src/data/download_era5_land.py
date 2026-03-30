@@ -27,8 +27,8 @@ from filewise.file_operations.ops_handler import (
     make_directories,
     move_files
 )
-from filewise.xarray_utils.file_utils import scan_ncfiles
-from filewise.xarray_utils.xarray_obj_handler import grib2nc
+from climarraykit.file_utils import scan_ncfiles
+from climarraykit.xarray_obj_handler import grib2nc
 from pygenutils.strings.string_handler import find_substring_index
 from pygenutils.time_handling.program_snippet_exec_timers import program_exec_timer
 

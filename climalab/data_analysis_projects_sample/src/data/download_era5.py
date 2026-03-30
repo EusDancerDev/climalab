@@ -27,10 +27,10 @@ from filewise.file_operations.ops_handler import (
     move_files,
     find_files
 )
-from filewise.xarray_utils.file_utils import scan_ncfiles
+from climarraykit.file_utils import scan_ncfiles
 from pygenutils.time_handling.program_snippet_exec_timers import program_exec_timer
 from pygenutils.strings.string_handler import find_substring_index
-from filewise.xarray_utils.xarray_obj_handler import grib2nc
+from climarraykit.xarray_obj_handler import grib2nc
 
 #------------------#
 # Define functions #
