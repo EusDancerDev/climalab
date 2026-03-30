@@ -6,7 +6,7 @@
 #------------------------#
 
 from filewise.file_operations.ops_handler import rename_objects
-from filewise.xarray_utils.patterns import get_file_variables, get_times
+from climarraykit.patterns import get_file_variables, get_times
 from paramlib.global_parameters import (
     BASIC_ARITHMETIC_OPERATORS, 
     COMMON_DELIMITER_LIST, 
