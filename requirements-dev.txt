@@ -6,20 +6,22 @@ filewise @ git+https://github.com/EusDancerDev/filewise.git
 pygenutils @ git+https://github.com/EusDancerDev/pygenutils.git
 paramlib @ git+https://github.com/EusDancerDev/paramlib.git
 
-# Standard dependencies
+# Standard dependencies (aligned with pyproject.toml [project.dependencies])
 numpy>=1.21.0
 pandas>=1.3.0
-xarray>=2022.1.0
+xarray>=2024.2.0
 netcdf4>=1.6.0
-matplotlib>=3.5.0
+matplotlib>=3.8.0
 cartopy>=0.20.0
 cdsapi>=0.6.0
 cfgrib>=0.9.0
 PyYAML>=6.0
 climarraykit>=0.1.0
 
-# Development tools
+# Development tools (aligned with [project.optional-dependencies] dev)
 pytest>=7.0.0
 pytest-cov>=4.0.0
-black>=22.0.0
-flake8>=5.0.0 
+black>=23.0.0
+isort>=5.0.0
+mypy>=1.0.0
+flake8>=6.0.0
