@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# climalab/data_analysis_projects_sample/src/data/__init__.py
+# climalab/data_analysis_projects_sample/src/app/__init__.py
 
-# Define what should be available when using 'from climalab.data_analysis_projects_sample.src.data import *'
+# Define what should be available when using 'from climalab.data_analysis_projects_sample.src.app import *'
 __all__ = [
     'cds_tools',
     'download_cordex',
