@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [6.0.1] - 2026-03-31
+
+### Changed (6.0.1)
+
+#### **Documentation** (changing; 6.0.1)
+
+- Module `meteorological/weather_software.py`: docstring examples use **`pd.date_range(..., freq='h')`** for hourly frequency, aligned with pandas 2.2+ normalisation of the hourly alias (replacing **`'H'`** in copy-pastable snippets).
+
+---
+
 ## [6.0.0] - 2026-03-31
 
 ### Breaking (6.0.0)
