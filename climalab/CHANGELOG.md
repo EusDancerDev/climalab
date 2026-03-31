@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [6.0.0] - 2026-03-31
+
+### Breaking (6.0.0)
+
+#### **Package Dependencies** (breaking; 6.0.0)
+
+- **NumPy / Pandas:** require **`numpy>=2.2.3`** and **`pandas>=2.2.3`** in **`pyproject.toml`**, **`requirements.txt`**, **`requirements-dev.txt`**, and **`recipe/meta.yaml`**. This drops support for NumPy 1.x / Pandas 1.x install surfaces.
+
+---
+
 ## [5.0.0] - 2026-03-30
 
 ### Breaking (5.0.0)
