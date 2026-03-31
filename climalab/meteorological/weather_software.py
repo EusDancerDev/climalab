@@ -52,7 +52,7 @@ def temperature_typical_extreme_period(hdy_df_t2m: pd.DataFrame) -> str:
     --------
     >>> import pandas as pd
     >>> import numpy as np
-    >>> dates = pd.date_range('2020-01-01', '2020-12-31', freq='H')
+    >>> dates = pd.date_range('2020-01-01', '2020-12-31', freq='h')
     >>> temps = 15 + 10 * np.sin(2 * np.pi * np.arange(len(dates)) / (365.25 * 24))
     >>> df = pd.DataFrame({'date': dates, 't2m': temps})
     >>> header = temperature_typical_extreme_period(df)
