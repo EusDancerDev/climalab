@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [6.0.3] - 2026-04-02
+
+### Fixed (6.0.3)
+
+#### **Package Dependencies** (fixing; 6.0.3)
+
+- **`climarraykit`:** require **`>=0.2.1`** so the install surface matches the aligned **NumPy** / **Pandas** **≥2.2.3** chain (**filewise** **≥3.14.0**, **pygenutils** **≥17.1.0**, **paramlib** **≥3.5.0**).
+- **`requirements.txt`:** raise the same interdependent floors; comment now references **climarraykit** **0.2.1**.
+- **`pyproject.toml`:** add **`cdsapi`** and **`cfgrib`** to **`[project.dependencies]`** so **`pip install climalab`** matches **`requirements.txt`** for sample download workflows.
+
+#### **Conda recipe** (fixing; 6.0.3)
+
+- **`recipe/meta.yaml`:** set version to **6.0.3**; expand **`run`** with **xarray**, **netcdf4**, **matplotlib**, **cartopy**, **pyyaml**, **cdsapi**, and **cfgrib** (aligned with **`pyproject.toml`**).
+- **`recipe/post-link.sh`:** install **climarraykit**, **filewise**, **pygenutils**, and **paramlib** with the same PyPI floors as **climarraykit** **0.2.1** (replacing **`more_itertools`** only).
+
+### Changed (6.0.3)
+
+#### **Data Analysis Projects Sample** (changing; 6.0.3)
+
+- **Config YAML:** replace machine-specific **`repo_path`**, **`codes_dir`**, and **`raw_input_data_dir`** values with **`/path/to/climalab/climalab`** placeholders and align **ERA5** / **E-OBS** **`project_dir`** layout with **ERA5-Land** (**`data_downloads`**).
+
+---
+
 ## [6.0.2] - 2026-04-02
 
 ### Changed (6.0.2)
@@ -27,29 +50,24 @@ All notable changes to this project will be documented in this file.
 
 ## [6.0.0] - 2026-03-31
 
-### Breaking (6.0.0)
+### Changed (6.0.0)
 
-#### **Package Dependencies** (breaking; 6.0.0)
+#### **Package Dependencies** (changed; 6.0.0)
 
-- **NumPy / Pandas:** require **`numpy>=2.2.3`** and **`pandas>=2.2.3`** in **`pyproject.toml`**, **`requirements.txt`**, **`requirements-dev.txt`**, and **`recipe/meta.yaml`**. This drops support for NumPy 1.x / Pandas 1.x install surfaces.
+- **Breaking change:** **NumPy / Pandas:** require **`numpy>=2.2.3`** and **`pandas>=2.2.3`** in **`pyproject.toml`**, **`requirements.txt`**, **`requirements-dev.txt`**, and **`recipe/meta.yaml`**. This drops support for NumPy 1.x / Pandas 1.x install surfaces.
 
 ---
 
 ## [5.0.0] - 2026-03-30
 
-### Breaking (5.0.0)
-
-#### **Data Analysis Projects Sample** (breaking; 5.0.0)
-
-- The sample download package no longer lives under **`climalab.data_analysis_projects_sample.src.data`**. It is now **`climalab.data_analysis_projects_sample.src.app`** (directory `src/app/`). Update imports accordingly, for example:
-  - Before: `from climalab.data_analysis_projects_sample.src.data import download_era5`
-  - After: `from climalab.data_analysis_projects_sample.src.app import download_era5`
-- **`climalab.data_analysis_projects_sample.src`**: `__all__` now exports **`app`** instead of **`data`**.
-
 ### Changed (5.0.0)
 
-#### **Data Analysis Projects Sample** (changing; 5.0.0)
+#### **Data Analysis Projects Sample** (changed; 5.0.0)
 
+- **Breaking change:** The sample download package no longer lives under **`climalab.data_analysis_projects_sample.src.data`**. It is now **`climalab.data_analysis_projects_sample.src.app`** (directory `src/app/`). Update imports accordingly, for example:
+  - Before: `from climalab.data_analysis_projects_sample.src.data import download_era5`
+  - After: `from climalab.data_analysis_projects_sample.src.app import download_era5`
+- **Breaking change:** **`climalab.data_analysis_projects_sample.src`**: `__all__` now exports **`app`** instead of **`data`**.
 - **`src/app/__init__.py`**: path comments and star-import note for `src.app`.
 - **`config/cordex_config.yaml`**: **`codes_dir`** points at `.../data_analysis_projects_sample/src/app`.
 
