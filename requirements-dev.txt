@@ -16,7 +16,7 @@ cartopy>=0.20.0
 cdsapi>=0.6.0
 cfgrib>=0.9.0
 PyYAML>=6.0
-climarraykit>=0.1.0
+climarraykit>=0.2.1
 
 # Development tools (aligned with [project.optional-dependencies] dev)
 pytest>=7.0.0
