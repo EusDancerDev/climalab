@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [6.0.2] - 2026-04-02
+
+### Changed (6.0.2)
+
+#### **Data Analysis Projects Sample** (changing; 6.0.2)
+
+- **`src/app/download_cordex.py`**, **`download_era5.py`**, **`download_era5_land.py`**, **`download_eobs.py`**: group imports with section headers (**Standard library**, **Third-party library**, **Project modules**).
+- Same modules: resolve the sample project root with **`Path(__file__).resolve().parents[2]`** instead of chained **`.parent`** calls.
+
+---
+
 ## [6.0.1] - 2026-03-31
 
 ### Changed (6.0.1)
