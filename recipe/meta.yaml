@@ -1,5 +1,5 @@
 {% set name = "climalab" %}
-{% set version = "6.0.1" %}
+{% set version = "6.0.3" %}
 
 package:
   name: {{ name|lower }}
@@ -23,7 +23,14 @@ requirements:
     - pip
     - numpy >=2.2.3
     - pandas >=2.2.3
-    # Add other dependencies as needed
+    - xarray >=2024.2.0
+    - netcdf4 >=1.6.0
+    - matplotlib >=3.8.0
+    - cartopy >=0.20.0
+    - pyyaml >=6.0
+    - cdsapi >=0.6.0
+    - cfgrib >=0.9.0
+    # climarraykit, filewise, pygenutils, paramlib: PyPI pins via post-link.sh
 
 test:
   imports:
