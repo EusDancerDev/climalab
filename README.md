@@ -316,7 +316,7 @@ For any questions or suggestions, please open an issue on GitHub or contact the 
 
 ## Version
 
-Current version: 6.0.2
+Current version: 6.0.3
 
-For detailed changelog, see [CHANGELOG.md](CHANGELOG.md).
-For versioning information, see [VERSIONING.md](VERSIONING.md).
+For detailed changelog, see CHANGELOG.md.
+For versioning information, see VERSIONING.md.
