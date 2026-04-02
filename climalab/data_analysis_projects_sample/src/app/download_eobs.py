@@ -9,18 +9,22 @@ Script to download E-OBS data using the configuration file.
 # Import modules #
 #----------------#
 
+# Standard library #
+#------------------#
+
 import logging
 import os
 import sys
-
 from pathlib import Path
 from typing import Any
 
+# Third-party library #
+#---------------------#
+
 import yaml
 
-#------------------------#
-# Import project modules #
-#------------------------#
+# Project modules #
+#-----------------#
 
 from cds_tools import download_data
 from filewise.file_operations.ops_handler import (
@@ -380,7 +384,7 @@ def main() -> None:
     None
     """
     # Get the configuration file path
-    script_dir = Path(__file__).parent.parent.parent
+    script_dir = Path(__file__).resolve().parents[2]
     config_path = script_dir / 'config' / 'eobs_config.yaml'
     
     # Load and validate configuration
