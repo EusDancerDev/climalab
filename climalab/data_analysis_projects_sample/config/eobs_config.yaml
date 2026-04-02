@@ -19,9 +19,9 @@ version: "28.0e"
 resolution: "0.1"
 
 # Fixed parameters
-# Main directories
-repo_path: "/home/jonander/Documents/gordetegiak/pygenutils."
-project_dir: "{repo_path}/test-base_programs/{project_name}"
+# Main directories (set repo_path to the absolute path of the climalab package directory)
+repo_path: "/path/to/climalab/climalab"
+project_dir: "{repo_path}/data_downloads/{project_name}"
 codes_dir: "{project_dir}/codes"
 main_input_data_dir: "{project_dir}/input_data"
 
