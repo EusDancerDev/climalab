@@ -9,8 +9,8 @@ cdsapi>=0.6.0
 cfgrib>=0.9.0
 PyYAML>=6.0
 
-# Interdependent packages (floors compatible with climarraykit’s dependency chain)
-filewise>=3.13.0
-climarraykit>=0.1.0
-pygenutils>=16.4.0
-paramlib>=3.4.10
+# Interdependent packages (floors aligned with climarraykit>=0.2.1)
+filewise>=3.14.0
+climarraykit>=0.2.1
+pygenutils>=17.1.0
+paramlib>=3.5.0
