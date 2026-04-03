@@ -42,7 +42,11 @@ about:
   home: https://github.com/EusDancerDev/climalab
   license: MIT
   license_file: LICENSE
-  summary: Python package climalab
+  summary: Climate and meteorology analysis with xarray, NetCDF, mapping, and CDS-style data access
+  description: |
+    climalab builds on xarray, NetCDF4, matplotlib, and cartopy for gridded climate workflows:
+    diagnostics, reanalysis-style handling, and optional cfgrib or cdsapi-driven retrieval depending
+    on the conda environment. It pairs with climarraykit for shared array patterns.
   doc_url: https://github.com/EusDancerDev/climalab#readme
   dev_url: https://github.com/EusDancerDev/climalab.git
 
