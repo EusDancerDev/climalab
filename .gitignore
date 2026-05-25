@@ -58,7 +58,10 @@ logs/
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# Project specific
+# Local climate data
+local_data/
+outputs/
+artifacts/
 *.nc
 *.nc4
 *.grib
@@ -72,4 +75,12 @@ logs/
 *.zarr.zip
 
 # Ignore Copernicus-ECMWF data download directory
-data_downloads/input_data
+data_downloads/input_data/
+
+# Keep shareable examples and fixtures trackable.
+!examples/**
+!tests/**
+!docs/**
+!notebooks/**
+!sample_data/**
+!fixtures/**
